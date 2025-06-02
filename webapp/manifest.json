@@ -79,6 +79,12 @@
       },
       "mensagensModel": {
         "type": "sap.ui.model.json.JSONModel"
+      },
+      "loginModel": {
+        "type": "sap.ui.model.json.JSONModel"
+      },
+      "usuariosLoginModel": {
+        "type": "sap.ui.model.json.JSONModel"
       }
     },
     "resources": {
