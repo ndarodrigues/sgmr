@@ -49,7 +49,7 @@
       "minUI5Version": "1.136.1",
       "libs": {
         "sap.m": {},
-        "sap.ui.core": {}      
+        "sap.ui.core": {}
       }
     },
     "contentDensities": {
@@ -125,12 +125,26 @@
           "target": [
             "Configurar"
           ]
-        },    
+        },
         {
           "name": "Login",
           "pattern": "Login",
           "target": [
             "Login"
+          ]
+        },
+        {
+          "name": "Inicio",
+          "pattern": "Inicio",
+          "target": [
+            "Inicio"
+          ]
+        },
+        {
+          "name": "Administrativo",
+          "pattern": "Administrativo",
+          "target": [
+            "Administrativo"
           ]
         }
       ],
@@ -149,19 +163,26 @@
           "viewId": "Inicio",
           "viewName": "Inicio"
         },
-         "Login": {
+        "Login": {
           "viewType": "XML",
           "transition": "slide",
           "clearControlAggregation": false,
           "viewId": "Login",
           "viewName": "Login"
         },
-         "Configurar": {
+        "Configurar": {
           "viewType": "XML",
           "transition": "slide",
           "clearControlAggregation": false,
           "viewId": "Configurar",
           "viewName": "Configurar"
+        },
+         "Administrativo": {
+          "viewType": "XML",
+          "transition": "slide",
+          "clearControlAggregation": false,
+          "viewId": "Administrativo",
+          "viewName": "Administrativo"
         }
       }
     },

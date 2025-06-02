@@ -126,7 +126,7 @@
 					ariaHasPopup="Dialog"/>					
 				<ToolbarSpacer/>
 				<Button id="testarButton" text="{i18n>testar}" type="Emphasized" press="onTestar" icon="sap-icon://connected" ></Button>
-				<Button id="confirmarComboioButton" text="{i18n>confirmar}" type="Success" press="onConfirmar" icon="sap-icon://save" ></Button>
+				<Button id="confirmarComboioButton" text="{i18n>confirmar}" type="Success" press="onCancelar" icon="sap-icon://save" ></Button>
                 <Button id="cancelarComboioButton" text="{i18n>cancelar}" type="Reject" press="onCancelar" icon="sap-icon://cancel" ></Button>   
 			</OverflowToolbar>
 		</footer>
