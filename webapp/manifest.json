@@ -49,13 +49,7 @@
       "minUI5Version": "1.136.1",
       "libs": {
         "sap.m": {},
-        "sap.ui.core": {},
-        "sap.f": {},
-        "sap.suite.ui.generic.template": {},
-        "sap.ui.comp": {},
-        "sap.ui.generic.app": {},
-        "sap.ui.table": {},
-        "sap.ushell": {}
+        "sap.ui.core": {}      
       }
     },
     "contentDensities": {
@@ -74,6 +68,16 @@
         "preload": true,
         "settings": {}
       },
+      "sgmrODataModel": {
+        "type": "sap.ui.model.odata.v2.ODataModel",
+        "settings": {
+          "defaultOperationMode": "Server",
+          "defaultBindingModel": "TwoWay",
+          "defaultCountMode": "Request"
+        },
+        "dataSource": "mainService",
+        "preload": true
+      },
       "conexaoModel": {
         "type": "sap.ui.model.json.JSONModel"
       },
@@ -84,6 +88,9 @@
         "type": "sap.ui.model.json.JSONModel"
       },
       "usuariosLoginModel": {
+        "type": "sap.ui.model.json.JSONModel"
+      },
+      "busyDialogModel": {
         "type": "sap.ui.model.json.JSONModel"
       }
     },
@@ -111,6 +118,20 @@
           "target": [
             "TargetApp"
           ]
+        },
+        {
+          "name": "Configurar",
+          "pattern": "Configurar",
+          "target": [
+            "Configurar"
+          ]
+        },    
+        {
+          "name": "Login",
+          "pattern": "Login",
+          "target": [
+            "Login"
+          ]
         }
       ],
       "targets": {
@@ -120,6 +141,27 @@
           "clearControlAggregation": false,
           "viewId": "App",
           "viewName": "App"
+        },
+        "Inicio": {
+          "viewType": "XML",
+          "transition": "slide",
+          "clearControlAggregation": false,
+          "viewId": "Inicio",
+          "viewName": "Inicio"
+        },
+         "Login": {
+          "viewType": "XML",
+          "transition": "slide",
+          "clearControlAggregation": false,
+          "viewId": "Login",
+          "viewName": "Login"
+        },
+         "Configurar": {
+          "viewType": "XML",
+          "transition": "slide",
+          "clearControlAggregation": false,
+          "viewId": "Configurar",
+          "viewName": "Configurar"
         }
       }
     },
