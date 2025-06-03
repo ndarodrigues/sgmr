@@ -5,7 +5,7 @@ sap.ui.define([
     'sap/m/MessagePopover',
     'sap/m/MessageItem',
     'sap/ui/model/json/JSONModel',
-    "sap/m/MessageBox"    
+    "sap/m/MessageBox"
 ],
     function (Controller, formatter, MessageToast, MessagePopover, MessageItem, JSONModel, MessageBox) {
         "use strict";
@@ -17,6 +17,41 @@ sap.ui.define([
             onInit: function () {
                 oController = this;
                 oView = oController.getView();
+
+                var oUsuario = [{
+                    CodUsuario: "01",
+                    Nome: "USUARIO1",
+                    Senha: "",
+                    ConfirmarSenha: "",
+                    Centro: "UMYA",
+                    Deposito: "DPLU",
+                    Perfil: "MASTER",
+                    CodigoPerfil: "01",
+                    Sincronizado: "N",
+                    Bloqueado: false,
+                    Tipomensagem: "",
+                    Mensagem: "",
+                    Autorizacoes: []
+                },
+                {
+                    CodUsuario: "02",
+                    Nome: "USUARIO2",
+                    Senha: "",
+                    ConfirmarSenha: "",
+                    Centro: "UMYA",
+                    Deposito: "DPLU",
+                    Perfil: "INSPETOR",
+                    CodigoPerfil: "01",
+                    Sincronizado: "N",
+                    Bloqueado: false,
+                    Tipomensagem: "",
+                    Mensagem: "",
+                    Autorizacoes: []
+                }]
+
+                oController.getOwnerComponent().getModel("listaUsuariosModel").setData(oUsuario);
+                oController.getOwnerComponent().getModel("listaUsuariosModel").refresh()
+
 
                 oView.bindElement("listaUsuariosModel>/");
                 oView.bindElement("layoutTelaModel>/");
@@ -144,7 +179,7 @@ sap.ui.define([
 
             onEditarUsuario: function (oEvent) {
                 var oUsuario = oEvent.getSource().getBindingContext("listaUsuariosModel").getModel().getProperty(oEvent.getSource().getBindingContext("listaUsuariosModel").getPath());
-                var oUsuario = JSON.parse(JSON.stringify(oUsuario));                
+                var oUsuario = JSON.parse(JSON.stringify(oUsuario));
                 oUsuario.Sincronizado = "U"
                 oUsuario.Senha = oController.descriptografar(oUsuario.Senha)
                 oUsuario.ConfirmarSenha = oUsuario.Senha
@@ -154,8 +189,32 @@ sap.ui.define([
             },
 
             onExibirUsuario: function (oEvent) {
-                var oUsuario = oEvent.getSource().getBindingContext("listaUsuariosModel").getModel().getProperty(oEvent.getSource().getBindingContext("listaUsuariosModel").getPath());
-                var oUsuario = JSON.parse(JSON.stringify(oUsuario));    
+                // var oUsuario = oEvent.getSource().getBindingContext("listaUsuariosModel").getModel().getProperty(oEvent.getSource().getBindingContext("listaUsuariosModel").getPath());
+                 var oUsuario = {
+                    CodUsuario: "",
+                    Nome: "",
+                    Senha: "123",
+                    ConfirmarSenha: "",
+                    Centro: "UMYA",
+                    Deposito: "DPLU",
+                    Perfil: "",
+                    CodigoPerfil: "",
+                    Sincronizado: "N",
+                    Bloqueado: false,
+                    Tipomensagem: "",
+                    Mensagem: "",
+                    Autorizacoes: [ {
+                            CodigoAutorizacao: "01",
+                            DescrAutorizacao: "INSPEÇÃO MATERIAL RODANTE",
+                            Selecionado: true
+                        },
+                        {
+                            CodigoAutorizacao: "02",
+                            DescrAutorizacao: "MOVIMENTAÇÃO MATERIAL RODANTE",
+                            Selecionado: true
+                        }]
+                }
+                var oUsuario = JSON.parse(JSON.stringify(oUsuario));
                 oUsuario.Senha = oController.descriptografar(oUsuario.Senha)
                 oUsuario.ConfirmarSenha = oUsuario.Senha
                 oController.getOwnerComponent().getModel("criarUsuarioModel").setData(oUsuario);
@@ -178,7 +237,16 @@ sap.ui.define([
                     Bloqueado: false,
                     Tipomensagem: "",
                     Mensagem: "",
-                    Autorizacoes: []
+                    Autorizacoes: [ {
+                            CodigoAutorizacao: "01",
+                            DescrAutorizacao: "INSPEÇÃO MATERIAL RODANTE",
+                            Selecionado: true
+                        },
+                        {
+                            CodigoAutorizacao: "02",
+                            DescrAutorizacao: "MOVIMENTAÇÃO MATERIAL RODANTE",
+                            Selecionado: true
+                        }]
                 }
 
                 oController.getOwnerComponent().getModel("criarUsuarioModel").setData(oUsuario);

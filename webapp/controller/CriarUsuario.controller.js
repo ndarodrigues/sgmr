@@ -281,6 +281,7 @@ sap.ui.define([
                 if (oUsuario.Centro == "") {
                     oCentroInput.setValueState("Error");
                     var oMockMessage = {
+           
                         type: 'Error',
                         title: oController.getView().getModel("i18n").getResourceBundle().getText("campoobrigatorio"),
                         description: oController.getView().getModel("i18n").getResourceBundle().getText("campocentro"),

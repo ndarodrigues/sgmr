@@ -21,6 +21,9 @@ sap.ui.define([
                 oView.bindElement("loginModel>/");
                 oView.bindElement("busyDialogModel>/")
                 oView.bindElement("acessosModel>/")
+
+                 oController.getOwnerComponent().getModel("usuarioModel").setData({CodUsuario: "USUARIO01"});
+                  oController.getOwnerComponent().getModel("usuarioModel").refresh()
                 oView.bindElement("usuarioModel>/")
                 
                 var oModel = new JSONModel();

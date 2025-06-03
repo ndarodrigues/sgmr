@@ -13,93 +13,91 @@ sap.ui.define([
 
     return Controller.extend("com.pontual.sgmr.controller.App", {
 
-        	getRouter: function () {
-			return UIComponent.getRouterFor(this);
-		},
+        getRouter: function () {
+            return UIComponent.getRouterFor(this);
+        },
 
-		onNavBack: function () {
-			var oHistory, sPreviousHash;
+        onNavBack: function () {
+            var oHistory, sPreviousHash;
 
-			oHistory = History.getInstance();
-			sPreviousHash = oHistory.getPreviousHash();
+            oHistory = History.getInstance();
+            sPreviousHash = oHistory.getPreviousHash();
 
-			if (sPreviousHash !== undefined) {
-				window.history.go(-1);
-			} else {
-				this.getRouter().navTo("Login", {}, true /*no history*/);
-			}
-		},
+            if (sPreviousHash !== undefined) {
+                window.history.go(-1);
+            } else {
+                this.getRouter().navTo("Login", {}, true /*no history*/);
+            }
+        },
 
-		onSairApp: function () {
-			this.getRouter().navTo("Login", {}, true /*no history*/);
-		},
+        onSairApp: function () {
+            this.getRouter().navTo("Login", {}, true /*no history*/);
+        },
 
-		carregarAcessos: function () {
+        carregarAcessos: function () {
 
-			oController = this;
+            oController = this;
 
-			var aAutorizacoes = oController.getOwnerComponent().getModel("usuarioModel").getProperty("/Autorizacoes")
+            var aAutorizacoes = oController.getOwnerComponent().getModel("usuarioModel").getProperty("/Autorizacoes")
 
-			var oAcesso = {
-				ordem: false,
-				comboio: false,
-				administrativo: false
-			}
+            var oAcesso = {
+                administrativo: true
+            }
 
-			if (aAutorizacoes) {
-				aAutorizacoes.forEach(oAutorizacao => {
-					if (oAutorizacao.CodigoAutorizacao == "016" || oAutorizacao.CodigoAutorizacao == "017" || oAutorizacao.CodigoAutorizacao == "018" ||
-						oAutorizacao.CodigoAutorizacao == "019" || oAutorizacao.CodigoAutorizacao == "020") {
-						oAcesso.ordem = true;
-					}
-					if (oAutorizacao.CodigoAutorizacao == "000") {
-						oAcesso.comboio = true;
-					}
-					if (oAutorizacao.CodigoAutorizacao == "001") {
-						oAcesso.administrativo = true;
-					}
-				});
-			}
+            if (aAutorizacoes) {
+                aAutorizacoes.forEach(oAutorizacao => {
+                    if (oAutorizacao.CodigoAutorizacao == "016" || oAutorizacao.CodigoAutorizacao == "017" || oAutorizacao.CodigoAutorizacao == "018" ||
+                        oAutorizacao.CodigoAutorizacao == "019" || oAutorizacao.CodigoAutorizacao == "020") {
+                        oAcesso.ordem = true;
+                    }
+                    if (oAutorizacao.CodigoAutorizacao == "000") {
+                        oAcesso.comboio = true;
+                    }
+                    if (oAutorizacao.CodigoAutorizacao == "001") {
+                        oAcesso.administrativo = true;
+                    }
+                });
+            }
 
-			oController.getOwnerComponent().getModel("acessosModel").setData(oAcesso)
-			oController.getOwnerComponent().getModel("acessosModel").refresh();
-		},
+            oController.getOwnerComponent().getModel("acessosModel").setData(oAcesso)
+            oController.getOwnerComponent().getModel("acessosModel").refresh();
+        },
 
-		/** Funções de Banco de Dados */
+        /** Funções de Banco de Dados */
 
 
-		gravarLocalStorage: function (pStorage, pData) {
-			var oStorage = jQuery.sap.storage(jQuery.sap.storage.Type.local);
-			oStorage.put(pStorage, pData);
-		},
+        gravarLocalStorage: function (pStorage, pData) {
+            var oStorage = jQuery.sap.storage(jQuery.sap.storage.Type.local);
+            oStorage.put(pStorage, pData);
+        },
 
-		lerLocalStorage: function (pStorage) {
-			var oStorage = jQuery.sap.storage(jQuery.sap.storage.Type.local);
-			var oData = oStorage.get(pStorage);
+        lerLocalStorage: function (pStorage) {
+            var oStorage = jQuery.sap.storage(jQuery.sap.storage.Type.local);
+            var oData = oStorage.get(pStorage);
 
-			return oData;
-		},
+            return oData;
+        },
 
-		gravarNomeBancoDados: function (pUsuario) {
-			var oStorage = jQuery.sap.storage(jQuery.sap.storage.Type.local);
-			var data = {
-				"databasename": "BDSGMR_" + pUsuario
-			};
-			oStorage.put("SGMR_StorageSet", data);
-		},
+        gravarNomeBancoDados: function (pUsuario) {
+            var oStorage = jQuery.sap.storage(jQuery.sap.storage.Type.local);
+            var data = {
+                "databasename": "BDSGMR_" + pUsuario
+            };
+            oStorage.put("SGMR_StorageSet", data);
+        },
 
-		getDatabaseName: function () {
-			var oStorage = jQuery.sap.storage(jQuery.sap.storage.Type.local);
-			var oData = oStorage.get("SGMR_StorageSet");
+        getDatabaseName: function () {
+            var oStorage = jQuery.sap.storage(jQuery.sap.storage.Type.local);
+            var oData = oStorage.get("SGMR_StorageSet");
 
-			return oData.databasename;
-		},
+            return oData.databasename;
+        },
 
-		getDatabaseVersion: function () {
-			return BD_VERSION;
-		},
+        getDatabaseVersion: function () {
+            return BD_VERSION;
+        },
 
-        
+
         onInit: function () {
             oController = this;
             oView = oController.getView();
@@ -240,6 +238,15 @@ sap.ui.define([
             });
 
             return sIcon;
+        },
+
+        descriptografar: function (content) {
+            try {
+                return atob(content);
+            } catch (error) {
+                return content;
+            }
+            v
         },
 
 

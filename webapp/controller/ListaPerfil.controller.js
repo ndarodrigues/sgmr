@@ -14,8 +14,50 @@ sap.ui.define([
 
         return Controller.extend("com.pontual.sgmr.controller.ListaPerfil", {
             onInit: function () {
+
                 oController = this;
                 oView = oController.getView();
+
+                var oPerfil = [{
+                    CodigoPerfil: 0,
+                    DescrPerfil: "MASTER",
+                    Sincronizado: "N",
+                    HabilitarTelaCriarPerfil: true,
+                    AutorizacaoSet: [
+                        {
+                            CodigoAutorizacao: "01",
+                            DescrAutorizacao: "INSPEÇÃO MATERIAL RODANTE",
+                            Selecionado: true
+                        },
+                        {
+                            CodigoAutorizacao: "02",
+                            DescrAutorizacao: "MOVIMENTAÇÃO MATERIAL RODANTE",
+                            Selecionado: true
+                        }
+
+
+                    ]},
+                    {
+                        CodigoPerfil: 1,
+                        DescrPerfil: "INSPETOR",
+                        Sincronizado: "N",
+                        HabilitarTelaCriarPerfil: true,
+                        AutorizacaoSet: [
+                            {
+                                CodigoAutorizacao: "01",
+                                DescrAutorizacao: "INSPEÇÃO MATERIAL RODANTE",
+                                Selecionado: true
+                            },
+
+
+                        ]
+                    }
+                ]
+
+
+                oController.getOwnerComponent().getModel("listaPerfilModel").setData(oPerfil);
+                oController.getOwnerComponent().getModel("listaPerfilModel").refresh()
+
 
                 oView.bindElement("listaPerfilModel>/");
                 oView.bindElement("layoutTelaModel>/");
@@ -154,40 +196,16 @@ sap.ui.define([
                     HabilitarTelaCriarPerfil: true,
                     AutorizacaoSet: [
                         {
-                            CodigoAutorizacao: "016",
-                            DescrAutorizacao: "ATIVIDADES DE LAVADOR",
+                            CodigoAutorizacao: "01",
+                            DescrAutorizacao: "INSPEÇÃO MATERIAL RODANTE",
                             Selecionado: false
-                        },
-                        {
-                            CodigoAutorizacao: "017",
-                            DescrAutorizacao: "ATIVIDADES DE LUBRIFICADOR",
-                            Selecionado: false
-                        },
-                        {
-                            CodigoAutorizacao: "018",
-                            DescrAutorizacao: "ATIVIDADES DE MECÂNICA",
-                            Selecionado: false
-                        },
-                        {
-                            CodigoAutorizacao: "019",
-                            DescrAutorizacao: "ATIVIDADES DE ELÉTRICA",
-                            Selecionado: false
-                        },
-                        {
-                            CodigoAutorizacao: "020",
-                            DescrAutorizacao: "ATIVIDADES DE BORRACHARIA",
-                            Selecionado: false
-                        },
-                        {
-                            CodigoAutorizacao: "000",
-                            DescrAutorizacao: "COMBOIO",
-                            Selecionado: false
-                        },
-                        {
-                            CodigoAutorizacao: "001",
-                            DescrAutorizacao: "ADMINISTRADOR",
+                        }, {
+                            CodigoAutorizacao: "02",
+                            DescrAutorizacao: "MOVIMENTAÇÃO MATERIAL RODANTE",
                             Selecionado: false
                         }
+                        
+
 
                     ]
                 }

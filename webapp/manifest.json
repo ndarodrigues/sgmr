@@ -96,6 +96,9 @@
       "criarUsuarioModel": {
         "type": "sap.ui.model.json.JSONModel"
       },
+      "usuarioModel": {
+        "type": "sap.ui.model.json.JSONModel"
+      },
       "perfilCriarModel": {
         "type": "sap.ui.model.json.JSONModel"
       },
@@ -106,6 +109,9 @@
         "type": "sap.ui.model.json.JSONModel"
       },
       "layoutTelaModel": {
+        "type": "sap.ui.model.json.JSONModel"
+      },
+      "acessosModel": {
         "type": "sap.ui.model.json.JSONModel"
       }
     },
