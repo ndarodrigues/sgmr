@@ -92,6 +92,21 @@
       },
       "busyDialogModel": {
         "type": "sap.ui.model.json.JSONModel"
+      },
+      "criarUsuarioModel": {
+        "type": "sap.ui.model.json.JSONModel"
+      },
+      "perfilCriarModel": {
+        "type": "sap.ui.model.json.JSONModel"
+      },
+      "listaPerfilModel": {
+        "type": "sap.ui.model.json.JSONModel"
+      },
+      "listaUsuariosModel": {
+        "type": "sap.ui.model.json.JSONModel"
+      },
+      "layoutTelaModel": {
+        "type": "sap.ui.model.json.JSONModel"
       }
     },
     "resources": {
@@ -146,6 +161,34 @@
           "target": [
             "Administrativo"
           ]
+        },
+         {
+          "name": "ListaPerfil",
+          "pattern": "ListaPerfil",
+          "target": [
+            "ListaPerfil"
+          ]
+        },
+        {
+          "name": "ListaUsuario",
+          "pattern": "ListaUsuario",
+          "target": [
+            "ListaUsuario"
+          ]
+        },
+        {
+          "name": "CriarPerfil",
+          "pattern": "CriarPerfil",
+          "target": [
+            "CriarPerfil"
+          ]
+        },
+        {
+          "name": "CriarUsuario",
+          "pattern": "CriarUsuario",
+          "target": [
+            "CriarUsuario"
+          ]
         }
       ],
       "targets": {
@@ -183,6 +226,34 @@
           "clearControlAggregation": false,
           "viewId": "Administrativo",
           "viewName": "Administrativo"
+        },
+        "ListaPerfil": {
+          "viewType": "XML",
+          "transition": "slide",
+          "clearControlAggregation": false,
+          "viewId": "ListaPerfil",
+          "viewName": "ListaPerfil"
+        },
+        "ListaUsuario": {
+          "viewType": "XML",
+          "transition": "slide",
+          "clearControlAggregation": false,
+          "viewId": "ListaUsuario",
+          "viewName": "ListaUsuario"
+        },
+        "CriarPerfil": {
+          "viewType": "XML",
+          "transition": "slide",
+          "clearControlAggregation": false,
+          "viewId": "CriarPerfil",
+          "viewName": "CriarPerfil"
+        },
+        "CriarUsuario": {
+          "viewType": "XML",
+          "transition": "slide",
+          "clearControlAggregation": false,
+          "viewId": "CriarUsuario",
+          "viewName": "CriarUsuario"
         }
       }
     },

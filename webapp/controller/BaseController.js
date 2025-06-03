@@ -83,14 +83,14 @@ sap.ui.define([
 		gravarNomeBancoDados: function (pUsuario) {
 			var oStorage = jQuery.sap.storage(jQuery.sap.storage.Type.local);
 			var data = {
-				"databasename": "BDCMM_" + pUsuario
+				"databasename": "BDSGMR_" + pUsuario
 			};
-			oStorage.put("CMM_StorageSet", data);
+			oStorage.put("SGMR_StorageSet", data);
 		},
 
 		getDatabaseName: function () {
 			var oStorage = jQuery.sap.storage(jQuery.sap.storage.Type.local);
-			var oData = oStorage.get("CMM_StorageSet");
+			var oData = oStorage.get("SGMR_StorageSet");
 
 			return oData.databasename;
 		},
