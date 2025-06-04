@@ -105,6 +105,9 @@
       "listaPerfilModel": {
         "type": "sap.ui.model.json.JSONModel"
       },
+      "listaMaterialRodante": {
+        "type": "sap.ui.model.json.JSONModel"
+      },
       "listaUsuariosModel": {
         "type": "sap.ui.model.json.JSONModel"
       },
@@ -176,6 +179,13 @@
           ]
         },
         {
+          "name": "ListaMaterialRodante",
+          "pattern": "ListaMaterialRodante",
+          "target": [
+            "ListaMaterialRodante"
+          ]
+        },
+        {
           "name": "ListaUsuario",
           "pattern": "ListaUsuario",
           "target": [
@@ -239,6 +249,13 @@
           "clearControlAggregation": false,
           "viewId": "ListaPerfil",
           "viewName": "ListaPerfil"
+        },
+        "ListaMaterialRodante": {
+          "viewType": "XML",
+          "transition": "slide",
+          "clearControlAggregation": false,
+          "viewId": "ListaMaterialRodante",
+          "viewName": "ListaMaterialRodante"
         },
         "ListaUsuario": {
           "viewType": "XML",
