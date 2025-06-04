@@ -102,6 +102,12 @@
       "perfilCriarModel": {
         "type": "sap.ui.model.json.JSONModel"
       },
+      "materialRodanteCriarModel": {
+        "type": "sap.ui.model.json.JSONModel"
+      },
+      "listaMaterialRodanteModel": {
+        "type": "sap.ui.model.json.JSONModel"
+      },
       "listaPerfilModel": {
         "type": "sap.ui.model.json.JSONModel"
       },

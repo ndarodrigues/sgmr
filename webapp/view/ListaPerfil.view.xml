@@ -37,7 +37,7 @@
                             <OverflowToolbar id="otbSubheader">
                                 <Title text="{i18n>listaperfis}" level="H2" />
                                 <ToolbarSpacer />
-                                <Button id="criarPerfilButton" width="12rem" text="{i18n>criarperfil}" type="Emphasized" press="onCriarPerfil" icon="sap-icon://business-card" class="sapUiSmallMarginBottom"	></Button>                
+                                <Button id="criarMaterialRodanteButton" width="12rem" text="{i18n>criarperfil}" type="Emphasized" press="onCriarPerfil" icon="sap-icon://business-card" class="sapUiSmallMarginBottom"	></Button>                
                             </OverflowToolbar>
                         </headerToolbar>
                         <columns>

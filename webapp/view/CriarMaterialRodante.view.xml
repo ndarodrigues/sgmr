@@ -1,4 +1,4 @@
-<mvc:View controllerName="com.pontual.sgmr.controller.CriarPerfil"
+<mvc:View controllerName="com.pontual.sgmr.controller.CriarmaterialRodante"
     height="100%"
     xmlns:mvc="sap.ui.core.mvc" 
     xmlns:l="sap.ui.layout"
@@ -25,10 +25,10 @@
         </headerContent>            
 		<content>   
             <VBox class="sapUiSmallMargin">     
-				<f:Form id="criarPerfilForm"
+				<f:Form id="criarmaterialRodanteForm"
 				editable="true">
 				<f:title>
-					<core:Title text="{i18n>criarmaterialrodante}" />
+					<core:Title text="{i18n>criarmaterialRodante}" />
 				</f:title>
 				<f:layout>
 					<f:ResponsiveGridLayout
@@ -49,14 +49,14 @@
 				<f:formContainers>
 					<f:FormContainer title="{i18n>dadosgerais}">
 						<f:formElements>
-							<f:FormElement label="{i18n>materialrodante}">
+							<f:FormElement label="{i18n>materialRodante}">
 								<f:fields>
 									<Input 
-                                        id="perfilInput"
-										value="{perfilCriarModel>DescrPerfil}"
+                                        id="materialRodanteInput"
+										value="{materialRodanteCriarModel>DescrmaterialRodante}"
 										showClearIcon="true"
                                         required="true"
-                                        enabled="{perfilCriarModel>HabilitarTelaCriarPerfil}"
+                                        enabled="{materialRodanteCriarModel>HabilitarTelaCriarmaterialRodante}"
 										/>
 								</f:fields>
 							</f:FormElement>
@@ -69,8 +69,8 @@
         alternateRowColors="true"
         autoPopinMode="true" 
         contextualWidth="Auto"		
-        mode="{= ${perfilCriarModel>HabilitarTelaCriarPerfil} ? 'MultiSelect' : 'None' }" 
-        items="{perfilCriarModel>/AutorizacaoSet}">
+        mode="{= ${materialRodanteCriarModel>HabilitarTelaCriarmaterialRodante} ? 'MultiSelect' : 'None' }" 
+        items="{materialRodanteCriarModel>/AutorizacaoSet}">
             <headerToolbar>
                 <OverflowToolbar id="otbSubheader">
                     <Title text="{i18n>autorizacoes}" level="H2" />
@@ -87,10 +87,10 @@
                 </Column>									
             </columns>
             <items>
-                <ColumnListItem vAlign="Middle" navigated="true" type="Inactive" press="onOrdemPress" selected="{perfilCriarModel>Selecionado}">	
+                <ColumnListItem vAlign="Middle" navigated="true" type="Inactive" press="onOrdemPress" selected="{materialRodanteCriarModel>Selecionado}">	
                     <cells>
-                        <ObjectIdentifier title="{perfilCriarModel>CodigoAutorizacao}"/>
-                        <ObjectIdentifier title="{perfilCriarModel>DescrAutorizacao}"/>
+                        <ObjectIdentifier title="{materialRodanteCriarModel>CodigoAutorizacao}"/>
+                        <ObjectIdentifier title="{materialRodanteCriarModel>DescrAutorizacao}"/>
                     </cells>
                 </ColumnListItem>
             </items>
@@ -106,8 +106,8 @@
 					press=".handleMessagePopoverPress"
 					ariaHasPopup="Dialog"/>		                
 				<ToolbarSpacer/>
-                <Button id="confirmarPerfilButton" text="{i18n>confirmar}" type="Success" press="onConfirmarPerfil" icon="sap-icon://save" enabled="{perfilCriarModel>HabilitarTelaCriarPerfil}"></Button>
-                <Button id="cancelarPerfilButton" text="{i18n>cancelar}" type="Reject" press="onCancelarPerfil" icon="sap-icon://cancel" enabled="{perfilCriarModel>HabilitarTelaCriarPerfil}"></Button>   
+                <Button id="confirmarmaterialRodanteButton" text="{i18n>confirmar}" type="Success" press="onConfirmarmaterialRodante" icon="sap-icon://save" enabled="{materialRodanteCriarModel>HabilitarTelaCriarmaterialRodante}"></Button>
+                <Button id="cancelarmaterialRodanteButton" text="{i18n>cancelar}" type="Reject" press="onCancelarmaterialRodante" icon="sap-icon://cancel" enabled="{materialRodanteCriarModel>HabilitarTelamaterialRodante}"></Button>   
 			</OverflowToolbar>
 		</footer>
     </Page>

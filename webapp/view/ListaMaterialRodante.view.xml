@@ -26,33 +26,33 @@
             />
         </headerContent>            
 		<content>               
-                    <Table id="idListaPerfilTable" 
+                    <Table id="idListaMaterialRodanteTable" 
                     alternateRowColors="true"
                     autoPopinMode="true" 
                     contextualWidth="Auto"		
                     growing="false" 
                     growingThreshold="10" 
-                    items="{listaPerfilModel>/}">
+                    items="{listaMaterialRodanteModel>/}">
                         <headerToolbar>
                             <OverflowToolbar id="otbSubheader">
                                 <Title text="{i18n>listamaterialrodante}" level="H2" />
                                 <ToolbarSpacer />
-                                <Button id="criarPerfilButton" width="12rem" text="{i18n>criarmaterialrodante}" type="Emphasized" press="onCriarPerfil" icon="sap-icon://business-card" class="sapUiSmallMarginBottom"	></Button>                
+                                <Button id="criarMaterialRodanteButton" width="12rem" text="{i18n>criarmaterialrodante}" type="Emphasized" press="onCriarMaterialRodante" icon="sap-icon://business-card" class="sapUiSmallMarginBottom"	></Button>                
                             </OverflowToolbar>
                         </headerToolbar>
                         <columns>
                             <Column hAlign="Begin">
-                                <Text text="{i18n>materialrodante}" />
+                                <Text text="{i18n>codigo}" />
                             </Column>
-                            <Column hAlign="Center" width="10%">
-                                <Text text="" />
-                            </Column>										
+                            <Column hAlign="Begin">
+                                <Text text="{i18n>materialrodante}" />
+                            </Column>                                           								
                         </columns>
                         <items>
-                            <ColumnListItem vAlign="Middle" navigated="true" type="Navigation" press="onPerfilPress">
+                            <ColumnListItem vAlign="Middle" navigated="true" type="Navigation" press="onMaterialRodantePress">
                                 <cells>
-                                    <ObjectIdentifier title="{listaPerfilModel>DescrPerfil}"/>
-                                    <Button id="excluirPerfilButton" type="Reject" press="onEliminarPerfil" icon="sap-icon://delete" class="sapUiSmallMarginBottom"	></Button>                
+                                    <ObjectIdentifier title="{listaMaterialRodanteModel>DescrMaterialRodante}"/>
+                                    <Button id="excluirMaterialRodanteButton" type="Reject" press="onEliminarMaterialRodante" icon="sap-icon://delete" class="sapUiSmallMarginBottom"	></Button>                
                                 </cells>
                             </ColumnListItem>
                         </items>

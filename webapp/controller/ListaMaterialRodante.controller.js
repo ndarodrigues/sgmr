@@ -18,11 +18,11 @@ sap.ui.define([
                 oController = this;
                 oView = oController.getView();
 
-                var oPerfil = [{
-                    CodigoPerfil: 0,
-                    DescrPerfil: "EX 1200 5 01",
+                var omaterialRodante = [{
+                    CodigomaterialRodante: 0,
+                    DescrmaterialRodante: "EX 1200 5 01",
                     Sincronizado: "N",
-                    HabilitarTelaCriarPerfil: true,
+                    HabilitarTelaCriarmaterialRodante: true,
                     AutorizacaoSet: [
                         {
                             CodigoAutorizacao: "01",
@@ -38,10 +38,10 @@ sap.ui.define([
 
                     ]},
                     {
-                        CodigoPerfil: 1,
-                        DescrPerfil: "EX 1200 5 01",
+                        CodigomaterialRodante: 1,
+                        DescrmaterialRodante: "EX 1200 5 01",
                         Sincronizado: "N",
-                        HabilitarTelaCriarPerfil: true,
+                        HabilitarTelaCriarmaterialRodante: true,
                         AutorizacaoSet: [
                             {
                                 CodigoAutorizacao: "01",
@@ -55,11 +55,11 @@ sap.ui.define([
                 ]
 
 
-                oController.getOwnerComponent().getModel("listaPerfilModel").setData(oPerfil);
-                oController.getOwnerComponent().getModel("listaPerfilModel").refresh()
+                oController.getOwnerComponent().getModel("listaMaterialRodanteModel").setData(omaterialRodante);
+                oController.getOwnerComponent().getModel("listaMaterialRodanteModel").refresh()
 
 
-                oView.bindElement("listaPerfilModel>/");
+                oView.bindElement("listaMaterialRodanteModel>/");
                 oView.bindElement("layoutTelaModel>/");
                 oView.bindElement("busyDialogModel>/")
 
@@ -68,7 +68,7 @@ sap.ui.define([
                 this.getView().setModel(oModel);
 
                 this._oRouter = sap.ui.core.UIComponent.getRouterFor(this);
-                this._oRouter.getRoute("ListaPerfil").attachMatched(this._handleRouteMatched, this);
+                this._oRouter.getRoute("ListaMaterialRodante").attachMatched(this._handleRouteMatched, this);
 
             },
 
@@ -78,7 +78,7 @@ sap.ui.define([
                 var aFilters = []
                 var filter = new sap.ui.model.Filter({ path: "Sincronizado", operator: sap.ui.model.FilterOperator.NE, value1: "E" });
                 aFilters.push(filter);
-                this.getView().byId("idListaPerfilTable").getBinding("items").filter(aFilters, "Application");
+                this.getView().byId("idListaMaterialRodanteTable").getBinding("items").filter(aFilters, "Application");
 
                 var oModel = new JSONModel();
                 oModel.setData([]);
@@ -132,23 +132,23 @@ sap.ui.define([
             },
 
 
-            onEliminarPerfil: function (oEvent) {
-                var oPerfil = oEvent.getSource().getBindingContext("listaPerfilModel").getModel().getProperty(oEvent.getSource().getBindingContext("listaPerfilModel").getPath());
+            onEliminarmaterialRodante: function (oEvent) {
+                var omaterialRodante = oEvent.getSource().getBindingContext("listaMaterialRodanteModel").getModel().getProperty(oEvent.getSource().getBindingContext("listaMaterialRodanteModel").getPath());
                 var aUsuarios = oController.getOwnerComponent().getModel("listaUsuariosModel").getData()
                 var oUsuario = aUsuarios.find(function (pUsuario) {
-                    return pUsuario.Perfil === oPerfil.DescrPerfil
+                    return pUsuario.materialRodante === omaterialRodante.DescrmaterialRodante
                 })
                 if (oUsuario == undefined) {
-                    oPerfil.Sincronizado = "E"
-                    oController.getOwnerComponent().getModel("listaPerfilModel").refresh()
-                    oController.limparTabelaIndexDB("tb_perfil").then(
+                    omaterialRodante.Sincronizado = "E"
+                    oController.getOwnerComponent().getModel("listaMaterialRodanteModel").refresh()
+                    oController.limparTabelaIndexDB("tb_materialRodante").then(
                         function (result) {
-                            oController.gravarTabelaIndexDB("tb_perfil", oController.getOwnerComponent().getModel("listaPerfilModel").getData()).then(
+                            oController.gravarTabelaIndexDB("tb_materialRodante", oController.getOwnerComponent().getModel("listaMaterialRodanteModel").getData()).then(
                                 function (result) {
-                                    MessageToast.show("Perfil marcado para eliminação.");
-                                    oController.perfilUpdate().then(
+                                    MessageToast.show("materialRodante marcado para eliminação.");
+                                    oController.materialRodanteUpdate().then(
                                         function (result) {
-                                            MessageToast.show("Perfil eliminado com sucesso");
+                                            MessageToast.show("materialRodante eliminado com sucesso");
                                             var aMensagens = oController.getOwnerComponent().getModel("mensagensModel").getData();
                                             oController.getView().getModel().setData(aMensagens);
                                             oController.getView().getModel().refresh()
@@ -165,12 +165,12 @@ sap.ui.define([
 
                             })
                 } else {
-                    MessageToast.show("Perfil associado a usuário. Remova antes de eliminar.");
+                    MessageToast.show("materialRodante associado a usuário. Remova antes de eliminar.");
                     var oMockMessage = {
                         type: 'Error',
-                        title: 'Perfil em uso',
-                        description: 'Perfil associado a usuário. Remova antes de eliminar.',
-                        subtitle: 'Perfil',
+                        title: 'materialRodante em uso',
+                        description: 'materialRodante associado a usuário. Remova antes de eliminar.',
+                        subtitle: 'materialRodante',
                         counter: 1
                     };
                     oController.getView().getModel().setData([oMockMessage]);
@@ -178,22 +178,22 @@ sap.ui.define([
                 }
             },
 
-            onPerfilPress: function (oEvent) {
-                var oPerfil = oEvent.getSource().getBindingContext("listaPerfilModel").getModel().getProperty(oEvent.getSource().getBindingContext("listaPerfilModel").getPath());
-                var oObjetoNovo = JSON.parse(JSON.stringify(oPerfil));
-                oObjetoNovo.HabilitarTelaCriarPerfil = false
-                oController.getOwnerComponent().getModel("perfilCriarModel").setData(oObjetoNovo);
-                oController.getOwnerComponent().getModel("perfilCriarModel").refresh()
-                oController.getOwnerComponent().getRouter().navTo("CriarPerfil", null, true);
+            onmaterialRodantePress: function (oEvent) {
+                var omaterialRodante = oEvent.getSource().getBindingContext("listaMaterialRodanteModel").getModel().getProperty(oEvent.getSource().getBindingContext("listaMaterialRodanteModel").getPath());
+                var oObjetoNovo = JSON.parse(JSON.stringify(omaterialRodante));
+                oObjetoNovo.HabilitarTelaCriarmaterialRodante = false
+                oController.getOwnerComponent().getModel("materialRodanteCriarModel").setData(oObjetoNovo);
+                oController.getOwnerComponent().getModel("materialRodanteCriarModel").refresh()
+                oController.getOwnerComponent().getRouter().navTo("CriarmaterialRodante", null, true);
             },
 
-            onCriarPerfil: function (oEvent) {
+            onCriarmaterialRodante: function (oEvent) {
 
-                var oPerfil = {
-                    CodigoPerfil: 0,
-                    DescrPerfil: "",
+                var omaterialRodante = {
+                    CodigomaterialRodante: 0,
+                    DescrmaterialRodante: "",
                     Sincronizado: "N",
-                    HabilitarTelaCriarPerfil: true,
+                    HabilitarTelaCriarmaterialRodante: true,
                     AutorizacaoSet: [
                         {
                             CodigoAutorizacao: "01",
@@ -210,9 +210,9 @@ sap.ui.define([
                     ]
                 }
 
-                oController.getOwnerComponent().getModel("perfilCriarModel").setData(oPerfil);
-                oController.getOwnerComponent().getModel("perfilCriarModel").refresh()
-                oController.getOwnerComponent().getRouter().navTo("CriarPerfil", null, true);
+                oController.getOwnerComponent().getModel("materialRodanteCriarModel").setData(omaterialRodante);
+                oController.getOwnerComponent().getModel("materialRodanteCriarModel").refresh()
+                oController.getOwnerComponent().getRouter().navTo("CriarmaterialRodante", null, true);
             },
 
             onSincronizar: function (oEvent) {
