@@ -44,13 +44,17 @@
                             <Column hAlign="Begin">
                                 <Text text="{i18n>codigo}" />
                             </Column>
-                            <Column hAlign="Begin">
+                              <Column hAlign="Begin">
                                 <Text text="{i18n>materialrodante}" />
-                            </Column>                                           								
+                            </Column>
+                            <Column hAlign="Center" width="10%">
+                                <Text text="" />
+                            </Column>										
                         </columns>
                         <items>
                             <ColumnListItem vAlign="Middle" navigated="true" type="Navigation" press="onMaterialRodantePress">
                                 <cells>
+                                    <ObjectIdentifier title="{listaMaterialRodanteModel>Codigo}"/>
                                     <ObjectIdentifier title="{listaMaterialRodanteModel>DescrMaterialRodante}"/>
                                     <Button id="excluirMaterialRodanteButton" type="Reject" press="onEliminarMaterialRodante" icon="sap-icon://delete" class="sapUiSmallMarginBottom"	></Button>                
                                 </cells>

@@ -19,8 +19,8 @@ sap.ui.define([
                 oView = oController.getView();
 
                 var omaterialRodante = [{
-                    CodigomaterialRodante: 0,
-                    DescrmaterialRodante: "EX 1200 5 01",
+                    Codigo: "0001",
+                    DescrMaterialRodante: "EX 1200 5 01",
                     Sincronizado: "N",
                     HabilitarTelaCriarmaterialRodante: true,
                     AutorizacaoSet: [
@@ -38,8 +38,8 @@ sap.ui.define([
 
                     ]},
                     {
-                        CodigomaterialRodante: 1,
-                        DescrmaterialRodante: "EX 1200 5 01",
+                        Codigo: "0002",
+                        DescrMaterialRodante: "EX 1200 5 02",
                         Sincronizado: "N",
                         HabilitarTelaCriarmaterialRodante: true,
                         AutorizacaoSet: [
@@ -178,13 +178,13 @@ sap.ui.define([
                 }
             },
 
-            onmaterialRodantePress: function (oEvent) {
+            onMaterialRodantePress: function (oEvent) {
                 var omaterialRodante = oEvent.getSource().getBindingContext("listaMaterialRodanteModel").getModel().getProperty(oEvent.getSource().getBindingContext("listaMaterialRodanteModel").getPath());
                 var oObjetoNovo = JSON.parse(JSON.stringify(omaterialRodante));
                 oObjetoNovo.HabilitarTelaCriarmaterialRodante = false
                 oController.getOwnerComponent().getModel("materialRodanteCriarModel").setData(oObjetoNovo);
                 oController.getOwnerComponent().getModel("materialRodanteCriarModel").refresh()
-                oController.getOwnerComponent().getRouter().navTo("CriarmaterialRodante", null, true);
+                oController.getOwnerComponent().getRouter().navTo("CriarMaterialRodante", null, true);
             },
 
             onCriarmaterialRodante: function (oEvent) {
@@ -212,7 +212,7 @@ sap.ui.define([
 
                 oController.getOwnerComponent().getModel("materialRodanteCriarModel").setData(omaterialRodante);
                 oController.getOwnerComponent().getModel("materialRodanteCriarModel").refresh()
-                oController.getOwnerComponent().getRouter().navTo("CriarmaterialRodante", null, true);
+                oController.getOwnerComponent().getRouter().navTo("CriarMaterialRodante", null, true);
             },
 
             onSincronizar: function (oEvent) {

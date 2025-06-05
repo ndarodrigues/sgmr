@@ -1,114 +1,69 @@
-<mvc:View controllerName="com.pontual.sgmr.controller.CriarmaterialRodante"
-    height="100%"
-    xmlns:mvc="sap.ui.core.mvc" 
-    xmlns:l="sap.ui.layout"
-	xmlns:f="sap.ui.layout.form"
-	xmlns:core="sap.ui.core"   
-    displayBlock="true"
-    xmlns="sap.m">
-    <Page id="pageInicio" 
-          title="{i18n>title}" 
-          titleAlignment="Center"
-          showNavButton="true"   
-          navButtonPress="onNavBack"       
-          class="sapUiContentPadding sapUiResponsivePadding--header sapUiResponsivePadding--subHeader sapUiResponsivePadding--content sapUiResponsivePadding--footer">
-        <headerContent>
-            <ObjectStatus
-                id="networkStatus"
-                active="false"
-                inverted="true"
-                icon="{path: 'conexaoModel>statusConexao',
-                    formatter: 'com.pontual.sgmr.model.formatter.getIconeConexao'}"
-                state="{path: 'conexaoModel>statusConexao',
-                        formatter: 'com.pontual.sgmr.model.formatter.getCorIconeConexao'}"
-            />
-        </headerContent>            
-		<content>   
-            <VBox class="sapUiSmallMargin">     
-				<f:Form id="criarmaterialRodanteForm"
-				editable="true">
-				<f:title>
-					<core:Title text="{i18n>criarmaterialRodante}" />
-				</f:title>
-				<f:layout>
-					<f:ResponsiveGridLayout
-						labelSpanXL="4"
-						labelSpanL="4"
-						labelSpanM="12"
-						labelSpanS="12"
-						adjustLabelSpan="false"
-						emptySpanXL="0"
-						emptySpanL="0"
-						emptySpanM="0"
-						emptySpanS="0"
-						columnsXL="2"
-						columnsL="2"
-						columnsM="2"
-						singleContainerFullSize="false" />
-				</f:layout>
-				<f:formContainers>
-					<f:FormContainer title="{i18n>dadosgerais}">
-						<f:formElements>
-							<f:FormElement label="{i18n>materialRodante}">
-								<f:fields>
-									<Input 
-                                        id="materialRodanteInput"
-										value="{materialRodanteCriarModel>DescrmaterialRodante}"
-										showClearIcon="true"
-                                        required="true"
-                                        enabled="{materialRodanteCriarModel>HabilitarTelaCriarmaterialRodante}"
-										/>
-								</f:fields>
-							</f:FormElement>
-						</f:formElements>
-					</f:FormContainer>		
+<mvc:View controllerName="com.pontual.sgmr.controller.CriarMaterialRodante" xmlns:mvc="sap.ui.core.mvc"
+	xmlns="sap.uxap"
+	xmlns:m="sap.m"
+	xmlns:blockcolor="com.pontual.sgmr.view"
+	height="100%">
+	<ObjectPageLayout id="ObjectPageLayout" upperCaseAnchorBar="false">
+		<headerTitle>
+			<ObjectPageHeader objectTitle="Section sample">
+			</ObjectPageHeader>
+		</headerTitle>
 
-				</f:formContainers>				
-			</f:Form>           
-        <Table id="idListaAutorizacoesTable" 
-        alternateRowColors="true"
-        autoPopinMode="true" 
-        contextualWidth="Auto"		
-        mode="{= ${materialRodanteCriarModel>HabilitarTelaCriarmaterialRodante} ? 'MultiSelect' : 'None' }" 
-        items="{materialRodanteCriarModel>/AutorizacaoSet}">
-            <headerToolbar>
-                <OverflowToolbar id="otbSubheader">
-                    <Title text="{i18n>autorizacoes}" level="H2" />
-                    <ToolbarSpacer />  
-                                
-                </OverflowToolbar>
-            </headerToolbar>
-            <columns>
-                <Column hAlign="Begin" width="20%">
-                    <Text text="{i18n>autorizacao}" />
-                </Column>
-                <Column hAlign="Begin" width="80%">
-                    <Text text="{i18n>descricao}" />
-                </Column>									
-            </columns>
-            <items>
-                <ColumnListItem vAlign="Middle" navigated="true" type="Inactive" press="onOrdemPress" selected="{materialRodanteCriarModel>Selecionado}">	
-                    <cells>
-                        <ObjectIdentifier title="{materialRodanteCriarModel>CodigoAutorizacao}"/>
-                        <ObjectIdentifier title="{materialRodanteCriarModel>DescrAutorizacao}"/>
-                    </cells>
-                </ColumnListItem>
-            </items>
-        </Table>
-	</VBox>         
-		</content>
-		<footer>
-			<OverflowToolbar>
-				<Button id="messagePopoverBtn"
-					icon="{ path: '/', formatter: '.buttonIconFormatter' }"
-					type="{ path: '/', formatter: '.buttonTypeFormatter' }"
-					text= "{path: '/', formatter: '.highestSeverityMessages' }"
-					press=".handleMessagePopoverPress"
-					ariaHasPopup="Dialog"/>		                
-				<ToolbarSpacer/>
-                <Button id="confirmarmaterialRodanteButton" text="{i18n>confirmar}" type="Success" press="onConfirmarmaterialRodante" icon="sap-icon://save" enabled="{materialRodanteCriarModel>HabilitarTelaCriarmaterialRodante}"></Button>
-                <Button id="cancelarmaterialRodanteButton" text="{i18n>cancelar}" type="Reject" press="onCancelarmaterialRodante" icon="sap-icon://cancel" enabled="{materialRodanteCriarModel>HabilitarTelamaterialRodante}"></Button>   
-			</OverflowToolbar>
-		</footer>
-    </Page>
+		<headerContent>
+			<m:ObjectAttribute title="" text="This example explains the rules for the rendering of sections"/>
+		</headerContent>
+
+		<sections>
+			<ObjectPageSection titleUppercase="false" title="Section 1">
+				<subSections>
+					<ObjectPageSubSection title="Subsection 1.1" titleUppercase="false">
+						<blocks>
+							<blockcolor:RoletesSuperiores id="bbt1"/>
+						</blocks>
+					</ObjectPageSubSection>
+					<ObjectPageSubSection title="Subsection 1.2" titleUppercase="false">
+						<blocks>
+							<blockcolor:RoletesInferiores id="bbt2"/>
+						</blocks>
+					</ObjectPageSubSection>
+				</subSections>
+			</ObjectPageSection>
+
+			<ObjectPageSection titleUppercase="false" title="Section 2">
+			</ObjectPageSection>
+
+			<ObjectPageSection titleUppercase="false" title="Section 3">
+				<subSections>
+					<ObjectPageSubSection titleUppercase="false">
+						<blocks>
+							<blockcolor:BlockBlueT3 id="bbt3"/>
+						</blocks>
+					</ObjectPageSubSection>
+				</subSections>
+			</ObjectPageSection>
+
+			<ObjectPageSection>
+				<subSections>
+					<ObjectPageSubSection titleUppercase="false">
+						<blocks>
+							<blockcolor:BlockBlueT4 id="bbt4"/>
+						</blocks>
+					</ObjectPageSubSection>
+				</subSections>
+			</ObjectPageSection>
+
+			<ObjectPageSection titleUppercase="false" title="Section 5">
+				<subSections>
+					<ObjectPageSubSection titleUppercase="false">
+						<blocks>
+							<blockcolor:BlockBlueT5 id="bbt5"/>
+						</blocks>
+					</ObjectPageSubSection>
+				</subSections>
+			</ObjectPageSection>
+
+
+		</sections>
+
+	</ObjectPageLayout>
 </mvc:View>

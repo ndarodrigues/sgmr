@@ -205,13 +205,37 @@
             "CriarPerfil"
           ]
         },
+         {
+          "name": "CriarMaterialRodante",
+          "pattern": "CriarMaterialRodante",
+          "target": [
+            "RoletesSuperiores"            
+          ]
+        
+
+        },
         {
           "name": "CriarUsuario",
           "pattern": "CriarUsuario",
           "target": [
             "CriarUsuario"
           ]
+        },
+        {
+          "name": "RoletesSuperiores",
+          "pattern": "RoletesSuperiores",
+          "target": [
+            "RoletesSuperiores"
+          ]
+        },
+         {
+          "name": "RoletesInferiores",
+          "pattern": "RoletesInferiores",
+          "target": [
+            "RoletesInferiores"
+          ]
         }
+
       ],
       "targets": {
         "TargetApp": {
@@ -277,15 +301,37 @@
           "viewId": "CriarPerfil",
           "viewName": "CriarPerfil"
         },
+        "CriarMaterialRodante": {
+          "viewType": "XML",
+          "transition": "slide",
+          "clearControlAggregation": false,
+          "viewId": "CriarMaterialRodante",
+          "viewName": "CriarMaterialRodante"
+        },
         "CriarUsuario": {
           "viewType": "XML",
           "transition": "slide",
           "clearControlAggregation": false,
           "viewId": "CriarUsuario",
           "viewName": "CriarUsuario"
+        },
+        "RoletesSuperiores": {
+          "viewType": "XML",
+          "transition": "slide",
+          "clearControlAggregation": false,
+          "viewId": "RoletesSuperiores",
+          "viewName": "RoletesSuperiores"
+        },
+         "RoletesInferiores": {
+          "viewType": "XML",
+          "transition": "slide",
+          "clearControlAggregation": false,
+          "viewId": "RoletesInferiores",
+          "viewName": "RoletesInferiores"
         }
       }
-    },
+    },	
+   
     "rootView": {
       "viewName": "com.pontual.sgmr.view.App",
       "type": "XML",
