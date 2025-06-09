@@ -7,11 +7,11 @@
     displayBlock="true"
     xmlns="sap.m">
 
-		            <VBox class="sapUiSmallMargin">     
+		    <VBox class="sapUiSmallMargin">     
 				<f:Form id="criarUsuarioForm"
 				editable="true">
 				<f:title>
-					<core:Title text="Roletes Superiores" />
+					<core:Title text="Cabeçalho" />
 				</f:title>
 				<f:layout>
 					<f:ResponsiveGridLayout
@@ -30,85 +30,85 @@
 						singleContainerFullSize="false" />
 				</f:layout>
 				<f:formContainers>
-					<f:FormContainer title="Lado Esquerdo">
+					<f:FormContainer title="">
 						<f:formElements>
-							<f:FormElement label="1º Pos.(Dianteiro) \ % Desgaste">
+							<f:FormElement label="Data">
+								<f:fields>							
+									<DateTimePicker
+									id="inputData"
+									required="true"
+									change="handleChange"
+									class="sapUiSmallMarginBottom"
+									value="{
+										'path': 'comboioModel>Data',
+										'type': 'sap.ui.model.type.DateTime',
+										'formatOptions': {
+											'pattern': 'dd/MM/y HH:mm:ss' 
+										}
+									}"/>					
+								</f:fields>
+							</f:FormElement>
+							<f:FormElement label="Operação">
 								<f:fields>							
 									<Input 
 										value="{criarUsuarioModel>CodUsuario}"
                                         maxLength="12"
 										required="true"
 										showClearIcon="true"
-										description="50%"
 										width="100%"
 										enabled="{layoutTelaModel>HabilitarTelaCriarUsuario}"
 										/>						
 								</f:fields>
 							</f:FormElement>
-							<f:FormElement label="2º Pos. (Centro) \ % Desgaste">
+							<f:FormElement label="Frequência">
 								<f:fields>							
-									<Input 
-										value="{criarUsuarioModel>CodUsuario}"
-                                        maxLength="12"
-										required="true"
-										showClearIcon="true"
-										description="50%"
-										width="100%"
-										enabled="{layoutTelaModel>HabilitarTelaCriarUsuario}"
-										/>						
-								</f:fields>
-							</f:FormElement>
-							<f:FormElement label="3º Pos. (Traseiro) \ % Desgaste">
-								<f:fields>							
-									<Input 
-										value="{criarUsuarioModel>CodUsuario}"
-                                        maxLength="12"
-										required="true"
-										showClearIcon="true"
-										description="50%"
-										width="100%"
-										enabled="{layoutTelaModel>HabilitarTelaCriarUsuario}"
-										/>						
+									<ObjectStatus
+										class="sapMObjectStatusMedium"
+										text="500 Hs"
+										inverted="true"
+										state="Indication13" />							
 								</f:fields>
 							</f:FormElement>                                                                                      
 						</f:formElements>
 					</f:FormContainer>		
-					<f:FormContainer title="Lado Direito">
+					<f:FormContainer title="">
 						<f:formElements>
-							<f:FormElement label="1º Pos.(Dianteiro) \ % Desgaste">
+							<f:FormElement label="Equipamento">
+								<f:fields>		
+									<VBox >
+										<Input 
+											id="equipamentoInput"
+											value="{comboioModel>Equipamento}"
+											required="true"
+											showValueHelp="true"
+											showClearIcon="true"
+											valueHelpOnly="true"
+											change="limparDescricaoEquipamento"
+											valueHelpRequest="handleEquipamentoValueHelp" 
+											/>	
+										<Text text="Descrição do equipamento após selecionado"></Text>		
+									</VBox>					
+								</f:fields>
+							</f:FormElement>
+							<f:FormElement label="Série">
 								<f:fields>							
 									<Input 
 										value="{criarUsuarioModel>CodUsuario}"
                                         maxLength="12"
 										required="true"
 										showClearIcon="true"
-										description="50%"
 										width="100%"
 										enabled="{layoutTelaModel>HabilitarTelaCriarUsuario}"
 										/>						
 								</f:fields>
 							</f:FormElement>
-							<f:FormElement label="2º Pos. (Centro) \ % Desgaste">
+							<f:FormElement label="Horímetro Equipamento">
 								<f:fields>							
 									<Input 
 										value="{criarUsuarioModel>CodUsuario}"
                                         maxLength="12"
 										required="true"
 										showClearIcon="true"
-										description="50%"
-										width="100%"
-										enabled="{layoutTelaModel>HabilitarTelaCriarUsuario}"
-										/>						
-								</f:fields>
-							</f:FormElement>
-							<f:FormElement label="3º Pos. (Traseiro) \ % Desgaste">
-								<f:fields>							
-									<Input 
-										value="{criarUsuarioModel>CodUsuario}"
-                                        maxLength="12"
-										required="true"
-										showClearIcon="true"
-										description="50%"
 										width="100%"
 										enabled="{layoutTelaModel>HabilitarTelaCriarUsuario}"
 										/>						
@@ -116,6 +116,62 @@
 							</f:FormElement>                                                                                      
 						</f:formElements>
 					</f:FormContainer>	
+					<f:FormContainer title="Esteira Esquerda">
+						<f:formElements>
+							<f:FormElement label="TAG">
+								<f:fields>							
+									<Input 
+										value="{criarUsuarioModel>CodUsuario}"
+                                        maxLength="12"
+										required="true"
+										showClearIcon="true"
+										width="100%"
+										enabled="{layoutTelaModel>HabilitarTelaCriarUsuario}"
+										/>						
+								</f:fields>
+							</f:FormElement>
+							<f:FormElement label="Horímetro">
+								<f:fields>							
+									<Input 
+										value="{criarUsuarioModel>CodUsuario}"
+                                        maxLength="12"
+										required="true"
+										showClearIcon="true"
+										width="100%"
+										enabled="{layoutTelaModel>HabilitarTelaCriarUsuario}"
+										/>						
+								</f:fields>
+							</f:FormElement>                                                                                      
+						</f:formElements>
+					</f:FormContainer>	
+					<f:FormContainer title="Esteira Direta">
+						<f:formElements>
+							<f:FormElement label="TAG">
+								<f:fields>							
+									<Input 
+										value="{criarUsuarioModel>CodUsuario}"
+                                        maxLength="12"
+										required="true"
+										showClearIcon="true"
+										width="100%"
+										enabled="{layoutTelaModel>HabilitarTelaCriarUsuario}"
+										/>						
+								</f:fields>
+							</f:FormElement>
+							<f:FormElement label="Horímetro">
+								<f:fields>							
+									<Input 
+										value="{criarUsuarioModel>CodUsuario}"
+                                        maxLength="12"
+										required="true"
+										showClearIcon="true"
+										width="100%"
+										enabled="{layoutTelaModel>HabilitarTelaCriarUsuario}"
+										/>						
+								</f:fields>
+							</f:FormElement>                                                                                      
+						</f:formElements>
+					</f:FormContainer>											
 				</f:formContainers>				
 			</f:Form>     
 		</VBox>
