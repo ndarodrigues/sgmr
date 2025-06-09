@@ -1,4 +1,5 @@
 <mvc:View
+	controllerName="com.pontual.sgmr.controller.ObjectPageSection"    
     height="100%"
     xmlns:mvc="sap.ui.core.mvc" 
     xmlns:l="sap.ui.layout"
@@ -7,12 +8,15 @@
     displayBlock="true"
     xmlns="sap.m">
 
-		            <VBox class="sapUiSmallMargin">     
-				<f:Form id="criarUsuarioForm"
-				editable="true">
-				<f:title>
-					<core:Title text="Roletes Superiores" />
-				</f:title>
+		    <VBox class="sapUiSmallMargin">     
+				<f:Form	editable="true">
+				<f:toolbar>
+					<Toolbar>
+						<Title text="Componente Medido"/>
+						<ToolbarSpacer />
+						<Button icon="sap-icon://image-viewer" press="_handleExibirRoleteSuperior" />
+					</Toolbar>
+				</f:toolbar>
 				<f:layout>
 					<f:ResponsiveGridLayout
 						labelSpanXL="4"
@@ -32,7 +36,7 @@
 				<f:formContainers>
 					<f:FormContainer title="Lado Esquerdo">
 						<f:formElements>
-							<f:FormElement label="1º Pos.(Dianteiro) \ % Desgaste">
+							<f:FormElement label="1º Pos. (Dianteiro)\Desgaste">
 								<f:fields>							
 									<Input 
 										value="{criarUsuarioModel>CodUsuario}"
@@ -45,7 +49,7 @@
 										/>						
 								</f:fields>
 							</f:FormElement>
-							<f:FormElement label="2º Pos. (Centro) \ % Desgaste">
+							<f:FormElement label="2º Pos. (Central)\Desgaste">
 								<f:fields>							
 									<Input 
 										value="{criarUsuarioModel>CodUsuario}"
@@ -58,7 +62,7 @@
 										/>						
 								</f:fields>
 							</f:FormElement>
-							<f:FormElement label="3º Pos. (Traseiro) \ % Desgaste">
+							<f:FormElement label="3º Pos. (Traseiro)\Desgaste">
 								<f:fields>							
 									<Input 
 										value="{criarUsuarioModel>CodUsuario}"
@@ -88,7 +92,7 @@
 										/>						
 								</f:fields>
 							</f:FormElement>
-							<f:FormElement label="2º Pos. (Centro) \ % Desgaste">
+							<f:FormElement label="2º Pos. (Central) \ % Desgaste">
 								<f:fields>							
 									<Input 
 										value="{criarUsuarioModel>CodUsuario}"
