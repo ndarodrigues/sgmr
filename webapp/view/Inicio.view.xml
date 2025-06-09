@@ -41,6 +41,7 @@
                 <items>
                     <Button id="entrarMaterialRodanteButton" width="12rem" text="{i18n>materialrodante}" type="Emphasized" press="onEntrarMaterialRodante" icon="sap-icon://cargo-train" class="sapUiSmallMarginBottom"	visible="{acessosModel>materialrodante}"></Button>                                   
                     <Button id="entrarAdministrativoButton" width="12rem" text="{i18n>administrativo}" type="Emphasized" press="onEntrarAdministrativo" icon="sap-icon://account" class="sapUiSmallMarginBottom"	visible="{acessosModel>administrativo}"></Button>
+                    <Button id="testeButton" width="12rem" text="{i18n>Object Section}" type="Emphasized" press="onTeste" icon="sap-icon://account" class="sapUiSmallMarginBottom"	></Button>                    
                     
                 </items>
             </VBox>

@@ -122,6 +122,9 @@
       },
       "acessosModel": {
         "type": "sap.ui.model.json.JSONModel"
+      },
+      "objectPageModel": {
+        "type": "sap.ui.model.json.JSONModel"
       }
     },
     "resources": {
@@ -234,6 +237,13 @@
           "target": [
             "RoletesInferiores"
           ]
+        },
+         {
+          "name": "ObjectPageSection",
+          "pattern": "ObjectPageSection",
+          "target": [
+            "ObjectPageSection"
+          ]
         }
 
       ],
@@ -328,6 +338,13 @@
           "clearControlAggregation": false,
           "viewId": "RoletesInferiores",
           "viewName": "RoletesInferiores"
+        },
+         "ObjectPageSection": {
+          "viewType": "XML",
+          "transition": "slide",
+          "clearControlAggregation": false,
+          "viewId": "ObjectPageSection",
+          "viewName": "ObjectPageSection"
         }
       }
     },	
