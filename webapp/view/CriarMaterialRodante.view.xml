@@ -1,69 +1,1169 @@
-<mvc:View controllerName="com.pontual.sgmr.controller.CriarMaterialRodante" xmlns:mvc="sap.ui.core.mvc"
-	xmlns="sap.uxap"
-	xmlns:m="sap.m"
-	xmlns:blockcolor="com.pontual.sgmr.view"
-	height="100%">
-	<ObjectPageLayout id="ObjectPageLayout" upperCaseAnchorBar="false">
-		<headerTitle>
-			<ObjectPageHeader objectTitle="Section sample">
-			</ObjectPageHeader>
-		</headerTitle>
+<mvc:View controllerName="com.pontual.sgmr.controller.CriarMaterialRodante"
+    height="100%"
+    xmlns:mvc="sap.ui.core.mvc" 
+	xmlns:l="sap.ui.layout"
+	xmlns:f="sap.ui.layout.form"
+	xmlns:core="sap.ui.core"    
+    displayBlock="true"
+    xmlns="sap.m">
+    <Page id="pageComboio" 
+          title="{i18n>title}" 
+          titleAlignment="Center"
+          showNavButton="true"      
+		  navButtonPress="onNavBack"       
+          class="sapUiContentPadding sapUiResponsivePadding--header sapUiResponsivePadding--subHeader sapUiResponsivePadding--content sapUiResponsivePadding--footer">
+        <headerContent>
+            <ObjectStatus
+                id="networkStatus"
+                active="false"
+                inverted="true"
+                icon="{path: 'conexaoModel>statusConexao',
+                    formatter: 'com.pontual.sgmr.model.formatter.getIconeConexao'}"
+                state="{path: 'conexaoModel>statusConexao',
+                        formatter: 'com.pontual.sgmr.model.formatter.getCorIconeConexao'}"
+            />
+        </headerContent>       
+		<content>
+            <VBox class="sapUiSmallMargin">     
+				<f:Form id="dadosGeraisForm"
+				editable="true">
+				<f:title>
+					<core:Title text="Inspeção e Medição de Material Rodante - HITACHI - EX 1200 - 5" />
+				</f:title>
+				<f:layout>
+					<f:ResponsiveGridLayout
+						labelSpanXL="4"
+						labelSpanL="4"
+						labelSpanM="12"
+						labelSpanS="12"
+						adjustLabelSpan="false"
+						emptySpanXL="0"
+						emptySpanL="0"
+						emptySpanM="0"
+						emptySpanS="0"
+						columnsXL="2"
+						columnsL="2"
+						columnsM="2"
+						singleContainerFullSize="false" />
+				</f:layout>
+				<f:formContainers>
+					<f:FormContainer>
+						<f:formElements>
+							<f:FormElement label="Data">
+								<f:fields>
+									<DateTimePicker
+										id="inputData"
+										required="true"
+										change="handleChange"
+										class="sapUiSmallMarginBottom"
+										value="{
+											'path': 'CriarMaterialRodanteModel>Data',
+											'type': 'sap.ui.model.type.DateTime',
+											'formatOptions': {
+												'pattern': 'dd/MM/y HH:mm:ss' 
+											}
+										}"/>
 
-		<headerContent>
-			<m:ObjectAttribute title="" text="This example explains the rules for the rendering of sections"/>
-		</headerContent>
+								
+									</f:fields>
+								
+							</f:FormElement>
+							<f:FormElement label="Equipamento">
+								<f:fields>
+									<Input 
+										id="depositoInput"
+										value="{CriarMaterialRodanteModel>Deposito}"
+                                        maxLength="4"
+										enabled="false"
+										required="true"
+										showClearIcon="true"									
+										/>
+								</f:fields>
+							</f:FormElement>
+							<f:FormElement label="TAG Esteira Esquerda">
+								<f:fields>
+									<Input 
+										id="depositoInput1"
+										value="{CriarMaterialRodanteModel>Deposito}"
+                                        maxLength="4"
+										enabled="false"										
+										showClearIcon="true"									
+										/>
+								</f:fields>
+							</f:FormElement>
+							<f:FormElement label="TAG Esteira Direita">
+								<f:fields>
+									<Input 
+										id="depositoInput2"
+										value="{CriarMaterialRodanteModel>Deposito}"
+                                        maxLength="4"
+										enabled="false"										
+										showClearIcon="true"									
+										/>
+								</f:fields>
+							</f:FormElement>
+						
+						</f:formElements>
+					</f:FormContainer>
+					<f:FormContainer>
+						<f:formElements>
+							<f:FormElement label="Operação">
+								<f:fields>
+									<Input 
+										id="centroInput"
+										value="{CriarMaterialRodanteModel>Centro}"
+                                        maxLength="4"
+										enabled="false"										
+										showClearIcon="true"									
+										/>					
+								</f:fields>
+							</f:FormElement>
+							
+							<f:FormElement label="Série">
+								<f:fields>
+									<Input value="{CriarMaterialRodanteModel>Autor}"
+										   enabled="false" />
+								</f:fields>
+							</f:FormElement>		
+							<f:FormElement label="Horímetro Eqto">
+								<f:fields>
+									<Input value="{CriarMaterialRodanteModel>Autor}"
+										   enabled="false" />
+								</f:fields>
+							</f:FormElement>
+							<f:FormElement label="Horímetro Esteira Direita">
+								<f:fields>
+									<Input value="{CriarMaterialRodanteModel>Autor}"
+										   enabled="false" />
+								</f:fields>
+							</f:FormElement>	
+							<f:FormElement label="Horímetro Esteira Esquerda">
+								<f:fields>
+									<Input value="{CriarMaterialRodanteModel>Autor}"
+										   enabled="false" />
+								</f:fields>
+							</f:FormElement>									
+						</f:formElements>
+					</f:FormContainer>				
+				</f:formContainers>
+			</f:Form>
+	</VBox>
+	<VBox class="sapUiSmallMargin"> 
+		
+		<f:Form id="RoletesSuperiores"
+		editable="true">
+			<f:title>
+				<core:Title text="Roletes Superiores" />
+			</f:title>
+			<f:formContainers>
+				<f:FormContainer>
+						<f:formElements>
+							<f:FormElement>
+								<f:fields>
+									<Image src="\img\roletesuperior.png" alt="RoleteSuperior" width="50%" heigth="50%"/>	
+								</f:fields>
+							</f:FormElement>					
+											
+						</f:formElements>
+				</f:FormContainer>	
+			</f:formContainers>	
+			<f:layout>
+				<f:ResponsiveGridLayout
+					labelSpanXL="4"
+					labelSpanL="4"
+					labelSpanM="12"
+					labelSpanS="12"
+					adjustLabelSpan="false"
+					emptySpanXL="0"
+					emptySpanL="0"
+					emptySpanM="0"
+					emptySpanS="0"
+					columnsXL="2"
+					columnsL="2"
+					columnsM="2"
+					singleContainerFullSize="false" />
+			</f:layout>
+			<f:formContainers>
+			</f:formContainers>
+			<f:formContainers>
+				<f:FormContainer title="Lado Esquerdo">
+					<f:formElements>
+						<f:FormElement label="1º Posição">
+							<f:fields>
+								<Input 
+								id="posicao1"
+								value="{CriarMaterialRodanteModel>Horimetro}"
+								description=""
+								type="Number"
+								enabled="true"
+								required="false"
+								showClearIcon="true"
+								change="onValidarHorimetro"									
+								/>
+							</f:fields>
+						</f:FormElement>							
+						<f:FormElement label="1º Valor Medido">
+							<f:fields>
+								<Input 
+								id="valormedido1"
+								value="{CriarMaterialRodanteModel>Horimetro}"
+								description=""
+								type="Number"
+								enabled="true"
+								required="false"
+								showClearIcon="true"
+								change="onValidarHorimetro"									
+								/>							
+							</f:fields>
+						</f:FormElement>
+						<f:FormElement label="1º Desgaste">
+							<f:fields>
+								<Input 
+								id="desgaste1"
+								value="{CriarMaterialRodanteModel>Horimetro}"
+								description=""
+								type="Number"
+								enabled="true"
+								required="false"
+								showClearIcon="true"
+								change="onValidarHorimetro"									
+								/>						
+							</f:fields>
+						</f:FormElement>																
+					</f:formElements>
+		
+					<f:formElements>
+						<f:FormElement label="2º Posição">
+							<f:fields>
+								<Input 
+								id="horimetroInput11"
+								value="{CriarMaterialRodanteModel>Horimetro}"
+								description=""
+								type="Number"
+								enabled="true"
+								required="false"
+								showClearIcon="true"
+								change="onValidarHorimetro"									
+								/>
+							</f:fields>
+						</f:FormElement>							
+						<f:FormElement label="2º Valor Medido">
+							<f:fields>
+								<Input 
+								id="valormedido2"
+								value="{CriarMaterialRodanteModel>Horimetro}"
+								description=""
+								type="Number"
+								enabled="true"
+								required="false"
+								showClearIcon="true"
+								change="onValidarHorimetro"									
+								/>
+							</f:fields>
+						</f:FormElement>
+						<f:FormElement label="2º Desgaste">
+							<f:fields>
+								<Input 
+								id="desgaste2"
+								value="{CriarMaterialRodanteModel>Horimetro}"
+								description=""
+								type="Number"
+								enabled="true"
+								required="false"
+								showClearIcon="true"
+								change="onValidarHorimetro"									
+								/>					
+							</f:fields>
+						</f:FormElement>																
+					</f:formElements>
+					<f:formElements>
+						<f:FormElement label="3º Posição">
+							<f:fields>
+								<Input 
+								id="horimetroInput12"
+								value="{CriarMaterialRodanteModel>Horimetro}"
+								description=""
+								type="Number"
+								enabled="true"
+								required="false"
+								showClearIcon="true"
+								change="onValidarHorimetro"									
+								/>
+							</f:fields>
+						</f:FormElement>							
+						<f:FormElement label="3º Valor Medido">
+							<f:fields>
+							   <Input 
+								id="valormedido3"
+								value="{CriarMaterialRodanteModel>Horimetro}"
+								description=""
+								type="Number"
+								enabled="true"
+								required="false"
+								showClearIcon="true"
+								change="onValidarHorimetro"									
+								/>
+							</f:fields>
+						</f:FormElement>
+						<f:FormElement label="3º Desgaste">
+							<f:fields>
+								<Input 
+								id="desgaste3"
+								value="{CriarMaterialRodanteModel>Horimetro}"
+								description=""
+								type="Number"
+								enabled="true"
+								required="false"
+								showClearIcon="true"
+								change="onValidarHorimetro"									
+								/>					
+							</f:fields>
+						</f:FormElement>																
+					</f:formElements>
+				</f:FormContainer>
+				<f:FormContainer title="Lado Direito">
+				<f:formElements>
+						<f:FormElement label="1º Posição">
+							<f:fields>
+								<Input 
+								id="posicao10"
+								value="{CriarMaterialRodanteModel>Horimetro}"
+								description=""
+								type="Number"
+								enabled="true"
+								required="false"
+								showClearIcon="true"
+								change="onValidarHorimetro"									
+								/>
+							</f:fields>
+						</f:FormElement>							
+						<f:FormElement label="1º Valor Medido">
+							<f:fields>
+								<Input 
+								id="valormedido10"
+								value="{CriarMaterialRodanteModel>Horimetro}"
+								description=""
+								type="Number"
+								enabled="true"
+								required="false"
+								showClearIcon="true"
+								change="onValidarHorimetro"									
+								/>							
+							</f:fields>
+						</f:FormElement>
+						<f:FormElement label="1º Desgaste">
+							<f:fields>
+								<Input 
+								id="desgaste10"
+								value="{CriarMaterialRodanteModel>Horimetro}"
+								description=""
+								type="Number"
+								enabled="true"
+								required="false"
+								showClearIcon="true"
+								change="onValidarHorimetro"									
+								/>						
+							</f:fields>
+						</f:FormElement>																
+					</f:formElements>
+		
+					<f:formElements>
+						<f:FormElement label="2º Posição">
+							<f:fields>
+								<Input 
+								id="posicao22"
+								value="{CriarMaterialRodanteModel>Horimetro}"
+								description=""
+								type="Number"
+								enabled="true"
+								required="false"
+								showClearIcon="true"
+								change="onValidarHorimetro"									
+								/>
+							</f:fields>
+						</f:FormElement>							
+						<f:FormElement label="2º Valor Medido">
+							<f:fields>
+								<Input 
+								id="valormedido22"
+								value="{CriarMaterialRodanteModel>Horimetro}"
+								description=""
+								type="Number"
+								enabled="true"
+								required="false"
+								showClearIcon="true"
+								change="onValidarHorimetro"									
+								/>
+							</f:fields>
+						</f:FormElement>
+						<f:FormElement label="2º Desgaste">
+							<f:fields>
+								<Input 
+								id="desgaste22"
+								value="{CriarMaterialRodanteModel>Horimetro}"
+								description=""
+								type="Number"
+								enabled="true"
+								required="false"
+								showClearIcon="true"
+								change="onValidarHorimetro"									
+								/>					
+							</f:fields>
+						</f:FormElement>																
+					</f:formElements>
+					<f:formElements>
+						<f:FormElement label="3º Posição">
+							<f:fields>
+								<Input 
+								id="posicao33"
+								value="{CriarMaterialRodanteModel>Horimetro}"
+								description=""
+								type="Number"
+								enabled="true"
+								required="false"
+								showClearIcon="true"
+								change="onValidarHorimetro"									
+								/>
+							</f:fields>
+						</f:FormElement>							
+						<f:FormElement label="3º Valor Medido">
+							<f:fields>
+							   <Input 
+								id="valormedido33"
+								value="{CriarMaterialRodanteModel>Horimetro}"
+								description=""
+								type="Number"
+								enabled="true"
+								required="false"
+								showClearIcon="true"
+								change="onValidarHorimetro"									
+								/>
+							</f:fields>
+						</f:FormElement>
+						<f:FormElement label="3º Desgaste">
+							<f:fields>
+								<Input 
+								id="desgaste33"
+								value="{CriarMaterialRodanteModel>Horimetro}"
+								description=""
+								type="Number"
+								enabled="true"
+								required="false"
+								showClearIcon="true"
+								change="onValidarHorimetro"									
+								/>					
+							</f:fields>
+						</f:FormElement>																
+					</f:formElements>
+				</f:FormContainer>		
+			</f:formContainers>
+		</f:Form>
 
-		<sections>
-			<ObjectPageSection titleUppercase="false" title="Section 1">
-				<subSections>
-					<ObjectPageSubSection title="Subsection 1.1" titleUppercase="false">
-						<blocks>
-							<blockcolor:RoletesSuperiores id="bbt1"/>
-						</blocks>
-					</ObjectPageSubSection>
-					<ObjectPageSubSection title="Subsection 1.2" titleUppercase="false">
-						<blocks>
-							<blockcolor:RoletesInferiores id="bbt2"/>
-						</blocks>
-					</ObjectPageSubSection>
-				</subSections>
-			</ObjectPageSection>
+		<f:Form id="RoletesInferiores"
+		editable="true">
+			<f:title>
+				<core:Title text="Roletes Inferiores" />
+			</f:title>
+			<f:FormContainer>
+					<f:formElements>
+						<f:FormElement>
+							<f:fields>
+								<Image src="\img\roleteinferior.png" alt="RoleteSuperior" width="50%" heigth="50%"/>	
+							</f:fields>
+						</f:FormElement>					
+										
+					</f:formElements>
+			</f:FormContainer>		
+			<f:layout>
+				<f:ResponsiveGridLayout
+					labelSpanXL="4"
+					labelSpanL="4"
+					labelSpanM="12"
+					labelSpanS="12"
+					adjustLabelSpan="false"
+					emptySpanXL="0"
+					emptySpanL="0"
+					emptySpanM="0"
+					emptySpanS="0"
+					columnsXL="2"
+					columnsL="2"
+					columnsM="2"
+					singleContainerFullSize="false" />
+			</f:layout>
+			<f:formContainers>
+				<f:FormContainer title="Lado Esquerdo">							
+					<f:formElements>
+						<f:FormElement label="1º">
+							<f:fields>
+								<Input 
+								id="primeiro"
+								value="{CriarMaterialRodanteModel>Horimetro}"
+								description=""
+								type="Number"
+								enabled="true"
+								required="false"
+								showClearIcon="true"
+								change="onValidarHorimetro"									
+								/>
+							</f:fields>
+						</f:FormElement>							
+						<f:FormElement label="2º">
+							<f:fields>
+								<Input 
+								id="segundo"
+								value="{CriarMaterialRodanteModel>Horimetro}"
+								description=""
+								type="Number"
+								enabled="true"
+								required="false"
+								showClearIcon="true"
+								change="onValidarHorimetro"									
+								/>							
+							</f:fields>
+						</f:FormElement>
+						<f:FormElement label="3º">
+							<f:fields>
+								<Input 
+								id="terceiro"
+								value="{CriarMaterialRodanteModel>Horimetro}"
+								description=""
+								type="Number"
+								enabled="true"
+								required="false"
+								showClearIcon="true"
+								change="onValidarHorimetro"									
+								/>						
+							</f:fields>
+						</f:FormElement>
+						<f:FormElement label="4º">
+							<f:fields>
+								<Input 
+								id="quarto"
+								value="{CriarMaterialRodanteModel>Horimetro}"
+								description=""
+								type="Number"
+								enabled="true"
+								required="false"
+								showClearIcon="true"
+								change="onValidarHorimetro"									
+								/>
+							</f:fields>
+						</f:FormElement>							
+						<f:FormElement label="5º">
+							<f:fields>
+								<Input 
+								id="quinto"
+								value="{CriarMaterialRodanteModel>Horimetro}"
+								description=""
+								type="Number"
+								enabled="true"
+								required="false"
+								showClearIcon="true"
+								change="onValidarHorimetro"									
+								/>
+							</f:fields>
+						</f:FormElement>
+						<f:FormElement label="6º">
+							<f:fields>
+								<Input 
+								id="sexto"
+								value="{CriarMaterialRodanteModel>Horimetro}"
+								description=""
+								type="Number"
+								enabled="true"
+								required="false"
+								showClearIcon="true"
+								change="onValidarHorimetro"									
+								/>					
+							</f:fields>
+						</f:FormElement>																
+						<f:FormElement label="7º">
+							<f:fields>
+								<Input 
+								id="setimo"
+								value="{CriarMaterialRodanteModel>Horimetro}"
+								description=""
+								type="Number"
+								enabled="true"
+								required="false"
+								showClearIcon="true"
+								change="onValidarHorimetro"									
+								/>
+							</f:fields>
+						</f:FormElement>							
+						<f:FormElement label="8º">
+							<f:fields>
+							   <Input 
+								id="oitavo"
+								value="{CriarMaterialRodanteModel>Horimetro}"
+								description=""
+								type="Number"
+								enabled="true"
+								required="false"
+								showClearIcon="true"
+								change="onValidarHorimetro"									
+								/>
+							</f:fields>
+						</f:FormElement>
+					</f:formElements>	
+				</f:FormContainer>
+				<f:FormContainer title="Lado Direito">							
+					<f:formElements>
+						<f:FormElement label="1º">
+							<f:fields>
+								<Input 
+								id="primeirod"
+								value="{CriarMaterialRodanteModel>Horimetro}"
+								description=""
+								type="Number"
+								enabled="true"
+								required="false"
+								showClearIcon="true"
+								change="onValidarHorimetro"									
+								/>
+							</f:fields>
+						</f:FormElement>							
+						<f:FormElement label="2º">
+							<f:fields>
+								<Input 
+								id="segundod"
+								value="{CriarMaterialRodanteModel>Horimetro}"
+								description=""
+								type="Number"
+								enabled="true"
+								required="false"
+								showClearIcon="true"
+								change="onValidarHorimetro"									
+								/>							
+							</f:fields>
+						</f:FormElement>
+						<f:FormElement label="3º">
+							<f:fields>
+								<Input 
+								id="terceirod"
+								value="{CriarMaterialRodanteModel>Horimetro}"
+								description=""
+								type="Number"
+								enabled="true"
+								required="false"
+								showClearIcon="true"
+								change="onValidarHorimetro"									
+								/>						
+							</f:fields>
+						</f:FormElement>
+						<f:FormElement label="4º">
+							<f:fields>
+								<Input 
+								id="quartod"
+								value="{CriarMaterialRodanteModel>Horimetro}"
+								description=""
+								type="Number"
+								enabled="true"
+								required="false"
+								showClearIcon="true"
+								change="onValidarHorimetro"									
+								/>
+							</f:fields>
+						</f:FormElement>							
+						<f:FormElement label="5º">
+							<f:fields>
+								<Input 
+								id="quintod"
+								value="{CriarMaterialRodanteModel>Horimetro}"
+								description=""
+								type="Number"
+								enabled="true"
+								required="false"
+								showClearIcon="true"
+								change="onValidarHorimetro"									
+								/>
+							</f:fields>
+						</f:FormElement>
+						<f:FormElement label="6º">
+							<f:fields>
+								<Input 
+								id="sextod"
+								value="{CriarMaterialRodanteModel>Horimetro}"
+								description=""
+								type="Number"
+								enabled="true"
+								required="false"
+								showClearIcon="true"
+								change="onValidarHorimetro"									
+								/>					
+							</f:fields>
+						</f:FormElement>																
+						<f:FormElement label="7º">
+							<f:fields>
+								<Input 
+								id="setimod"
+								value="{CriarMaterialRodanteModel>Horimetro}"
+								description=""
+								type="Number"
+								enabled="true"
+								required="false"
+								showClearIcon="true"
+								change="onValidarHorimetro"									
+								/>
+							</f:fields>
+						</f:FormElement>							
+						<f:FormElement label="8º">
+							<f:fields>
+							   <Input 
+								id="oitavod"
+								value="{CriarMaterialRodanteModel>Horimetro}"
+								description=""
+								type="Number"
+								enabled="true"
+								required="false"
+								showClearIcon="true"
+								change="onValidarHorimetro"									
+								/>
+							</f:fields>
+						</f:FormElement>
+					</f:formElements>	
+				</f:FormContainer>
+			</f:formContainers>
+		</f:Form>
 
-			<ObjectPageSection titleUppercase="false" title="Section 2">
-			</ObjectPageSection>
+		<f:Form id="Sapatas"
+		editable="true">
+			<f:title>
+				<core:Title text="Sapatas" />
+			</f:title>
+			<f:FormContainer>
+					<f:formElements>
+						<f:FormElement>
+							<f:fields>
+								<Image src="\img\sapata.png" alt="RoleteSuperior" width="50%" heigth="50%"/>	
+							</f:fields>
+						</f:FormElement>		
+										
+					</f:formElements>
+			</f:FormContainer>		
+			<f:layout>
+				<f:ResponsiveGridLayout
+					labelSpanXL="4"
+					labelSpanL="4"
+					labelSpanM="12"
+					labelSpanS="12"
+					adjustLabelSpan="false"
+					emptySpanXL="0"
+					emptySpanL="0"
+					emptySpanM="0"
+					emptySpanS="0"
+					columnsXL="2"
+					columnsL="2"
+					columnsM="2"
+					singleContainerFullSize="false" />
+			</f:layout>
+			<f:formContainers>
+				<f:FormContainer title="Lado Esquerdo">
+					<f:formElements>
+						<f:FormElement label="C">
+							<f:fields>
+								<Input 
+								id="c_e"
+								value="{CriarMaterialRodanteModel>Horimetro}"
+								description=""
+								type="Number"
+								enabled="true"
+								required="false"
+								showClearIcon="true"
+								change="onValidarHorimetro"									
+								/>
+							</f:fields>
+						</f:FormElement>					
+					</f:formElements>
+				</f:FormContainer>
+				<f:FormContainer title="Lado Direito">
+					<f:formElements>						
+						<f:FormElement label="C" visible="{CriarMaterialRodanteModel>ExibirMaterial}">
+							<f:fields>
+								<Input 
+								id="c_d"
+								value="{CriarMaterialRodanteModel>Horimetro}"
+								description=""
+								type="Number"
+								enabled="true"
+								required="false"
+								showClearIcon="true"
+								change="onValidarHorimetro"									
+								/>
+							</f:fields>
+						</f:FormElement>					
+					</f:formElements>
+				</f:FormContainer>		
+			</f:formContainers>
+		</f:Form>
 
-			<ObjectPageSection titleUppercase="false" title="Section 3">
-				<subSections>
-					<ObjectPageSubSection titleUppercase="false">
-						<blocks>
-							<blockcolor:BlockBlueT3 id="bbt3"/>
-						</blocks>
-					</ObjectPageSubSection>
-				</subSections>
-			</ObjectPageSection>
+		<f:Form id="Buchas"
+		editable="true">
+			<f:title>
+				<core:Title text="Buchas" />
+			</f:title>
+			<f:FormContainer>
+					<f:formElements>
+						<f:FormElement>
+							<f:fields>
+								<Image src="\img\bucha.png" alt="RoleteSuperior" width="50%" heigth="50%"/>	
+							</f:fields>
+						</f:FormElement>					
+										
+					</f:formElements>
+			</f:FormContainer>		
+			<f:layout>
+				<f:ResponsiveGridLayout
+					labelSpanXL="4"
+					labelSpanL="4"
+					labelSpanM="12"
+					labelSpanS="12"
+					adjustLabelSpan="false"
+					emptySpanXL="0"
+					emptySpanL="0"
+					emptySpanM="0"
+					emptySpanS="0"
+					columnsXL="2"
+					columnsL="2"
+					columnsM="2"
+					singleContainerFullSize="false" />
+			</f:layout>
+			<f:formContainers>
+				<f:FormContainer title="Lado Esquerdo">
+					<f:formElements>
+						<f:FormElement label="Dn">
+							<f:fields>
+								<Input 
+								id="dn_e"
+								value="{CriarMaterialRodanteModel>Horimetro}"
+								description=""
+								type="Number"
+								enabled="true"
+								required="false"
+								showClearIcon="true"
+								change="onValidarHorimetro"									
+								/>
+							</f:fields>
+						</f:FormElement>					
+					</f:formElements>
+				</f:FormContainer>
+				<f:FormContainer title="Lado Direito">
+					<f:formElements>						
+						<f:FormElement label="Dn" visible="{CriarMaterialRodanteModel>ExibirMaterial}">
+							<f:fields>
+								<Input 
+								id="dn_d"
+								value="{CriarMaterialRodanteModel>Horimetro}"
+								description=""
+								type="Number"
+								enabled="true"
+								required="false"
+								showClearIcon="true"
+								change="onValidarHorimetro"									
+								/>
+							</f:fields>
+						</f:FormElement>					
+					</f:formElements>
+				</f:FormContainer>		
+			</f:formContainers>
+		</f:Form>
 
-			<ObjectPageSection>
-				<subSections>
-					<ObjectPageSubSection titleUppercase="false">
-						<blocks>
-							<blockcolor:BlockBlueT4 id="bbt4"/>
-						</blocks>
-					</ObjectPageSubSection>
-				</subSections>
-			</ObjectPageSection>
+		<f:Form id="Elos"
+		editable="true">
+			<f:title>
+				<core:Title text="Elos" />
+			</f:title>
+			<f:FormContainer>
+					<f:formElements>
+						<f:FormElement>
+							<f:fields>
+								<Image src="\img\elo.png" alt="RoleteSuperior" width="50%" heigth="50%"/>	
+							</f:fields>
+						</f:FormElement>					
+										
+					</f:formElements>
+			</f:FormContainer>		
+			<f:layout>
+				<f:ResponsiveGridLayout
+					labelSpanXL="4"
+					labelSpanL="4"
+					labelSpanM="12"
+					labelSpanS="12"
+					adjustLabelSpan="false"
+					emptySpanXL="0"
+					emptySpanL="0"
+					emptySpanM="0"
+					emptySpanS="0"
+					columnsXL="2"
+					columnsL="2"
+					columnsM="2"
+					singleContainerFullSize="false" />
+			</f:layout>
+			<f:formContainers>
+				<f:FormContainer title="Lado Esquerdo">
+					<f:formElements>
+						<f:FormElement label="Hn">
+							<f:fields>
+								<Input 
+								id="hn_e"
+								value="{CriarMaterialRodanteModel>Horimetro}"
+								description=""
+								type="Number"
+								enabled="true"
+								required="false"
+								showClearIcon="true"
+								change="onValidarHorimetro"									
+								/>
+							</f:fields>
+						</f:FormElement>					
+					</f:formElements>
+				</f:FormContainer>
+				<f:FormContainer title="Lado Direito">
+					<f:formElements>						
+						<f:FormElement label="Hn" visible="{CriarMaterialRodanteModel>ExibirMaterial}">
+							<f:fields>
+								<Input 
+								id="hn_d"
+								value="{CriarMaterialRodanteModel>Horimetro}"
+								description=""
+								type="Number"
+								enabled="true"
+								required="false"
+								showClearIcon="true"
+								change="onValidarHorimetro"									
+								/>
+							</f:fields>
+						</f:FormElement>					
+					</f:formElements>
+				</f:FormContainer>		
+			</f:formContainers>
+		</f:Form>
 
-			<ObjectPageSection titleUppercase="false" title="Section 5">
-				<subSections>
-					<ObjectPageSubSection titleUppercase="false">
-						<blocks>
-							<blockcolor:BlockBlueT5 id="bbt5"/>
-						</blocks>
-					</ObjectPageSubSection>
-				</subSections>
-			</ObjectPageSection>
+		<f:Form id="RodaGuia"
+		editable="true">
+			<f:title>
+				<core:Title text="Roda Guia" />
+			</f:title>
+			<f:FormContainer>
+					<f:formElements>
+						<f:FormElement>
+							<f:fields>
+								<Image src="\img\rodaguia.png" alt="RoleteSuperior" width="50%" heigth="50%"/>	
+							</f:fields>
+						</f:FormElement>					
+										
+					</f:formElements>
+			</f:FormContainer>		
+			<f:layout>
+				<f:ResponsiveGridLayout
+					labelSpanXL="4"
+					labelSpanL="4"
+					labelSpanM="12"
+					labelSpanS="12"
+					adjustLabelSpan="false"
+					emptySpanXL="0"
+					emptySpanL="0"
+					emptySpanM="0"
+					emptySpanS="0"
+					columnsXL="2"
+					columnsL="2"
+					columnsM="2"
+					singleContainerFullSize="false" />
+			</f:layout>
+				<f:FormContainer title="Lado Esquerdo">
+					<f:formElements>
+						<f:FormElement label="Hn">
+							<f:fields>
+								<Input 
+								id="hn_e_rg"
+								value="{CriarMaterialRodanteModel>Horimetro}"
+								description=""
+								type="Number"
+								enabled="true"
+								required="false"
+								showClearIcon="true"
+								change="onValidarHorimetro"									
+								/>
+							</f:fields>
+						</f:FormElement>					
+					</f:formElements>
+				</f:FormContainer>
+				<f:FormContainer title="Lado Direito">
+					<f:formElements>						
+						<f:FormElement label="Hn" visible="{CriarMaterialRodanteModel>ExibirMaterial}">
+							<f:fields>
+								<Input 
+								id="hn_d_rg"
+								value="{CriarMaterialRodanteModel>Horimetro}"
+								description=""
+								type="Number"
+								enabled="true"
+								required="false"
+								showClearIcon="true"
+								change="onValidarHorimetro"									
+								/>
+							</f:fields>
+						</f:FormElement>					
+					</f:formElements>
+				</f:FormContainer>	
+		</f:Form>
 
+		<f:Form id="PassoEsteira"
+		editable="true">
+			<f:title>
+				<core:Title text="Passo Esteira" />
+			</f:title>
+			<f:FormContainer>
+					<f:formElements>
+						<f:FormElement>
+							<f:fields>
+								<Image src="\img\passoesteira.png" alt="RoleteSuperior" width="50%" heigth="50%"/>	
+							</f:fields>
+						</f:FormElement>					
+										
+					</f:formElements>
+			</f:FormContainer>		
+			<f:layout>
+				<f:ResponsiveGridLayout
+					labelSpanXL="4"
+					labelSpanL="4"
+					labelSpanM="12"
+					labelSpanS="12"
+					adjustLabelSpan="false"
+					emptySpanXL="0"
+					emptySpanL="0"
+					emptySpanM="0"
+					emptySpanS="0"
+					columnsXL="2"
+					columnsL="2"
+					columnsM="2"
+					singleContainerFullSize="false" />
+			</f:layout>
+			<f:formContainers>
+				<f:FormContainer title="Lado Esquerdo">
+					<f:formElements>
+						<f:FormElement label="Passo Esteira (A) (5 Pinos)">
+							<f:fields>
+								<Input 
+								id="passo_5"
+								value="{CriarMaterialRodanteModel>Horimetro}"
+								description=""
+								type="Number"
+								enabled="true"
+								required="false"
+								showClearIcon="true"
+								change="onValidarHorimetro"									
+								/>
+							</f:fields>
+						</f:FormElement>					
+					</f:formElements>
+				</f:FormContainer>
+				<f:FormContainer title="Lado Direito">
+					<f:formElements>						
+						<f:FormElement label="Passo (A)" visible="{CriarMaterialRodanteModel>ExibirMaterial}">
+							<f:fields>
+								<Input 
+								id="passo"
+								value="{CriarMaterialRodanteModel>Horimetro}"
+								description=""
+								type="Number"
+								enabled="true"
+								required="false"
+								showClearIcon="true"
+								change="onValidarHorimetro"									
+								/>
+							</f:fields>
+						</f:FormElement>					
+					</f:formElements>
+				</f:FormContainer>	
+			</f:formContainers>
+		</f:Form>
 
-		</sections>
+		<f:Form id="Tensionamento"
+		editable="true">
+			<f:title>
+				<core:Title text="Tensionamento" />
+			</f:title>
+			<f:FormContainer>
+					<f:formElements>
+						<f:FormElement>
+							<f:fields>
+								<Image src="\img\tensionamento.png" alt="RoleteSuperior" width="50%" heigth="50%"/>	
+							</f:fields>
+						</f:FormElement>					
+										
+					</f:formElements>
+			</f:FormContainer>		
+			<f:layout>
+				<f:ResponsiveGridLayout
+					labelSpanXL="4"
+					labelSpanL="4"
+					labelSpanM="12"
+					labelSpanS="12"
+					adjustLabelSpan="false"
+					emptySpanXL="0"
+					emptySpanL="0"
+					emptySpanM="0"
+					emptySpanS="0"
+					columnsXL="2"
+					columnsL="2"
+					columnsM="2"
+					singleContainerFullSize="false" />
+			</f:layout>
+			<f:formContainers>
+				<f:FormContainer title="Lado Esquerdo">
+					<f:formElements>
+						<f:FormElement label="Tensionamento (Flecha - A)">
+							<f:fields>
+								<Input 
+								id="passo_5"
+								value="{CriarMaterialRodanteModel>Horimetro}"
+								description=""
+								type="Number"
+								enabled="true"
+								required="false"
+								showClearIcon="true"
+								change="onValidarHorimetro"									
+								/>
+							</f:fields>
+						</f:FormElement>					
+					</f:formElements>
+				</f:FormContainer>
+				<f:FormContainer title="Lado Direito">
+					<f:formElements>						
+						<f:FormElement label="Flecha (A)" visible="{CriarMaterialRodanteModel>ExibirMaterial}">
+							<f:fields>
+								<Input 
+								id="passo"
+								value="{CriarMaterialRodanteModel>Horimetro}"
+								description=""
+								type="Number"
+								enabled="true"
+								required="false"
+								showClearIcon="true"
+								change="onValidarHorimetro"									
+								/>
+							</f:fields>
+						</f:FormElement>					
+					</f:formElements>
+				</f:FormContainer>	
+			</f:formContainers>
+		</f:Form>
+</VBox>	
 
-	</ObjectPageLayout>
+		</content>
+		<footer>
+			<OverflowToolbar>
+				<Button id="messagePopoverBtn"
+					icon="{ path: '/', formatter: '.buttonIconFormatter' }"
+					type="{ path: '/', formatter: '.buttonTypeFormatter' }"
+					text= "{path: '/', formatter: '.highestSeverityMessages' }"
+					press=".handleMessagePopoverPress"
+					ariaHasPopup="Dialog"/>		 
+				<ToolbarSpacer/>
+                <Button id="confirmarComboioButton" text="{i18n>confirmar}" type="Success" press="onConfirmarComboio" icon="sap-icon://save" ></Button>
+                <Button id="cancelarComboioButton" text="{i18n>cancelar}" type="Reject" press="onCancelarComboio" icon="sap-icon://cancel" ></Button>                
+			</OverflowToolbar>
+		</footer>
+    </Page>
 </mvc:View>
