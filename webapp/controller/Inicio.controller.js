@@ -114,7 +114,13 @@ sap.ui.define([
 
             handleMessagePopoverPress: function (oEvent) {
                 oMessagePopover.toggle(oEvent.getSource());
-            }
+            },
+
+            onTeste: function (oEvent) {
+                oController.getOwnerComponent().getRouter().navTo("ObjectPageSection", null, true);
+            },
+
+
 
         });
     });
