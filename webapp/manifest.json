@@ -49,13 +49,7 @@
       "minUI5Version": "1.136.1",
       "libs": {
         "sap.m": {},
-        "sap.ui.core": {},
-        "sap.f": {},
-        "sap.suite.ui.generic.template": {},
-        "sap.ui.comp": {},
-        "sap.ui.generic.app": {},
-        "sap.ui.table": {},
-        "sap.ushell": {}
+        "sap.ui.core": {}
       }
     },
     "contentDensities": {
@@ -74,10 +68,59 @@
         "preload": true,
         "settings": {}
       },
+      "sgmrODataModel": {
+        "type": "sap.ui.model.odata.v2.ODataModel",
+        "settings": {
+          "defaultOperationMode": "Server",
+          "defaultBindingModel": "TwoWay",
+          "defaultCountMode": "Request"
+        },
+        "dataSource": "mainService",
+        "preload": true
+      },
       "conexaoModel": {
         "type": "sap.ui.model.json.JSONModel"
       },
       "mensagensModel": {
+        "type": "sap.ui.model.json.JSONModel"
+      },
+      "loginModel": {
+        "type": "sap.ui.model.json.JSONModel"
+      },
+      "usuariosLoginModel": {
+        "type": "sap.ui.model.json.JSONModel"
+      },
+      "busyDialogModel": {
+        "type": "sap.ui.model.json.JSONModel"
+      },
+      "criarUsuarioModel": {
+        "type": "sap.ui.model.json.JSONModel"
+      },
+      "usuarioModel": {
+        "type": "sap.ui.model.json.JSONModel"
+      },
+      "perfilCriarModel": {
+        "type": "sap.ui.model.json.JSONModel"
+      },
+      "materialRodanteCriarModel": {
+        "type": "sap.ui.model.json.JSONModel"
+      },
+      "listaMaterialRodanteModel": {
+        "type": "sap.ui.model.json.JSONModel"
+      },
+      "listaPerfilModel": {
+        "type": "sap.ui.model.json.JSONModel"
+      },
+      "listaMaterialRodante": {
+        "type": "sap.ui.model.json.JSONModel"
+      },
+      "listaUsuariosModel": {
+        "type": "sap.ui.model.json.JSONModel"
+      },
+      "layoutTelaModel": {
+        "type": "sap.ui.model.json.JSONModel"
+      },
+      "acessosModel": {
         "type": "sap.ui.model.json.JSONModel"
       }
     },
@@ -105,7 +148,94 @@
           "target": [
             "TargetApp"
           ]
+        },
+        {
+          "name": "Configurar",
+          "pattern": "Configurar",
+          "target": [
+            "Configurar"
+          ]
+        },
+        {
+          "name": "Login",
+          "pattern": "Login",
+          "target": [
+            "Login"
+          ]
+        },
+        {
+          "name": "Inicio",
+          "pattern": "Inicio",
+          "target": [
+            "Inicio"
+          ]
+        },
+        {
+          "name": "Administrativo",
+          "pattern": "Administrativo",
+          "target": [
+            "Administrativo"
+          ]
+        },
+         {
+          "name": "ListaPerfil",
+          "pattern": "ListaPerfil",
+          "target": [
+            "ListaPerfil"
+          ]
+        },
+        {
+          "name": "ListaMaterialRodante",
+          "pattern": "ListaMaterialRodante",
+          "target": [
+            "ListaMaterialRodante"
+          ]
+        },
+        {
+          "name": "ListaUsuario",
+          "pattern": "ListaUsuario",
+          "target": [
+            "ListaUsuario"
+          ]
+        },
+        {
+          "name": "CriarPerfil",
+          "pattern": "CriarPerfil",
+          "target": [
+            "CriarPerfil"
+          ]
+        },
+         {
+          "name": "CriarMaterialRodante",
+          "pattern": "CriarMaterialRodante",
+          "target": [
+            "CriarMaterialRodante"            
+          ]
+        
+
+        },
+        {
+          "name": "CriarUsuario",
+          "pattern": "CriarUsuario",
+          "target": [
+            "CriarUsuario"
+          ]
+        },
+        {
+          "name": "RoletesSuperiores",
+          "pattern": "RoletesSuperiores",
+          "target": [
+            "RoletesSuperiores"
+          ]
+        },
+         {
+          "name": "RoletesInferiores",
+          "pattern": "RoletesInferiores",
+          "target": [
+            "RoletesInferiores"
+          ]
         }
+
       ],
       "targets": {
         "TargetApp": {
@@ -114,9 +244,94 @@
           "clearControlAggregation": false,
           "viewId": "App",
           "viewName": "App"
+        },
+        "Inicio": {
+          "viewType": "XML",
+          "transition": "slide",
+          "clearControlAggregation": false,
+          "viewId": "Inicio",
+          "viewName": "Inicio"
+        },
+        "Login": {
+          "viewType": "XML",
+          "transition": "slide",
+          "clearControlAggregation": false,
+          "viewId": "Login",
+          "viewName": "Login"
+        },
+        "Configurar": {
+          "viewType": "XML",
+          "transition": "slide",
+          "clearControlAggregation": false,
+          "viewId": "Configurar",
+          "viewName": "Configurar"
+        },
+         "Administrativo": {
+          "viewType": "XML",
+          "transition": "slide",
+          "clearControlAggregation": false,
+          "viewId": "Administrativo",
+          "viewName": "Administrativo"
+        },
+        "ListaPerfil": {
+          "viewType": "XML",
+          "transition": "slide",
+          "clearControlAggregation": false,
+          "viewId": "ListaPerfil",
+          "viewName": "ListaPerfil"
+        },
+        "ListaMaterialRodante": {
+          "viewType": "XML",
+          "transition": "slide",
+          "clearControlAggregation": false,
+          "viewId": "ListaMaterialRodante",
+          "viewName": "ListaMaterialRodante"
+        },
+        "ListaUsuario": {
+          "viewType": "XML",
+          "transition": "slide",
+          "clearControlAggregation": false,
+          "viewId": "ListaUsuario",
+          "viewName": "ListaUsuario"
+        },
+        "CriarPerfil": {
+          "viewType": "XML",
+          "transition": "slide",
+          "clearControlAggregation": false,
+          "viewId": "CriarPerfil",
+          "viewName": "CriarPerfil"
+        },
+        "CriarMaterialRodante": {
+          "viewType": "XML",
+          "transition": "slide",
+          "clearControlAggregation": false,
+          "viewId": "CriarMaterialRodante",
+          "viewName": "CriarMaterialRodante"
+        },
+        "CriarUsuario": {
+          "viewType": "XML",
+          "transition": "slide",
+          "clearControlAggregation": false,
+          "viewId": "CriarUsuario",
+          "viewName": "CriarUsuario"
+        },
+        "RoletesSuperiores": {
+          "viewType": "XML",
+          "transition": "slide",
+          "clearControlAggregation": false,
+          "viewId": "RoletesSuperiores",
+          "viewName": "RoletesSuperiores"
+        },
+         "RoletesInferiores": {
+          "viewType": "XML",
+          "transition": "slide",
+          "clearControlAggregation": false,
+          "viewId": "RoletesInferiores",
+          "viewName": "RoletesInferiores"
         }
       }
-    },
+    },	
+   
     "rootView": {
       "viewName": "com.pontual.sgmr.view.App",
       "type": "XML",

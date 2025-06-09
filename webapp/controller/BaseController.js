@@ -12,6 +12,92 @@ sap.ui.define([
     var oView
 
     return Controller.extend("com.pontual.sgmr.controller.App", {
+
+        getRouter: function () {
+            return UIComponent.getRouterFor(this);
+        },
+
+        onNavBack: function () {
+            var oHistory, sPreviousHash;
+
+            oHistory = History.getInstance();
+            sPreviousHash = oHistory.getPreviousHash();
+
+            if (sPreviousHash !== undefined) {
+                window.history.go(-1);
+            } else {
+                this.getRouter().navTo("Login", {}, true /*no history*/);
+            }
+        },
+
+        onSairApp: function () {
+            this.getRouter().navTo("Login", {}, true /*no history*/);
+        },
+
+        carregarAcessos: function () {
+
+            oController = this;
+
+            var aAutorizacoes = oController.getOwnerComponent().getModel("usuarioModel").getProperty("/Autorizacoes")
+
+            var oAcesso = {
+                administrativo: true
+            }
+
+            if (aAutorizacoes) {
+                aAutorizacoes.forEach(oAutorizacao => {
+                    if (oAutorizacao.CodigoAutorizacao == "016" || oAutorizacao.CodigoAutorizacao == "017" || oAutorizacao.CodigoAutorizacao == "018" ||
+                        oAutorizacao.CodigoAutorizacao == "019" || oAutorizacao.CodigoAutorizacao == "020") {
+                        oAcesso.ordem = true;
+                    }
+                    if (oAutorizacao.CodigoAutorizacao == "000") {
+                        oAcesso.comboio = true;
+                    }
+                    if (oAutorizacao.CodigoAutorizacao == "001") {
+                        oAcesso.administrativo = true;
+                    }
+                });
+            }
+
+            oController.getOwnerComponent().getModel("acessosModel").setData(oAcesso)
+            oController.getOwnerComponent().getModel("acessosModel").refresh();
+        },
+
+        /** Funções de Banco de Dados */
+
+
+        gravarLocalStorage: function (pStorage, pData) {
+            var oStorage = jQuery.sap.storage(jQuery.sap.storage.Type.local);
+            oStorage.put(pStorage, pData);
+        },
+
+        lerLocalStorage: function (pStorage) {
+            var oStorage = jQuery.sap.storage(jQuery.sap.storage.Type.local);
+            var oData = oStorage.get(pStorage);
+
+            return oData;
+        },
+
+        gravarNomeBancoDados: function (pUsuario) {
+            var oStorage = jQuery.sap.storage(jQuery.sap.storage.Type.local);
+            var data = {
+                "databasename": "BDSGMR_" + pUsuario
+            };
+            oStorage.put("SGMR_StorageSet", data);
+        },
+
+        getDatabaseName: function () {
+            var oStorage = jQuery.sap.storage(jQuery.sap.storage.Type.local);
+            var oData = oStorage.get("SGMR_StorageSet");
+
+            return oData.databasename;
+        },
+
+        getDatabaseVersion: function () {
+            return BD_VERSION;
+        },
+
+
         onInit: function () {
             oController = this;
             oView = oController.getView();
@@ -72,8 +158,95 @@ sap.ui.define([
             oController.getOwnerComponent().getModel("conexaoModel").setProperty("/statusConexao", "offline")
             oController.getOwnerComponent().getModel("conexaoModel").refresh(true)
         },
+
         onOrientationChange: function () {
             console.log(screen.orientation.type);
+        },
+
+
+        // Display the button type according to the message with the highest severity
+        // The priority of the message types are as follows: Error > Warning > Success > Info
+        buttonTypeFormatter: function () {
+            var sHighestSeverityIcon;
+            var aMessages = this.getView().getModel().oData;
+
+            aMessages.forEach(function (sMessage) {
+                switch (sMessage.type) {
+                    case "Error":
+                        sHighestSeverityIcon = "Negative";
+                        break;
+                    case "Warning":
+                        sHighestSeverityIcon = sHighestSeverityIcon !== "Negative" ? "Critical" : sHighestSeverityIcon;
+                        break;
+                    case "Success":
+                        sHighestSeverityIcon = sHighestSeverityIcon !== "Negative" && sHighestSeverityIcon !== "Critical" ? "Success" : sHighestSeverityIcon;
+                        break;
+                    default:
+                        sHighestSeverityIcon = !sHighestSeverityIcon ? "Neutral" : sHighestSeverityIcon;
+                        break;
+                }
+            });
+
+            return sHighestSeverityIcon;
+        },
+
+        // Display the number of messages with the highest severity
+        highestSeverityMessages: function () {
+            var sHighestSeverityIconType = this.buttonTypeFormatter();
+            var sHighestSeverityMessageType;
+
+            switch (sHighestSeverityIconType) {
+                case "Negative":
+                    sHighestSeverityMessageType = "Error";
+                    break;
+                case "Critical":
+                    sHighestSeverityMessageType = "Warning";
+                    break;
+                case "Success":
+                    sHighestSeverityMessageType = "Success";
+                    break;
+                default:
+                    sHighestSeverityMessageType = !sHighestSeverityMessageType ? "Information" : sHighestSeverityMessageType;
+                    break;
+            }
+
+            return this.getView().getModel().oData.reduce(function (iNumberOfMessages, oMessageItem) {
+                return oMessageItem.type === sHighestSeverityMessageType ? ++iNumberOfMessages : iNumberOfMessages;
+            }, "");
+        },
+
+        // Set the button icon according to the message with the highest severity
+        buttonIconFormatter: function () {
+            var sIcon;
+            var aMessages = this.getView().getModel().oData;
+
+            aMessages.forEach(function (sMessage) {
+                switch (sMessage.type) {
+                    case "Error":
+                        sIcon = "sap-icon://error";
+                        break;
+                    case "Warning":
+                        sIcon = sIcon !== "sap-icon://error" ? "sap-icon://alert" : sIcon;
+                        break;
+                    case "Success":
+                        sIcon = sIcon !== "sap-icon://error" && sIcon !== "sap-icon://alert" ? "sap-icon://sys-enter-2" : sIcon;
+                        break;
+                    default:
+                        sIcon = !sIcon ? "sap-icon://information" : sIcon;
+                        break;
+                }
+            });
+
+            return sIcon;
+        },
+
+        descriptografar: function (content) {
+            try {
+                return atob(content);
+            } catch (error) {
+                return content;
+            }
+            v
         },
 
 
