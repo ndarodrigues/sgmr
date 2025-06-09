@@ -74,17 +74,20 @@
 					<f:FormContainer title="">
 						<f:formElements>
 							<f:FormElement label="Equipamento">
-								<f:fields>							
-									<Input 
-										id="equipamentoInput"
-										value="{comboioModel>Equipamento}"
-										required="true"
-										showValueHelp="true"
-										showClearIcon="true"
-										valueHelpOnly="true"
-										change="limparDescricaoEquipamento"
-										valueHelpRequest="handleEquipamentoValueHelp" 
-										/>					
+								<f:fields>		
+									<VBox >
+										<Input 
+											id="equipamentoInput"
+											value="{comboioModel>Equipamento}"
+											required="true"
+											showValueHelp="true"
+											showClearIcon="true"
+											valueHelpOnly="true"
+											change="limparDescricaoEquipamento"
+											valueHelpRequest="handleEquipamentoValueHelp" 
+											/>	
+										<Text text="Descrição do equipamento após selecionado"></Text>		
+									</VBox>					
 								</f:fields>
 							</f:FormElement>
 							<f:FormElement label="Série">
