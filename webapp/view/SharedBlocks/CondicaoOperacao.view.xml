@@ -40,12 +40,8 @@
 										</layoutData>
 									</Switch>				
 								</f:fields>
-							</f:FormElement>                                                                                    
-						</f:formElements>
-					</f:FormContainer>		
-					<f:FormContainer title="Quantidade Lado">
-						<f:formElements>
-							<f:FormElement label="Direito">
+							</f:FormElement>
+							<f:FormElement label="Qtde Lado Direito">
 								<f:fields>							
 									<Input 
 										value="{criarUsuarioModel>CodUsuario}"
@@ -57,7 +53,7 @@
 										/>						
 								</f:fields>
 							</f:FormElement>
-							<f:FormElement label="Esquerdo">
+							<f:FormElement label="Qtde Lado Esquerdo">
 								<f:fields>							
 									<Input 
 										value="{criarUsuarioModel>CodUsuario}"
@@ -70,7 +66,7 @@
 								</f:fields>
 							</f:FormElement>                                                                                      
 						</f:formElements>
-					</f:FormContainer>																
+					</f:FormContainer>												
 				</f:formContainers>				
 			</f:Form>     
 		</VBox>
