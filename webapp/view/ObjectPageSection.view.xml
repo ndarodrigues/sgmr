@@ -56,6 +56,16 @@
 						</subSections>
 					</ObjectPageSection>
 
+					<ObjectPageSection titleUppercase="false" title="Roletes Superiores">
+						<subSections>
+							<ObjectPageSubSection titleUppercase="false">
+								<blocks>
+									<blockcolor:RoletesSuperiores id="RoletesInferiores"/>
+								</blocks>
+							</ObjectPageSubSection>
+						</subSections>
+					</ObjectPageSection>
+
 					<ObjectPageSection titleUppercase="false" title="Section 3">
 						<subSections>
 							<ObjectPageSubSection titleUppercase="false">
