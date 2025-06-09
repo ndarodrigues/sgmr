@@ -184,7 +184,7 @@ sap.ui.define([
                 oObjetoNovo.HabilitarTelaCriarmaterialRodante = false
                 oController.getOwnerComponent().getModel("materialRodanteCriarModel").setData(oObjetoNovo);
                 oController.getOwnerComponent().getModel("materialRodanteCriarModel").refresh()
-                oController.getOwnerComponent().getRouter().navTo("CriarMaterialRodante", null, true);
+                oController.getOwnerComponent().getRouter().navTo("ObjectPageSection", null, true);
             },
 
             onCriarmaterialRodante: function (oEvent) {

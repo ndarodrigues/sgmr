@@ -5,48 +5,82 @@
 	xmlns:m="sap.m"
 	xmlns:blockcolor="com.pontual.sgmr.view.SharedBlocks"
 	height="100%">
-	<ObjectPageLayout id="ObjectPageLayout" upperCaseAnchorBar="false">
-		<headerTitle>
-			<ObjectPageHeader objectTitle="HITACHI - EX 1200-5">
-			</ObjectPageHeader>
-		</headerTitle>
+	 <m:Page id="pageMaterial" 
+          title="{i18n>title}" 
+          titleAlignment="Center"
+          showNavButton="false" 
+          showSubHeader="true"
+          navButtonText="Sair"
+          icon="sap-icon://visits"
+          navButtonPress="onNavBack"         
+          class="sapUiContentPadding sapUiResponsivePadding--header sapUiResponsivePadding--subHeader sapUiResponsivePadding--content sapUiResponsivePadding--footer">
+		   <m:headerContent>
+				<m:ObjectStatus
+					id="networkStatus"
+					active="false"
+					inverted="true"
+					icon="{path: 'conexaoModel>statusConexao',
+						formatter: 'com.pontual.sgmr.model.formatter.getIconeConexao'}"
+					state="{path: 'conexaoModel>statusConexao',
+							formatter: 'com.pontual.sgmr.model.formatter.getCorIconeConexao'}"
+				/>
+        	</m:headerContent>   
+			<ObjectPageLayout id="ObjectPageLayout" upperCaseAnchorBar="false">
+				<headerTitle>
+					<ObjectPageHeader objectTitle="HITACHI - EX 1200-5">
+					</ObjectPageHeader>
+				</headerTitle>
 
-		<headerContent>
-			<m:ObjectAttribute title="Inpeção e Medição de Material Rodante" text=""/>
-		</headerContent>
+				<headerContent>
+					<m:ObjectAttribute title="Inpeção e Medição de Material Rodante" text=""/>
+				</headerContent>
 
-		<sections>
-			<ObjectPageSection titleUppercase="false" title="Cabeçalho">
-				<subSections>
-					<ObjectPageSubSection title="Cabeçalho" titleUppercase="false">
-						<blocks>
-							<blockcolor:BlockBlueT1 id="bbt1"/>
-						</blocks>
-					</ObjectPageSubSection>
-				</subSections>
-			</ObjectPageSection>
+				<sections>
+					<ObjectPageSection titleUppercase="false" title="Cabeçalho">
+						<subSections>
+							<ObjectPageSubSection title="Cabeçalho" titleUppercase="false">
+								<blocks>
+									<blockcolor:BlockBlueT1 id="bbt1"/>
+								</blocks>
+							</ObjectPageSubSection>
+						</subSections>
+					</ObjectPageSection>
 
-			<ObjectPageSection titleUppercase="false" title="Roletes Superiores">
-				<subSections>
-					<ObjectPageSubSection title="Roletes Superiores" titleUppercase="false">
-						<blocks>
-							<blockcolor:BlockBlueT2 id="bbt2"/>
-						</blocks>
-					</ObjectPageSubSection>
-				</subSections>
-			</ObjectPageSection>
+					<ObjectPageSection titleUppercase="false" title="Roletes Superiores">
+						<subSections>
+							<ObjectPageSubSection title="Roletes Superiores" titleUppercase="false">
+								<blocks>
+									<blockcolor:BlockBlueT2 id="bbt2"/>
+								</blocks>
+							</ObjectPageSubSection>
+						</subSections>
+					</ObjectPageSection>
 
-			<ObjectPageSection titleUppercase="false" title="Section 3">
-				<subSections>
-					<ObjectPageSubSection titleUppercase="false">
-						<blocks>
-							<blockcolor:BlockBlueT3 id="bbt3"/>
-						</blocks>
-					</ObjectPageSubSection>
-				</subSections>
-			</ObjectPageSection>
+					<ObjectPageSection titleUppercase="false" title="Section 3">
+						<subSections>
+							<ObjectPageSubSection titleUppercase="false">
+								<blocks>
+									<blockcolor:BlockBlueT3 id="bbt3"/>
+								</blocks>
+							</ObjectPageSubSection>
+						</subSections>
+					</ObjectPageSection>
 
-		</sections>
+				</sections>
 
-	</ObjectPageLayout>
+			</ObjectPageLayout>
+			<m:footer>
+				<m:OverflowToolbar>
+					<m:Button id="messagePopoverBtn"
+						icon="{ path: '/', formatter: '.buttonIconFormatter' }"
+						type="{ path: '/', formatter: '.buttonTypeFormatter' }"
+						text= "{path: '/', formatter: '.highestSeverityMessages' }"
+						press=".handleMessagePopoverPress"
+						ariaHasPopup="Dialog"/>		 
+					<m:ToolbarSpacer/>
+					<m:Button id="confirmarComboioButton" text="{i18n>confirmar}" type="Success" press="onConfirmarComboio" icon="sap-icon://save" ></m:Button>
+					<m:Button id="cancelarComboioButton" text="{i18n>cancelar}" type="Reject" press="onCancelarComboio" icon="sap-icon://cancel" ></m:Button>                
+				</m:OverflowToolbar>
+			</m:footer>
+	</m:Page>
 </mvc:View>
