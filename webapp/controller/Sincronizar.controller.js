@@ -12,48 +12,16 @@ sap.ui.define([
         var oView;
         var oMessagePopover;
 
-        return Controller.extend("com.pontual.sgmr.controller.ListaMaterialRodante", {
+        return Controller.extend("com.pontual.sgmr.controller.Sincronizar", {
             onInit: function () {
 
                 oController = this;
                 oView = oController.getView();
 
-                var omaterialRodante = [{
-                    Codigo: "EX12005",
-                    DescrMaterialRodante: "HITACHI - EX 1200-5",
-                    Sincronizado: "N",
-                    HabilitarTelaCriarmaterialRodante: true,
-                    AutorizacaoSet: [
-                        {
-                            CodigoAutorizacao: "01",
-                            DescrAutorizacao: "INSPEÇÃO MATERIAL RODANTE",
-                            Selecionado: true
-                        },
-                        {
-                            CodigoAutorizacao: "02",
-                            DescrAutorizacao: "MOVIMENTAÇÃO MATERIAL RODANTE",
-                            Selecionado: true
-                        }
-
-
-                    ]},
-                    {
-                        Codigo: "EX12006",
-                        DescrMaterialRodante: "HITACHI - EX 1200-6",
-                        Sincronizado: "N",
-                        HabilitarTelaCriarmaterialRodante: true,
-                        AutorizacaoSet: [
-                            {
-                                CodigoAutorizacao: "01",
-                                DescrAutorizacao: "INSPEÇÃO MATERIAL RODANTE",
-                                Selecionado: true
-                            },
-
-
-                        ]
-                    }
+                var omaterialRodante = [
+                    {Codigo: "Equipamento"},
+                    {Codigo: "Formulário"}
                 ]
-
 
                 oController.getOwnerComponent().getModel("listaMaterialRodanteModel").setData(omaterialRodante);
                 oController.getOwnerComponent().getModel("listaMaterialRodanteModel").refresh()
@@ -62,13 +30,22 @@ sap.ui.define([
                 oView.bindElement("listaMaterialRodanteModel>/");
                 oView.bindElement("layoutTelaModel>/");
                 oView.bindElement("busyDialogModel>/")
+                oView.bindElement("objectPageModel>/")
+                oView.bindElement("condicaoOperacaoModel>/")
+                oView.bindElement("inspecaoModel>/")
+                oView.bindElement("condicaoModel>/")
+                oView.bindElement("formularioModel>/")
+                
+                var aCondicoes = [{ key: "Formulário 321" }, { key: "Formulário 322" }, { key: "Formulário 323" }]
+                oController.getOwnerComponent().getModel("formularioModel").setData(aCondicoes);
+                oController.getOwnerComponent().getModel("formularioModel").refresh();
 
                 var oModel = new JSONModel();
                 oModel.setData([]);
                 this.getView().setModel(oModel);
 
                 this._oRouter = sap.ui.core.UIComponent.getRouterFor(this);
-                this._oRouter.getRoute("ListaMaterialRodante").attachMatched(this._handleRouteMatched, this);
+                this._oRouter.getRoute("AssociarFormulario").attachMatched(this._handleRouteMatched, this);
 
             },
 

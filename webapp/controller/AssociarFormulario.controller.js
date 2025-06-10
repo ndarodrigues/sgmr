@@ -12,7 +12,7 @@ sap.ui.define([
         var oView;
         var oMessagePopover;
 
-        return Controller.extend("com.pontual.sgmr.controller.ListaMaterialRodante", {
+        return Controller.extend("com.pontual.sgmr.controller.AssociarFormulario", {
             onInit: function () {
 
                 oController = this;
@@ -62,13 +62,22 @@ sap.ui.define([
                 oView.bindElement("listaMaterialRodanteModel>/");
                 oView.bindElement("layoutTelaModel>/");
                 oView.bindElement("busyDialogModel>/")
+                oView.bindElement("objectPageModel>/")
+                oView.bindElement("condicaoOperacaoModel>/")
+                oView.bindElement("inspecaoModel>/")
+                oView.bindElement("condicaoModel>/")
+                oView.bindElement("formularioModel>/")
+                
+                var aCondicoes = [{ key: "Formulário 321" }, { key: "Formulário 322" }, { key: "Formulário 323" }]
+                oController.getOwnerComponent().getModel("formularioModel").setData(aCondicoes);
+                oController.getOwnerComponent().getModel("formularioModel").refresh();
 
                 var oModel = new JSONModel();
                 oModel.setData([]);
                 this.getView().setModel(oModel);
 
                 this._oRouter = sap.ui.core.UIComponent.getRouterFor(this);
-                this._oRouter.getRoute("ListaMaterialRodante").attachMatched(this._handleRouteMatched, this);
+                this._oRouter.getRoute("AssociarFormulario").attachMatched(this._handleRouteMatched, this);
 
             },
 

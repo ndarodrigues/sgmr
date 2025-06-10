@@ -1,6 +1,7 @@
-<mvc:View controllerName="com.pontual.sgmr.controller.ListaMaterialRodante"
+<mvc:View controllerName="com.pontual.sgmr.controller.AssociarFormulario"
     height="100%"
     xmlns:mvc="sap.ui.core.mvc" 
+	xmlns:core="sap.ui.core"       
     displayBlock="true"
     xmlns="sap.m">
     <Page id="pageInicio" 
@@ -27,11 +28,12 @@
         </headerContent>            
 		<content>               
                     <Table id="idListaMaterialRodanteTable" 
-                    alternateRowColors="true"
-                    autoPopinMode="true" 
-                    contextualWidth="Auto"		
-                    growing="false" 
-                    growingThreshold="10" 
+                            alternateRowColors="true"
+                            autoPopinMode="false" 
+                            contextualWidth="Auto"		
+                            growing="true" 
+                            growingThreshold="100" 
+                            paste="onPaste" 
                     items="{listaMaterialRodanteModel>/}">
                         <headerToolbar>
                             <OverflowToolbar id="otbSubheader">
@@ -41,14 +43,24 @@
                             </OverflowToolbar>
                         </headerToolbar>
                         <columns>
-                            <Column hAlign="Begin">
+                            <Column hAlign="Begin" minScreenWidth="Phone" demandPopin="true" width="50%">
                                 <Text text="Equipamento" />
+                            </Column>
+                            <Column hAlign="Center" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" width="12.5%">
+                                <Text text="Formulário" />
                             </Column>								
                         </columns>
                         <items>
-                            <ColumnListItem vAlign="Middle" navigated="true" type="Navigation" press="onMaterialRodantePress">
+                            <ColumnListItem vAlign="Middle" navigated="false" type="Inactive" press="onMaterialRodantePress">
                                 <cells>
                                     <ObjectIdentifier title="{listaMaterialRodanteModel>Codigo}" text="{listaMaterialRodanteModel>DescrMaterialRodante}"/>
+                                    <ComboBox
+                                        items="{
+                                            path: 'formularioModel>/',
+                                            sorter: { path: 'key' }
+                                        }">
+                                        <core:Item key="{formularioModel>key}" text="{formularioModel>key}" />
+                                    </ComboBox>		                                        
                                 </cells>
                             </ColumnListItem>
                         </items>
@@ -64,7 +76,8 @@
 					press=".handleMessagePopoverPress"
 					ariaHasPopup="Dialog"/>                      
 				<ToolbarSpacer/>
-
+                <Button id="confirmarUsuarioButton" text="{i18n>confirmar}" type="Success" press="onConfirmarUsuario" icon="sap-icon://save" enabled="{layoutTelaModel>HabilitarTelaCriarUsuario}"	></Button>
+                <Button id="cancelarUsuarioButton" text="{i18n>cancelar}" type="Reject" press="onCancelarUsuario" icon="sap-icon://cancel" enabled="{layoutTelaModel>HabilitarTelaCriarUsuario}"	></Button>   
 			</OverflowToolbar>
 		</footer>
     </Page>

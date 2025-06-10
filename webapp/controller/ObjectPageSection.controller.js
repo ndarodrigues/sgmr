@@ -25,6 +25,7 @@ sap.ui.define([
                 oView.bindElement("objectPageModel>/")
                 oView.bindElement("condicaoOperacaoModel>/")
                 oView.bindElement("inspecaoModel>/")
+                oView.bindElement("condicaoModel>/")
 
                 var oTesteModel = {
                     country: "Brasil",
@@ -40,13 +41,17 @@ sap.ui.define([
 
             _handleRouteMatched: function (oEvent) {
 
-                var aCondicoes = [
-                    { condicao: "Umidade", status: "P" },
-                    { condicao: "Acúmulo", status: "P" },
-                    { condicao: "Abrasividade", status: "P" },
-                    { condicao: "Imapacto", status: "P" }]
-                oController.getOwnerComponent().getModel("condicaoOperacaoModel").setData(aCondicoes);
+                var aCondicoesOperacoes = [
+                    { operacao: "Umidade", status: "" },
+                    { operacao: "Acúmulo", status: "" },
+                    { operacao: "Abrasividade", status: "" },
+                    { operacao: "Imapacto", status: "" }]
+                oController.getOwnerComponent().getModel("condicaoOperacaoModel").setData(aCondicoesOperacoes);
                 oController.getOwnerComponent().getModel("condicaoOperacaoModel").refresh();
+
+                var aCondicoes = [{ key: "Baixo" }, { key: "Médio" }, { key: "Alto" }]
+                oController.getOwnerComponent().getModel("condicaoModel").setData(aCondicoes);
+                oController.getOwnerComponent().getModel("condicaoModel").refresh();
 
                 var aInspecoe = [
                     { inspecao: "Conferir tensão (flecha) e passo das esteiras conforme manual do equipamento." },
