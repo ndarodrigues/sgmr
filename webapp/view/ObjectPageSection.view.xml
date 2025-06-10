@@ -56,11 +56,31 @@
 						</subSections>
 					</ObjectPageSection>
 
-					<ObjectPageSection titleUppercase="false" title="Section 3">
+					<ObjectPageSection titleUppercase="false" title="Condição de Operação">
 						<subSections>
 							<ObjectPageSubSection titleUppercase="false">
 								<blocks>
-									<blockcolor:BlockBlueT3 id="bbt3"/>
+									<blockcolor:CondicaoOperacao id="condicaooperacao"/>
+								</blocks>
+							</ObjectPageSubSection>
+						</subSections>
+					</ObjectPageSection>
+
+					<ObjectPageSection titleUppercase="false" title="Roletes">
+						<subSections>
+							<ObjectPageSubSection titleUppercase="false">
+								<blocks>
+									<blockcolor:Roletes id="roletes"/>
+								</blocks>
+							</ObjectPageSubSection>
+						</subSections>
+					</ObjectPageSection>
+
+					<ObjectPageSection titleUppercase="false" title="Inspeção">
+						<subSections>
+							<ObjectPageSubSection titleUppercase="false">
+								<blocks>
+									<blockcolor:Inspecao id="inspecao"/>
 								</blocks>
 							</ObjectPageSubSection>
 						</subSections>
