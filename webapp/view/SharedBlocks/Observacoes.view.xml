@@ -8,9 +8,6 @@
     xmlns="sap.m">
 				<f:Form id="criarUsuarioForm"
 				editable="true">
-				<f:title>
-					<core:Title text="Se houver anomalias, relatar como Observações." />
-				</f:title>
 				<f:layout>
 					<f:ResponsiveGridLayout
 						labelSpanXL="4"
