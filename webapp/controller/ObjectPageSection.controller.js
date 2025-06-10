@@ -65,6 +65,7 @@ sap.ui.define([
 
             _handleExibirRoleteSuperior: function (oEvent) {
                 oController._handleExibirImagem()
+                //Teste
             },
 
             _handleExibirImagem: function (oEvent) {
