@@ -7,7 +7,7 @@
     displayBlock="true"
     xmlns="sap.m">
 
-		    <VBox class="sapUiSmallMargin">     
+	<VBox class="sapUiSmallMargin">     
 		<Table id="idOperacoesTable" 
 				alternateRowColors="true"
 				autoPopinMode="false" 

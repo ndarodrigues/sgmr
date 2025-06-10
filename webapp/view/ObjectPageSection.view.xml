@@ -56,6 +56,36 @@
 						</subSections>
 					</ObjectPageSection>
 
+					<ObjectPageSection titleUppercase="false" title="Roletes Inferiores">
+						<subSections>
+							<ObjectPageSubSection titleUppercase="false">
+								<blocks>
+									<blockcolor:RoletesInferiores id="roletes_infe"/>
+								</blocks>
+							</ObjectPageSubSection>
+						</subSections>
+					</ObjectPageSection>
+
+					<ObjectPageSection titleUppercase="false" title="Sapatas">
+						<subSections>
+							<ObjectPageSubSection titleUppercase="false">
+								<blocks>
+									<blockcolor:Sapatas id="sapatas"/>
+								</blocks>
+							</ObjectPageSubSection>
+						</subSections>
+					</ObjectPageSection>
+
+					<ObjectPageSection titleUppercase="false" title="Buchas">
+						<subSections>
+							<ObjectPageSubSection titleUppercase="false">
+								<blocks>
+									<blockcolor:Buchas id="buchas"/>
+								</blocks>
+							</ObjectPageSubSection>
+						</subSections>
+					</ObjectPageSection>
+
 					<ObjectPageSection titleUppercase="false" title="Condição de Operação">
 						<subSections>
 							<ObjectPageSubSection titleUppercase="false">
@@ -75,6 +105,8 @@
 							</ObjectPageSubSection>
 						</subSections>
 					</ObjectPageSection>
+
+			
 
 					<ObjectPageSection titleUppercase="false" title="Inspeção">
 						<subSections>
