@@ -84,6 +84,9 @@
      "condicaoOperacaoModel": {
         "type": "sap.ui.model.json.JSONModel"
       },
+      "condicaoModel": {
+        "type": "sap.ui.model.json.JSONModel"
+      },
       "inspecaoModel": {
         "type": "sap.ui.model.json.JSONModel"
       },
@@ -131,7 +134,13 @@
       },
       "objectPageModel": {
         "type": "sap.ui.model.json.JSONModel"
-      }
+      },
+      "formularioModel": {
+        "type": "sap.ui.model.json.JSONModel"
+      },
+      "sincronizarModel": {
+        "type": "sap.ui.model.json.JSONModel"
+      }          
     },
     "resources": {
       "css": [
@@ -250,7 +259,21 @@
           "target": [
             "ObjectPageSection"
           ]
-        }
+        },
+         {
+          "name": "AssociarFormulario",
+          "pattern": "AssociarFormulario",
+          "target": [
+            "AssociarFormulario"
+          ]
+        },
+         {
+          "name": "Sincronizar",
+          "pattern": "Sincronizar",
+          "target": [
+            "Sincronizar"
+          ]
+        }         
 
       ],
       "targets": {
@@ -351,6 +374,20 @@
           "clearControlAggregation": false,
           "viewId": "ObjectPageSection",
           "viewName": "ObjectPageSection"
+        },
+         "AssociarFormulario": {
+          "viewType": "XML",
+          "transition": "slide",
+          "clearControlAggregation": false,
+          "viewId": "AssociarFormulario",
+          "viewName": "AssociarFormulario"
+        },
+         "Sincronizar": {
+          "viewType": "XML",
+          "transition": "slide",
+          "clearControlAggregation": false,
+          "viewId": "Sincronizar",
+          "viewName": "Sincronizar"
         }
       }
     },	

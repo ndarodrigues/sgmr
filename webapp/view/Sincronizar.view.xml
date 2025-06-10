@@ -1,6 +1,7 @@
-<mvc:View controllerName="com.pontual.sgmr.controller.ListaMaterialRodante"
+<mvc:View controllerName="com.pontual.sgmr.controller.Sincronizar"
     height="100%"
     xmlns:mvc="sap.ui.core.mvc" 
+	xmlns:core="sap.ui.core"       
     displayBlock="true"
     xmlns="sap.m">
     <Page id="pageInicio" 
@@ -27,12 +28,13 @@
         </headerContent>            
 		<content>               
                     <Table id="idListaMaterialRodanteTable" 
-                    alternateRowColors="true"
-                    autoPopinMode="true" 
-                    contextualWidth="Auto"		
-                    growing="false" 
-                    growingThreshold="10" 
-                    items="{listaMaterialRodanteModel>/}">
+                            alternateRowColors="true"
+                            autoPopinMode="false" 
+                            contextualWidth="Auto"		
+                            growing="true" 
+                            growingThreshold="100" 
+                            paste="onPaste" 
+                    items="{sincronizarModel>/}">
                         <headerToolbar>
                             <OverflowToolbar id="otbSubheader">
                                 <Title text="Material Rodante" level="H2" />
@@ -41,14 +43,18 @@
                             </OverflowToolbar>
                         </headerToolbar>
                         <columns>
-                            <Column hAlign="Begin">
-                                <Text text="Equipamento" />
+                            <Column hAlign="Begin" minScreenWidth="Phone" demandPopin="true" width="50%">
+                                <Text text="Tabela" />
+                            </Column>
+                            <Column hAlign="Center" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" width="12.5%">
+                                <Text text="" />
                             </Column>								
                         </columns>
                         <items>
-                            <ColumnListItem vAlign="Middle" navigated="true" type="Navigation" press="onMaterialRodantePress">
+                            <ColumnListItem vAlign="Middle" navigated="false" type="Inactive" press="onMaterialRodantePress">
                                 <cells>
-                                    <ObjectIdentifier title="{listaMaterialRodanteModel>Codigo}" text="{listaMaterialRodanteModel>DescrMaterialRodante}"/>
+                                    <ObjectIdentifier title="{sincronizarModel>Codigo}"/>
+                                    <Button id="sincronismoButton" width="12rem" text="Sincronizar" type="Emphasized" press="onSincronizar" icon="sap-icon://synchronize" class="sapUiSmallMarginBottom"	></Button>                                                	                                        
                                 </cells>
                             </ColumnListItem>
                         </items>
@@ -64,7 +70,6 @@
 					press=".handleMessagePopoverPress"
 					ariaHasPopup="Dialog"/>                      
 				<ToolbarSpacer/>
-
 			</OverflowToolbar>
 		</footer>
     </Page>

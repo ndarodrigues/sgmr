@@ -86,19 +86,6 @@
 						</subSections>
 					</ObjectPageSection>
 
-<<<<<<< HEAD
-					<ObjectPageSection titleUppercase="false" title="Condição Operação">
-=======
-					<ObjectPageSection titleUppercase="false" title="Elos">
-						<subSections>
-							<ObjectPageSubSection titleUppercase="false">
-								<blocks>
-									<blockcolor:Elos id="elos"/>
-								</blocks>
-							</ObjectPageSubSection>
-						</subSections>
-					</ObjectPageSection>
-
 					<ObjectPageSection titleUppercase="false" title="Roda Guia">
 						<subSections>
 							<ObjectPageSubSection titleUppercase="false">
@@ -129,8 +116,7 @@
 						</subSections>
 					</ObjectPageSection>
 
-					<ObjectPageSection titleUppercase="false" title="Condição de Operação">
->>>>>>> 78dd5562a65afbe81b8e06b8dc82a2ba8076d318
+					<ObjectPageSection titleUppercase="false" title="Condição Operação">
 						<subSections>
 							<ObjectPageSubSection titleUppercase="false">
 								<blocks>

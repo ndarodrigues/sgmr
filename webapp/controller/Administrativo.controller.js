@@ -3,7 +3,7 @@ sap.ui.define([
     "com/pontual/sgmr/model/formatter",
     'sap/m/MessagePopover',
     'sap/m/MessageItem',
-    'sap/ui/model/json/JSONModel'     
+    'sap/ui/model/json/JSONModel'
 ],
     function (Controller, formatter, MessagePopover, MessageItem, JSONModel) {
         "use strict";
@@ -89,9 +89,13 @@ sap.ui.define([
                 oController.getOwnerComponent().getRouter().navTo("ListaUsuario", null, true);
             },
 
+            onAssociarFormulario: function (oEvent) {
+                oController.getOwnerComponent().getRouter().navTo("AssociarFormulario", null, true);
+            },
+
 
             onSincronizar: function (oEvent) {
-                oController.onSincronizarGeral(oController, true)
+              oController.getOwnerComponent().getRouter().navTo("Sincronizar", null, true);
 
             },
 

@@ -25,28 +25,23 @@
 			</headerToolbar>
 			<columns>
 				<Column hAlign="Begin" minScreenWidth="Phone" demandPopin="true" width="50%">
+					<Text text="Operação" />
+				</Column>
+				<Column hAlign="Center" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" width="12.5%">
 					<Text text="Condição" />
-				</Column>
-				<Column hAlign="Center" vAlign="Middle" minScreenWidth="Phone" demandPopin="true" width="12.5%">
-					<Text text="Baixo" />
-				</Column>
-				<Column hAlign="Center" vAlign="Middle" minScreenWidth="Phone" demandPopin="true" width="12.5%">
-					<Text text="Moderado" />
-				</Column>
-				<Column hAlign="Center" vAlign="Middle" minScreenWidth="Phone" demandPopin="true" width="12.5%">
-					<Text text="Alto" />
-				</Column>																										
+				</Column>																									
 			</columns>
 			<items>
 				<ColumnListItem vAlign="Middle">
 					<cells>
-						<ObjectIdentifier title="{condicaoOperacaoModel>condicao}"/>
-						<Button type="{path: 'condicaoOperacaoModel>Status',
-							formatter: 'com.pontual.sgmr.model.formatter.getToggleCondicaoBaixo'}" press="onPressBaixo" icon="sap-icon://down" ></Button>  
-						<Button type="{path: 'condicaoOperacaoModel>Status',
-							formatter: 'com.pontual.sgmr.model.formatter.getToggleCondicaoMedio'}" press="onPressMedio" icon="sap-icon://circle-task" ></Button>   	
-						<Button type="{path: 'condicaoOperacaoModel>Status',
-							formatter: 'com.pontual.sgmr.model.formatter.getToggleCondicaoAlto'}" press="onPressAlto" icon="sap-icon://up"></Button>  																			
+						<ObjectIdentifier title="{condicaoOperacaoModel>operacao}"/>
+						<ComboBox
+							items="{
+								path: 'condicaoModel>/',
+								sorter: { path: 'key' }
+							}">
+							<core:Item key="{condicaoModel>key}" text="{condicaoModel>key}" />
+						</ComboBox>																			
 					</cells>
 				</ColumnListItem>
 			</items>

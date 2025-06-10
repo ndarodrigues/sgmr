@@ -30,6 +30,8 @@
                 <items>                    
                 <Button id="entrarPerfilButton" width="12rem" text="{i18n>perfil}" type="Emphasized" press="onEntrarPerfil" icon="sap-icon://business-card" class="sapUiSmallMarginBottom"	></Button>
                 <Button id="entrarUsuarioButton" width="12rem" text="{i18n>usuario}" type="Emphasized" press="onEntrarUsuario" icon="sap-icon://person-placeholder" class="sapUiSmallMarginBottom"	></Button>                
+                <Button id="associarButton" width="12rem" text="Associar Formulário" type="Emphasized" press="onAssociarFormulario" icon="sap-icon://form" class="sapUiSmallMarginBottom"	></Button>                                
+                <Button id="sincronismoButton" width="12rem" text="Sincronizar" type="Emphasized" press="onSincronizar" icon="sap-icon://synchronize" class="sapUiSmallMarginBottom"	></Button>                                                
                 </items>
             </VBox>
 		</content>
