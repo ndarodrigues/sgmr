@@ -1,4 +1,5 @@
 <mvc:View
+	controllerName="com.pontual.sgmr.controller.ObjectPageSection"    
     height="100%"
     xmlns:mvc="sap.ui.core.mvc" 
     xmlns:l="sap.ui.layout"
@@ -26,13 +27,13 @@
 				<Column hAlign="Begin" minScreenWidth="Phone" demandPopin="true" width="50%">
 					<Text text="Condição" />
 				</Column>
-				<Column hAlign="Center" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" width="12.5%">
+				<Column hAlign="Center" vAlign="Middle" minScreenWidth="Phone" demandPopin="true" width="12.5%">
 					<Text text="Baixo" />
 				</Column>
-				<Column hAlign="Center" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" width="12.5%">
+				<Column hAlign="Center" vAlign="Middle" minScreenWidth="Phone" demandPopin="true" width="12.5%">
 					<Text text="Moderado" />
 				</Column>
-				<Column hAlign="Center" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" width="12.5%">
+				<Column hAlign="Center" vAlign="Middle" minScreenWidth="Phone" demandPopin="true" width="12.5%">
 					<Text text="Alto" />
 				</Column>																										
 			</columns>
@@ -40,9 +41,12 @@
 				<ColumnListItem vAlign="Middle">
 					<cells>
 						<ObjectIdentifier title="{condicaoOperacaoModel>condicao}"/>
-						<Button type="Success" press="onPressConfirmado" icon="sap-icon://down" ></Button>  
-						<Button type="Attention" press="onPressPendente" icon="sap-icon://circle-task" ></Button>   	
-						<Button type="Negative" press="onPressNaoConfirmado" icon="sap-icon://up"></Button>  																			
+						<Button type="{path: 'condicaoOperacaoModel>Status',
+							formatter: 'com.pontual.sgmr.model.formatter.getToggleCondicaoBaixo'}" press="onPressBaixo" icon="sap-icon://down" ></Button>  
+						<Button type="{path: 'condicaoOperacaoModel>Status',
+							formatter: 'com.pontual.sgmr.model.formatter.getToggleCondicaoMedio'}" press="onPressMedio" icon="sap-icon://circle-task" ></Button>   	
+						<Button type="{path: 'condicaoOperacaoModel>Status',
+							formatter: 'com.pontual.sgmr.model.formatter.getToggleCondicaoAlto'}" press="onPressAlto" icon="sap-icon://up"></Button>  																			
 					</cells>
 				</ColumnListItem>
 			</items>

@@ -25,7 +25,7 @@ sap.ui.define([
                 oView.bindElement("objectPageModel>/")
                 oView.bindElement("condicaoOperacaoModel>/")
                 oView.bindElement("inspecaoModel>/")
-            
+
                 var oTesteModel = {
                     country: "Brasil",
                     company: "Pontual"
@@ -40,15 +40,19 @@ sap.ui.define([
 
             _handleRouteMatched: function (oEvent) {
 
-                var aCondicoes=[{condicao: "Umidade"},{condicao: "Acúmulo"}, {condicao: "Abrasividade"}, {condicao: "Imapacto"}]
+                var aCondicoes = [
+                    { condicao: "Umidade", status: "P" },
+                    { condicao: "Acúmulo", status: "P" },
+                    { condicao: "Abrasividade", status: "P" },
+                    { condicao: "Imapacto", status: "P" }]
                 oController.getOwnerComponent().getModel("condicaoOperacaoModel").setData(aCondicoes);
                 oController.getOwnerComponent().getModel("condicaoOperacaoModel").refresh();
 
-                var aInspecoe=[
-                    {inspecao: "Conferir tensão (flecha) e passo das esteiras conforme manual do equipamento."},
-                    {inspecao: "Medir a temperatura quando o equipamento estiver operando ou se estiver interrompido a operação em no máximo 20 min;"}, 
-                    {inspecao: "Verificar parafusos/porcas das sapatas, parafusos de segmentos, das rodas motrizes, dos mancais de roletes e protetores de roletes, que estejam frouxos ou faltando; "}, 
-                    {inspecao: "Verificar avarias e empenos nos suportes dos roletes superiores, protetores de roletes e nos suportes e alinhadores das rodas guia."}]
+                var aInspecoe = [
+                    { inspecao: "Conferir tensão (flecha) e passo das esteiras conforme manual do equipamento." },
+                    { inspecao: "Medir a temperatura quando o equipamento estiver operando ou se estiver interrompido a operação em no máximo 20 min;" },
+                    { inspecao: "Verificar parafusos/porcas das sapatas, parafusos de segmentos, das rodas motrizes, dos mancais de roletes e protetores de roletes, que estejam frouxos ou faltando; " },
+                    { inspecao: "Verificar avarias e empenos nos suportes dos roletes superiores, protetores de roletes e nos suportes e alinhadores das rodas guia." }]
                 oController.getOwnerComponent().getModel("inspecaoModel").setData(aInspecoe);
                 oController.getOwnerComponent().getModel("inspecaoModel").refresh();
 
@@ -86,7 +90,33 @@ sap.ui.define([
                 // Open the dialog
                 oDialog.open();
 
+            },
 
+            onPressBaixo: function (oEvent) {
+                var vPath = oEvent.getSource().getBindingContext("condicaoOperacaoModel").getPath()
+                var oAtividade = oEvent.getSource().getBindingContext("condicaoOperacaoModel").getModel().getProperty(vPath);
+                oAtividade.Status = "B";
+                oEvent.getSource().getBindingContext("condicaoOperacaoModel").getModel().setProperty(vPath, oAtividade);
+                oController.getView().getModel("condicaoOperacaoModel").refresh()
+                oController.onStatusChange(oEvent)
+            },
+
+            onPressMedio: function (oEvent) {
+                var vPath = oEvent.getSource().getBindingContext("condicaoOperacaoModel").getPath()
+                var oAtividade = oEvent.getSource().getBindingContext("condicaoOperacaoModel").getModel().getProperty(vPath);
+                oAtividade.Status = "M";
+                oEvent.getSource().getBindingContext("condicaoOperacaoModel").getModel().setProperty(vPath, oAtividade);
+                oController.getView().getModel("condicaoOperacaoModel").refresh()
+                oController.onStatusChange(oEvent)
+            },
+
+            onPressAlto: function (oEvent) {
+                var vPath = oEvent.getSource().getBindingContext("condicaoOperacaoModel").getPath()
+                var oAtividade = oEvent.getSource().getBindingContext("condicaoOperacaoModel").getModel().getProperty(vPath);
+                oAtividade.Status = "A";
+                oEvent.getSource().getBindingContext("condicaoOperacaoModel").getModel().setProperty(vPath, oAtividade);
+                oController.getView().getModel("condicaoOperacaoModel").refresh()
+                oController.onStatusChange(oEvent)
             },
 
         });

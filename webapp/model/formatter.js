@@ -56,24 +56,24 @@ sap.ui.define(function () {
 			}
 		},
 
-		getToggleConfirmado: function (value) {
-			if (value != undefined && value == "C") {
+		getToggleCondicaoBaixo: function (value) {
+			if (value != undefined && value == "B") {
 				return "Success"
 			} else {
 				return "Neutral"
 			}
 		},
 
-		getTogglePendente: function (value) {
-			if (value != undefined && value == "P") {
+		getToggleCondicaoMedio: function (value) {
+			if (value != undefined && value == "M") {
 				return "Attention"
 			} else {
 				return "Neutral"
 			}
 		},
 
-		getToggleNaoConfirmado: function (value) {
-			if (value != undefined && value == "N") {
+		getToggleCondicaoAlto: function (value) {
+			if (value != undefined && value == "A") {
 				return "Reject"
 			} else {
 				return "Neutral"
