@@ -81,12 +81,6 @@
       "conexaoModel": {
         "type": "sap.ui.model.json.JSONModel"
       },
-     "condicaoOperacaoModel": {
-        "type": "sap.ui.model.json.JSONModel"
-      },
-      "inspecaoModel": {
-        "type": "sap.ui.model.json.JSONModel"
-      },
       "mensagensModel": {
         "type": "sap.ui.model.json.JSONModel"
       },

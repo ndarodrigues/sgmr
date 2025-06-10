@@ -23,9 +23,7 @@ sap.ui.define([
                 this.getView().setModel(oModel);
 
                 oView.bindElement("objectPageModel>/")
-                oView.bindElement("condicaoOperacaoModel>/")
-                oView.bindElement("inspecaoModel>/")
-            
+
                 var oTesteModel = {
                     country: "Brasil",
                     company: "Pontual"
@@ -40,17 +38,6 @@ sap.ui.define([
 
             _handleRouteMatched: function (oEvent) {
 
-                var aCondicoes=[{condicao: "Umidade"},{condicao: "Acúmulo"}, {condicao: "Abrasividade"}, {condicao: "Imapacto"}]
-                oController.getOwnerComponent().getModel("condicaoOperacaoModel").setData(aCondicoes);
-                oController.getOwnerComponent().getModel("condicaoOperacaoModel").refresh();
-
-                var aInspecoe=[
-                    {inspecao: "Conferir tensão (flecha) e passo das esteiras conforme manual do equipamento."},
-                    {inspecao: "Medir a temperatura quando o equipamento estiver operando ou se estiver interrompido a operação em no máximo 20 min;"}, 
-                    {inspecao: "Verificar parafusos/porcas das sapatas, parafusos de segmentos, das rodas motrizes, dos mancais de roletes e protetores de roletes, que estejam frouxos ou faltando; "}, 
-                    {inspecao: "Verificar avarias e empenos nos suportes dos roletes superiores, protetores de roletes e nos suportes e alinhadores das rodas guia."}]
-                oController.getOwnerComponent().getModel("inspecaoModel").setData(aInspecoe);
-                oController.getOwnerComponent().getModel("inspecaoModel").refresh();
 
             },
 
