@@ -40,7 +40,7 @@
 						<subSections>
 							<ObjectPageSubSection title="Cabeçalho" titleUppercase="false">
 								<blocks>
-									<blockcolor:BlockBlueT1 id="bbt1"/>
+									<blockcolor:Cabecalho id="cabecalho"/>
 								</blocks>
 							</ObjectPageSubSection>
 						</subSections>
@@ -50,7 +50,7 @@
 						<subSections>
 							<ObjectPageSubSection title="Roletes Superiores" titleUppercase="false">
 								<blocks>
-									<blockcolor:BlockBlueT2 id="bbt2"/>
+									<blockcolor:RoletesSuperiores id="roletes_supe"/>
 								</blocks>
 							</ObjectPageSubSection>
 						</subSections>
