@@ -34,7 +34,7 @@
                             growing="true" 
                             growingThreshold="100" 
                             paste="onPaste" 
-                    items="{listaMaterialRodanteModel>/}">
+                    items="{sincronizarModel>/}">
                         <headerToolbar>
                             <OverflowToolbar id="otbSubheader">
                                 <Title text="Material Rodante" level="H2" />
@@ -53,7 +53,7 @@
                         <items>
                             <ColumnListItem vAlign="Middle" navigated="false" type="Inactive" press="onMaterialRodantePress">
                                 <cells>
-                                    <ObjectIdentifier title="{listaMaterialRodanteModel>Codigo}"/>
+                                    <ObjectIdentifier title="{sincronizarModel>Codigo}"/>
                                     <Button id="sincronismoButton" width="12rem" text="Sincronizar" type="Emphasized" press="onSincronizar" icon="sap-icon://synchronize" class="sapUiSmallMarginBottom"	></Button>                                                	                                        
                                 </cells>
                             </ColumnListItem>
@@ -70,8 +70,6 @@
 					press=".handleMessagePopoverPress"
 					ariaHasPopup="Dialog"/>                      
 				<ToolbarSpacer/>
-                <Button id="confirmarUsuarioButton" text="{i18n>confirmar}" type="Success" press="onConfirmarUsuario" icon="sap-icon://save" enabled="{layoutTelaModel>HabilitarTelaCriarUsuario}"	></Button>
-                <Button id="cancelarUsuarioButton" text="{i18n>cancelar}" type="Reject" press="onCancelarUsuario" icon="sap-icon://cancel" enabled="{layoutTelaModel>HabilitarTelaCriarUsuario}"	></Button>   
 			</OverflowToolbar>
 		</footer>
     </Page>

@@ -23,11 +23,11 @@ sap.ui.define([
                     {Codigo: "Formulário"}
                 ]
 
-                oController.getOwnerComponent().getModel("listaMaterialRodanteModel").setData(omaterialRodante);
-                oController.getOwnerComponent().getModel("listaMaterialRodanteModel").refresh()
+                oController.getOwnerComponent().getModel("sincronizarModel").setData(omaterialRodante);
+                oController.getOwnerComponent().getModel("sincronizarModel").refresh()
 
 
-                oView.bindElement("listaMaterialRodanteModel>/");
+                oView.bindElement("sincronizarModel>/");
                 oView.bindElement("layoutTelaModel>/");
                 oView.bindElement("busyDialogModel>/")
                 oView.bindElement("objectPageModel>/")

@@ -137,7 +137,10 @@
       },
       "formularioModel": {
         "type": "sap.ui.model.json.JSONModel"
-      }      
+      },
+      "sincronizarModel": {
+        "type": "sap.ui.model.json.JSONModel"
+      }          
     },
     "resources": {
       "css": [
