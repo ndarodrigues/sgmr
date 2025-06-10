@@ -78,40 +78,34 @@
         "dataSource": "mainService",
         "preload": true
       },
-      "conexaoModel": {
-        "type": "sap.ui.model.json.JSONModel"
-      },
-     "condicaoOperacaoModel": {
-        "type": "sap.ui.model.json.JSONModel"
-      },
-      "condicaoModel": {
-        "type": "sap.ui.model.json.JSONModel"
-      },
-      "inspecaoModel": {
-        "type": "sap.ui.model.json.JSONModel"
-      },
-      "mensagensModel": {
-        "type": "sap.ui.model.json.JSONModel"
-      },
-      "loginModel": {
-        "type": "sap.ui.model.json.JSONModel"
-      },
-      "usuariosLoginModel": {
+      "acessosModel": {
         "type": "sap.ui.model.json.JSONModel"
       },
       "busyDialogModel": {
         "type": "sap.ui.model.json.JSONModel"
       },
+      "condicaoOperacaoModel": {
+        "type": "sap.ui.model.json.JSONModel"
+      },
+      "condicaoModel": {
+        "type": "sap.ui.model.json.JSONModel"
+      },
+      "conexaoModel": {
+        "type": "sap.ui.model.json.JSONModel"
+      },
       "criarUsuarioModel": {
         "type": "sap.ui.model.json.JSONModel"
       },
-      "usuarioModel": {
+      "formularioModel": {
         "type": "sap.ui.model.json.JSONModel"
       },
-      "perfilCriarModel": {
+      "inspecaoModel": {
         "type": "sap.ui.model.json.JSONModel"
       },
-      "materialRodanteCriarModel": {
+      "layoutTelaModel": {
+        "type": "sap.ui.model.json.JSONModel"
+      },
+      "listaMaterialRodante": {
         "type": "sap.ui.model.json.JSONModel"
       },
       "listaMaterialRodanteModel": {
@@ -120,27 +114,33 @@
       "listaPerfilModel": {
         "type": "sap.ui.model.json.JSONModel"
       },
-      "listaMaterialRodante": {
-        "type": "sap.ui.model.json.JSONModel"
-      },
       "listaUsuariosModel": {
         "type": "sap.ui.model.json.JSONModel"
       },
-      "layoutTelaModel": {
+      "loginModel": {
         "type": "sap.ui.model.json.JSONModel"
       },
-      "acessosModel": {
+      "materialRodanteCriarModel": {
+        "type": "sap.ui.model.json.JSONModel"
+      },
+      "mensagensModel": {
         "type": "sap.ui.model.json.JSONModel"
       },
       "objectPageModel": {
         "type": "sap.ui.model.json.JSONModel"
       },
-      "formularioModel": {
+      "perfilCriarModel": {
         "type": "sap.ui.model.json.JSONModel"
       },
       "sincronizarModel": {
         "type": "sap.ui.model.json.JSONModel"
-      }          
+      },
+      "usuariosLoginModel": {
+        "type": "sap.ui.model.json.JSONModel"
+      },
+      "usuarioModel": {
+        "type": "sap.ui.model.json.JSONModel"
+      }
     },
     "resources": {
       "css": [
@@ -168,6 +168,20 @@
           ]
         },
         {
+          "name": "Administrativo",
+          "pattern": "Administrativo",
+          "target": [
+            "Administrativo"
+          ]
+        },
+        {
+          "name": "AssociarFormulario",
+          "pattern": "AssociarFormulario",
+          "target": [
+            "AssociarFormulario"
+          ]
+        },
+        {
           "name": "Configurar",
           "pattern": "Configurar",
           "target": [
@@ -175,10 +189,24 @@
           ]
         },
         {
-          "name": "Login",
-          "pattern": "Login",
+          "name": "CriarMaterialRodante",
+          "pattern": "CriarMaterialRodante",
           "target": [
-            "Login"
+            "CriarMaterialRodante"
+          ]
+        },
+        {
+          "name": "CriarPerfil",
+          "pattern": "CriarPerfil",
+          "target": [
+            "CriarPerfil"
+          ]
+        },
+        {
+          "name": "CriarUsuario",
+          "pattern": "CriarUsuario",
+          "target": [
+            "CriarUsuario"
           ]
         },
         {
@@ -189,13 +217,6 @@
           ]
         },
         {
-          "name": "Administrativo",
-          "pattern": "Administrativo",
-          "target": [
-            "Administrativo"
-          ]
-        },
-         {
           "name": "ListaPerfil",
           "pattern": "ListaPerfil",
           "target": [
@@ -217,26 +238,17 @@
           ]
         },
         {
-          "name": "CriarPerfil",
-          "pattern": "CriarPerfil",
+          "name": "Login",
+          "pattern": "Login",
           "target": [
-            "CriarPerfil"
+            "Login"
           ]
-        },
-         {
-          "name": "CriarMaterialRodante",
-          "pattern": "CriarMaterialRodante",
-          "target": [
-            "CriarMaterialRodante"            
-          ]
-        
-
         },
         {
-          "name": "CriarUsuario",
-          "pattern": "CriarUsuario",
+          "name": "ObjectPageSection",
+          "pattern": "ObjectPageSection",
           "target": [
-            "CriarUsuario"
+            "ObjectPageSection"
           ]
         },
         {
@@ -246,35 +258,20 @@
             "RoletesSuperiores"
           ]
         },
-         {
+        {
           "name": "RoletesInferiores",
           "pattern": "RoletesInferiores",
           "target": [
             "RoletesInferiores"
           ]
         },
-         {
-          "name": "ObjectPageSection",
-          "pattern": "ObjectPageSection",
-          "target": [
-            "ObjectPageSection"
-          ]
-        },
-         {
-          "name": "AssociarFormulario",
-          "pattern": "AssociarFormulario",
-          "target": [
-            "AssociarFormulario"
-          ]
-        },
-         {
+        {
           "name": "Sincronizar",
           "pattern": "Sincronizar",
           "target": [
             "Sincronizar"
           ]
-        }         
-
+        }
       ],
       "targets": {
         "TargetApp": {
@@ -284,19 +281,19 @@
           "viewId": "App",
           "viewName": "App"
         },
-        "Inicio": {
+        "Administrativo": {
           "viewType": "XML",
           "transition": "slide",
           "clearControlAggregation": false,
-          "viewId": "Inicio",
-          "viewName": "Inicio"
+          "viewId": "Administrativo",
+          "viewName": "Administrativo"
         },
-        "Login": {
+        "AssociarFormulario": {
           "viewType": "XML",
           "transition": "slide",
           "clearControlAggregation": false,
-          "viewId": "Login",
-          "viewName": "Login"
+          "viewId": "AssociarFormulario",
+          "viewName": "AssociarFormulario"
         },
         "Configurar": {
           "viewType": "XML",
@@ -304,34 +301,6 @@
           "clearControlAggregation": false,
           "viewId": "Configurar",
           "viewName": "Configurar"
-        },
-         "Administrativo": {
-          "viewType": "XML",
-          "transition": "slide",
-          "clearControlAggregation": false,
-          "viewId": "Administrativo",
-          "viewName": "Administrativo"
-        },
-        "ListaPerfil": {
-          "viewType": "XML",
-          "transition": "slide",
-          "clearControlAggregation": false,
-          "viewId": "ListaPerfil",
-          "viewName": "ListaPerfil"
-        },
-        "ListaMaterialRodante": {
-          "viewType": "XML",
-          "transition": "slide",
-          "clearControlAggregation": false,
-          "viewId": "ListaMaterialRodante",
-          "viewName": "ListaMaterialRodante"
-        },
-        "ListaUsuario": {
-          "viewType": "XML",
-          "transition": "slide",
-          "clearControlAggregation": false,
-          "viewId": "ListaUsuario",
-          "viewName": "ListaUsuario"
         },
         "CriarPerfil": {
           "viewType": "XML",
@@ -354,6 +323,41 @@
           "viewId": "CriarUsuario",
           "viewName": "CriarUsuario"
         },
+        "Inicio": {
+          "viewType": "XML",
+          "transition": "slide",
+          "clearControlAggregation": false,
+          "viewId": "Inicio",
+          "viewName": "Inicio"
+        },
+        "Login": {
+          "viewType": "XML",
+          "transition": "slide",
+          "clearControlAggregation": false,
+          "viewId": "Login",
+          "viewName": "Login"
+        },
+        "ListaPerfil": {
+          "viewType": "XML",
+          "transition": "slide",
+          "clearControlAggregation": false,
+          "viewId": "ListaPerfil",
+          "viewName": "ListaPerfil"
+        },
+        "ListaMaterialRodante": {
+          "viewType": "XML",
+          "transition": "slide",
+          "clearControlAggregation": false,
+          "viewId": "ListaMaterialRodante",
+          "viewName": "ListaMaterialRodante"
+        },
+        "ListaUsuario": {
+          "viewType": "XML",
+          "transition": "slide",
+          "clearControlAggregation": false,
+          "viewId": "ListaUsuario",
+          "viewName": "ListaUsuario"
+        },
         "RoletesSuperiores": {
           "viewType": "XML",
           "transition": "slide",
@@ -361,28 +365,21 @@
           "viewId": "RoletesSuperiores",
           "viewName": "RoletesSuperiores"
         },
-         "RoletesInferiores": {
+        "RoletesInferiores": {
           "viewType": "XML",
           "transition": "slide",
           "clearControlAggregation": false,
           "viewId": "RoletesInferiores",
           "viewName": "RoletesInferiores"
         },
-         "ObjectPageSection": {
+        "ObjectPageSection": {
           "viewType": "XML",
           "transition": "slide",
           "clearControlAggregation": false,
           "viewId": "ObjectPageSection",
           "viewName": "ObjectPageSection"
         },
-         "AssociarFormulario": {
-          "viewType": "XML",
-          "transition": "slide",
-          "clearControlAggregation": false,
-          "viewId": "AssociarFormulario",
-          "viewName": "AssociarFormulario"
-        },
-         "Sincronizar": {
+        "Sincronizar": {
           "viewType": "XML",
           "transition": "slide",
           "clearControlAggregation": false,
@@ -390,8 +387,7 @@
           "viewName": "Sincronizar"
         }
       }
-    },	
-   
+    },
     "rootView": {
       "viewName": "com.pontual.sgmr.view.App",
       "type": "XML",

@@ -34,7 +34,7 @@ sap.ui.define([
 
 
             _handleRouteMatched: function (oEvent) {
-                var urlLogo = oController.obterArquivo("logo.png")
+             
                 var oLogin = {
                     CodUsuario: "",
                     Senha: "",
