@@ -255,9 +255,9 @@ sap.ui.define([
         carregarDados: function (pServico, pFiltros) {
             oController = this;
             return new Promise((resolve, reject) => {
-                var cmmODataModel = oController.getConnectionModel("sgmrODataModel");
-                cmmODataModel.setHeaders(oController.getModelHeader());
-                cmmODataModel.setUseBatch(false);
+                var sgmrODataModel = oController.getConnectionModel("sgmrODataModel");
+                sgmrODataModel.setHeaders(oController.getModelHeader());
+                sgmrODataModel.setUseBatch(false);
 
                 switch (pServico) {
                     case "PerfilSet":
@@ -265,11 +265,16 @@ sap.ui.define([
                         aFilters = [];
                         break;
 
+                    case "ListaAutorizacaoSet":
+                        oExpand = ""
+                        aFilters = [];
+                        break;hh
+
                     default:
                         break;
                 }
 
-                cmmODataModel.read("/" + pServico, {
+                sgmrODataModel.read("/" + pServico, {
                     filters: aFilters,
                     urlParameters: {
                         "$expand": oExpand
@@ -282,13 +287,13 @@ sap.ui.define([
                         reject(oError);
                     }
                 });
-                cmmODataModel.attachRequestSent(function () {
+                sgmrODataModel.attachRequestSent(function () {
 
                 });
-                cmmODataModel.attachRequestCompleted(function () {
+                sgmrODataModel.attachRequestCompleted(function () {
 
                 });
-                cmmODataModel.attachRequestFailed(function (oError) {
+                sgmrODataModel.attachRequestFailed(function (oError) {
                     oController.closeBusyDialog();
                     oController.atualizarBusyDialog(oError.getParameter("message"));
                     var oMockMessage = {
@@ -301,10 +306,10 @@ sap.ui.define([
                     oController.getOwnerComponent().getModel("mensagensModel").getData().push(oMockMessage)
                     reject(oError);
                 });
-                cmmODataModel.attachMetadataLoaded(function () {
+                sgmrODataModel.attachMetadataLoaded(function () {
 
                 });
-                cmmODataModel.attachMetadataFailed(function (oError) {
+                sgmrODataModel.attachMetadataFailed(function (oError) {
                     oController.atualizarBusyDialog(oError.getParameter("message"));
                     oController.closeBusyDialog();
                     var oMockMessage = {
@@ -347,6 +352,44 @@ sap.ui.define([
                         "description": "Perfis encaminhados para o dispositivo",
                         "type": "Success",
                         "subtitle": "Perfis download"
+                    }
+                    oController.getOwnerComponent().getModel("mensagensModel").getData().push(oMensagem)
+
+                    resolve()
+                }).catch(
+                    function (result) {
+                        oController.closeBusyDialog();
+                        reject(result)
+                    })
+            })
+        },
+
+        carregarAutorizacao: function () {
+            return new Promise((resolve, reject) => {
+                oController.atualizarBusyDialog(oController.getView().getModel("i18n").getResourceBundle().getText("sincronizandoautorizacoes"));
+                oController.carregarDados("ListaAutorizacaoSet", []).then(function (result) {
+                    var aAutorizacoes = []
+                    for (let x = 0; x < result.results.length; x++) {
+                        const oAutorizacao = result.results[x];
+                        oAutorizacao.AutorizacaoSet = oAutorizacao;
+                        // oAutorizacao.forEach(element => {
+                        //     delete element.__metadata
+
+                        // });
+
+
+                        delete oAutorizacao.__metadata
+                        aAutorizacoes.push(oAutorizacao);
+                    }
+                    oController.getOwnerComponent().getModel("listaAutorizacao").setData(aAutorizacoes)
+
+
+                    var vDescricao = "Autorizações sincronizadas " + aAutorizacoes.length
+                    var oMensagem = {
+                        "title": vDescricao,
+                        "description": "Autorizações encaminhados para o dispositivo",
+                        "type": "Success",
+                        "subtitle": "Autorizações download"
                     }
                     oController.getOwnerComponent().getModel("mensagensModel").getData().push(oMensagem)
 
@@ -404,6 +447,7 @@ sap.ui.define([
         sincronizar: function (pCatalogo) {
             oController = this;
             oController.carregarPerfil()
+            oController.carregarAutorizacao()
 
         },
 

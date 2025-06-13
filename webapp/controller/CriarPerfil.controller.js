@@ -64,6 +64,12 @@ sap.ui.define([
 
                 oConfirmarButton.setBusy(false);
 
+                 var oPerfil = oController.getOwnerComponent().getModel("perfilCriarModel").getData()
+                 oPerfil.AutorizacaoSet.forEach(element => {
+                    element.Selecionado = false
+                 });
+                 oController.getOwnerComponent().getModel("perfilCriarModel").refresh()
+
             },
 
 
@@ -136,7 +142,7 @@ sap.ui.define([
                 if (vPodeGravar == true) {
                     oPerfilInput.setValueState("None");
                     oView.byId("idListaAutorizacoesTable").getSelectedContextPaths().forEach(element => {
-                       // oController.getOwnerComponent().getModel("perfilCriarModel").setProperty(element + '/Selecionado', true )
+                        // oController.getOwnerComponent().getModel("perfilCriarModel").setProperty(element + '/Selecionado', true )
                     });
 
                     if (oController.getOwnerComponent().getModel("listaPerfilModel").getData().length == undefined) {
@@ -145,44 +151,14 @@ sap.ui.define([
                     } else {
                         oController.getOwnerComponent().getModel("listaPerfilModel").getData().push(oPerfil)
                     }
-                    var oObjetoNovo = JSON.parse(JSON.stringify(oController.getOwnerComponent().getModel("listaPerfilModel").getData()));
-                    oController.getOwnerComponent().getModel("listaPerfilModel").refresh();
-                    oController.limparTabelaIndexDB("tb_perfil").then(
-                        function (result) {
-                            oController.gravarTabelaIndexDB("tb_perfil", oObjetoNovo).then(
-                                function (result) {
-                                    MessageToast.show(oController.getView().getModel("i18n").getResourceBundle().getText("dadossucesso"), {
-                                        duration: 500,                  // default
-                                        onClose: function () {
-                                            if (oController.checkConnection() == true) {
-                                                oController.perfilUpdate().then(
-                                                    function (result) {
-                                                        oController.closeBusyDialog();
-                                                        oController.getRouter().navTo("ListaPerfil", {}, true /*no history*/);
-                                                        oConfirmarButton.setEnabled(true);
-                                                        oConfirmarButton.setBusy(false);
-                                                    }).catch(
-                                                        function (result) {
 
-                                                        })
-                                            } else {
-                                                oController.closeBusyDialog();
-                                                oController.getRouter().navTo("ListaPerfil", {}, true /*no history*/);
-                                                oConfirmarButton.setEnabled(true);
-                                                oConfirmarButton.setBusy(false);
-                                            }
+                    oController.getOwnerComponent().getModel("listaPerfilModel").refresh()
+                    oController.closeBusyDialog();
+                    oController.getRouter().navTo("ListaPerfil", {}, true /*no history*/);
+                    oConfirmarButton.setEnabled(true);
+                    oConfirmarButton.setBusy(false);
 
-                                        }
-                                    });
-                                }).catch(
-                                    function (result) {
-
-                                    })
-                        }).catch(
-                            function (result) {
-
-                            })
-                }else{
+                } else {
                     oConfirmarButton.setEnabled(true);
                     oConfirmarButton.setBusy(false);
                 }

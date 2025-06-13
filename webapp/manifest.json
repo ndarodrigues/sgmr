@@ -105,6 +105,11 @@
       "layoutTelaModel": {
         "type": "sap.ui.model.json.JSONModel"
       },
+
+      "listaAutorizacao": {
+        "type": "sap.ui.model.json.JSONModel"
+      },
+
       "listaMaterialRodante": {
         "type": "sap.ui.model.json.JSONModel"
       },

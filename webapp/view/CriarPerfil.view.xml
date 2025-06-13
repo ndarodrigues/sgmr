@@ -87,7 +87,7 @@
                 </Column>									
             </columns>
             <items>
-                <ColumnListItem vAlign="Middle" navigated="true" type="Inactive" press="onOrdemPress">	
+                <ColumnListItem vAlign="Middle" navigated="true" type="Inactive" press="onOrdemPress" selected="{perfilCriarModel>Selecionado}">	
                     <cells>
                         <ObjectIdentifier title="{perfilCriarModel>CodigoAutorizacao}"/>
                         <ObjectIdentifier title="{perfilCriarModel>DescrAutorizacao}"/>
