@@ -34,7 +34,7 @@ sap.ui.define([
 
 
             _handleRouteMatched: function (oEvent) {
-             
+
                 var oLogin = {
                     CodUsuario: "",
                     Senha: "",
@@ -178,41 +178,16 @@ sap.ui.define([
             },
 
             onLogin: function (oEvent) {
+                oController.iniciarAplicativo()
                 oController.getOwnerComponent().getRouter().navTo("Inicio", null, true);
             },
 
             iniciarAplicativo: function (oEvent) {
-                oController.openBusyDialog();
-                oController.getOwnerComponent().getModel("busyDialogModel").setProperty("/loginInProgress", true);
-                var vUsuario = oView.byId("usuarioInput").getValue();
-
-                oController.prepararIndexDB(vUsuario.toUpperCase()).then(
-                    function (result) {
-                        oController.sincronizar(true).then(function (result) {
-                            // Busy será fechado no controller Inicio após carregamento completo
-                            oController.carregarAcessos()
-                            oController.getOwnerComponent().getRouter().navTo("Inicio", null, true);
-                        }).catch(
-                            function (result) {
-                                oController.carregarOffline().then(function (result) {
-                                    var aMensagens = oController.getOwnerComponent().getModel("mensagensModel").getData();
-                                    oController.getView().getModel().setData(aMensagens);
-                                    oController.getView().getModel().refresh()
-                                    // Busy será fechado no controller Inicio após carregamento completo
-                                    oController.carregarAcessos()
-                                    oController.getOwnerComponent().getRouter().navTo("Inicio", null, true);
-                                })
-
-                            });
-                    }
-                ).catch(
-                    function (result) {
-                        var aMensagens = oController.getOwnerComponent().getModel("mensagensModel").getData();
-                        oController.getView().getModel().setData(aMensagens);
-                        oController.getView().getModel().refresh()
-                        oController.getOwnerComponent().getModel("busyDialogModel").setProperty("/loginInProgress", false);
-                        oController.forceCloseBusyDialog();
-                    });
+                // oController.openBusyDialog();
+                // oController.getOwnerComponent().getModel("busyDialogModel").setProperty("/loginInProgress", true);
+                // var vUsuario = oView.byId("usuarioInput").getValue();
+                // var vUsuario = "master"
+                oController.sincronizar(true)
             },
 
             handleMessagePopoverPress: function (oEvent) {
@@ -222,6 +197,23 @@ sap.ui.define([
             carregarUsuariosOffLine: function () {
                 var aListaUser = oController.lerLocalStorage("SGMR_Login")
                 oController.getOwnerComponent().getModel("usuariosLoginModel").setData(aListaUser)
-            }
+            },
+
+            prepararIndexDB: function (pUsuario) {
+
+                return new Promise((resolve, reject) => {
+                    // oController = this;
+
+                    // //check for support
+                    // if (!('indexedDB' in window)) {
+                    //     console.log('Armazenamento offline não suportado.');
+                    //     reject();
+                    //     return;
+                    // }
+                    resolve()
+
+                }
+                )
+            },
         });
     });

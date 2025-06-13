@@ -18,45 +18,45 @@ sap.ui.define([
                 oController = this;
                 oView = oController.getView();
 
-                var oPerfil = [{
-                    CodigoPerfil: 0,
-                    DescrPerfil: "MASTER",
-                    Sincronizado: "N",
-                    HabilitarTelaCriarPerfil: true,
-                    AutorizacaoSet: [
-                        {
-                            CodigoAutorizacao: "01",
-                            DescrAutorizacao: "INSPEÇÃO MATERIAL RODANTE",
-                            Selecionado: true
-                        },
-                        {
-                            CodigoAutorizacao: "02",
-                            DescrAutorizacao: "MOVIMENTAÇÃO MATERIAL RODANTE",
-                            Selecionado: true
-                        }
+                // var oPerfil = [{
+                //     CodigoPerfil: 0,
+                //     DescrPerfil: "MASTER",
+                //     Sincronizado: "N",
+                //     HabilitarTelaCriarPerfil: true,
+                //     AutorizacaoSet: [
+                //         {
+                //             CodigoAutorizacao: "01",
+                //             DescrAutorizacao: "INSPEÇÃO MATERIAL RODANTE",
+                //             Selecionado: true
+                //         },
+                //         {
+                //             CodigoAutorizacao: "02",
+                //             DescrAutorizacao: "MOVIMENTAÇÃO MATERIAL RODANTE",
+                //             Selecionado: true
+                //         }
 
 
-                    ]},
-                    {
-                        CodigoPerfil: 1,
-                        DescrPerfil: "INSPETOR",
-                        Sincronizado: "N",
-                        HabilitarTelaCriarPerfil: true,
-                        AutorizacaoSet: [
-                            {
-                                CodigoAutorizacao: "01",
-                                DescrAutorizacao: "INSPEÇÃO MATERIAL RODANTE",
-                                Selecionado: true
-                            },
+                //     ]},
+                //     {
+                //         CodigoPerfil: 1,
+                //         DescrPerfil: "INSPETOR",
+                //         Sincronizado: "N",
+                //         HabilitarTelaCriarPerfil: true,
+                //         AutorizacaoSet: [
+                //             {
+                //                 CodigoAutorizacao: "01",
+                //                 DescrAutorizacao: "INSPEÇÃO MATERIAL RODANTE",
+                //                 Selecionado: true
+                //             },
 
 
-                        ]
-                    }
-                ]
+                //         ]
+                //     }
+                // ]
 
 
-                oController.getOwnerComponent().getModel("listaPerfilModel").setData(oPerfil);
-                oController.getOwnerComponent().getModel("listaPerfilModel").refresh()
+                // oController.getOwnerComponent().getModel("listaPerfilModel").setData(oPerfil);
+                // oController.getOwnerComponent().getModel("listaPerfilModel").refresh()
 
 
                 oView.bindElement("listaPerfilModel>/");

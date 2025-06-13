@@ -11,6 +11,9 @@ sap.ui.define([
     var oController
     var oView
 
+    var aFilters = ""
+    var oExpand = ""
+
     return Controller.extend("com.pontual.sgmr.controller.App", {
 
         getRouter: function () {
@@ -249,7 +252,256 @@ sap.ui.define([
             v
         },
 
+        carregarDados: function (pServico, pFiltros) {
+            oController = this;
+            return new Promise((resolve, reject) => {
+                var cmmODataModel = oController.getConnectionModel("sgmrODataModel");
+                cmmODataModel.setHeaders(oController.getModelHeader());
+                cmmODataModel.setUseBatch(false);
+
+                switch (pServico) {
+                    case "PerfilSet":
+                        oExpand = "AutorizacaoSet"
+                        aFilters = [];
+                        break;
+
+                    default:
+                        break;
+                }
+
+                cmmODataModel.read("/" + pServico, {
+                    filters: aFilters,
+                    urlParameters: {
+                        "$expand": oExpand
+                    },
+                    success: function (oData, oResponse) {
+                        resolve(oData);
+                    },
+                    error: function (oError) {
+                        oController.closeBusyDialog();
+                        reject(oError);
+                    }
+                });
+                cmmODataModel.attachRequestSent(function () {
+
+                });
+                cmmODataModel.attachRequestCompleted(function () {
+
+                });
+                cmmODataModel.attachRequestFailed(function (oError) {
+                    oController.closeBusyDialog();
+                    oController.atualizarBusyDialog(oError.getParameter("message"));
+                    var oMockMessage = {
+                        type: 'Error',
+                        title: 'Sem Conexão',
+                        description: 'Sem conexão com internet no momento. Tente mais tarde novamente',
+                        subtitle: 'Problemas de conexão',
+                        counter: 1
+                    };
+                    oController.getOwnerComponent().getModel("mensagensModel").getData().push(oMockMessage)
+                    reject(oError);
+                });
+                cmmODataModel.attachMetadataLoaded(function () {
+
+                });
+                cmmODataModel.attachMetadataFailed(function (oError) {
+                    oController.atualizarBusyDialog(oError.getParameter("message"));
+                    oController.closeBusyDialog();
+                    var oMockMessage = {
+                        type: 'Error',
+                        title: 'Sem Conexão',
+                        description: 'Sem conexão com internet no momento. Tente mais tarde novamente',
+                        subtitle: 'Problemas de conexão',
+                        counter: 1
+                    };
+                    oController.getOwnerComponent().getModel("mensagensModel").getData().push(oMockMessage)
+                    reject(oError);
+                });
+
+            })
+        },
+
+        carregarPerfil: function () {
+            return new Promise((resolve, reject) => {
+                oController.atualizarBusyDialog(oController.getView().getModel("i18n").getResourceBundle().getText("sincronizandoperfis"));
+                oController.carregarDados("PerfilSet", []).then(function (result) {
+                    var aPerfis = []
+                    for (let x = 0; x < result.results.length; x++) {
+                        const oPerfil = result.results[x];
+                        oPerfil.AutorizacaoSet = oPerfil.AutorizacaoSet.results;
+                        oPerfil.AutorizacaoSet.forEach(element => {
+                            delete element.__metadata
+
+                        });
 
 
+                        delete oPerfil.__metadata
+                        aPerfis.push(oPerfil);
+                    }
+                    oController.getOwnerComponent().getModel("listaPerfilModel").setData(aPerfis)
+
+
+                    var vDescricao = "Perfis sincronizados " + aPerfis.length
+                    var oMensagem = {
+                        "title": vDescricao,
+                        "description": "Perfis encaminhados para o dispositivo",
+                        "type": "Success",
+                        "subtitle": "Perfis download"
+                    }
+                    oController.getOwnerComponent().getModel("mensagensModel").getData().push(oMensagem)
+
+                    resolve()
+                }).catch(
+                    function (result) {
+                        oController.closeBusyDialog();
+                        reject(result)
+                    })
+            })
+        },
+
+        atualizarBusyDialog: function (pMensagem) {
+            oController = this;
+            oController.getOwnerComponent().getModel("busyDialogModel").setProperty("/mensagem", pMensagem)
+            oController.getOwnerComponent().getModel("busyDialogModel").refresh()
+        },
+
+        closeBusyDialog: function () {
+            var loginInProgress = false;
+            try {
+                loginInProgress = this.getOwnerComponent().getModel("busyDialogModel").getProperty("/loginInProgress");
+            } catch (e) {
+                loginInProgress = false;
+            }
+
+            if (!loginInProgress && this._pBusyDialog) {
+                this._pBusyDialog.then(function (oBusyDialog) {
+                    oBusyDialog.close();
+                });
+            }
+        },
+
+        sincronizarReceber: function (pCatalogo) {
+
+            // oController = this;
+            // return new Promise((resolve, reject) => {
+
+            //     if (oController.checkConnection() == true) {
+
+            //         //Preencher aqui com todos os serviços que precisam ser chamados e carregados
+            //         var aLeituras = [
+            //             oController.carregarPerfil(),
+            //         ]
+
+            //     } else {
+            //         oController.closeBusyDialog();
+            //         reject()
+            //     }
+            // })
+            resolve()
+
+        },
+
+        sincronizar: function (pCatalogo) {
+            oController = this;
+            oController.carregarPerfil()
+
+        },
+
+        openBusyDialog: function () {
+            oController = this;
+            oController.getOwnerComponent().getModel("busyDialogModel").setProperty("/mensagem", "Iniciando sincronismo")
+            oController.getOwnerComponent().getModel("busyDialogModel").refresh()
+
+            var oComponent = this.getOwnerComponent();
+            if (!oComponent._busyDialog && !this._pBusyDialog) {
+                this._pBusyDialog = Fragment.load({
+                    name: "com.pontual.sgrm.fragment.BusyDialog",
+                    controller: this
+                }).then(function (oBusyDialog) {
+                    this.getView().addDependent(oBusyDialog);
+                    syncStyleClass("sapUiSizeCompact", this.getView(), oBusyDialog);
+                    return oBusyDialog;
+                }.bind(this));
+
+                oComponent._busyDialog = this._pBusyDialog;
+            } else if (oComponent._busyDialog) {
+                this._pBusyDialog = oComponent._busyDialog;
+            }
+
+            this._pBusyDialog.then(function (oBusyDialog) {
+                oBusyDialog.open();
+            }.bind(this));
+        },
+
+        forceCloseBusyDialog: function () {
+            if (this._pBusyDialog) {
+                this._pBusyDialog.then(function (oBusyDialog) {
+                    oBusyDialog.close();
+                });
+            }
+
+            try {
+                var oComponent = this.getOwnerComponent();
+                if (oComponent && oComponent._busyDialog) {
+                    oComponent._busyDialog.then(function (oBusyDialog) {
+                        oBusyDialog.close();
+                    });
+                }
+            } catch (e) {
+                // Silently handle error
+            }
+
+            try {
+                var aBusyDialogs = document.querySelectorAll('.sapMBusyDialog');
+                if (aBusyDialogs.length > 0) {
+                    for (var i = 0; i < aBusyDialogs.length; i++) {
+                        var oBusyElement = aBusyDialogs[i];
+                        var oBusyControl = sap.ui.getCore().byId(oBusyElement.id);
+                        if (oBusyControl && oBusyControl.close) {
+                            oBusyControl.close();
+                        }
+                    }
+                }
+            } catch (e) {
+                // Silently handle error
+            }
+        },
+
+        getConnectionModel: function (pModel) {
+            oController = this;
+
+            var oController = this;
+            if (typeof cordova != "undefined") {
+
+                var oDataModel = oController.getOwnerComponent().getModel(pModel)
+                var oConexao = oController.lerLocalStorage("SGMR_DadosConexao")
+
+                var vUrl = oConexao.urlsemclient + oDataModel.sServiceUrl + "?sap-client=" + oConexao.cliente;
+
+                var model = new sap.ui.model.odata.v2.ODataModel(vUrl, {
+                    json: true
+                });
+
+                model.setHeaders(this.getModelHeader());
+                model.setUseBatch(false);
+                return model;
+
+            } else {
+                return oController.getOwnerComponent().getModel(pModel);
+
+            }
+
+        },
+
+        getModelHeader: function () {
+            var oHeader = {
+                "X-Requested-With": "X",
+                "Content-Type": "application/json",
+                "Accept": "application/json",
+                "MaxDataServiceVersion": "3.0"
+            };
+
+            return oHeader;
+        }
     });
 });
