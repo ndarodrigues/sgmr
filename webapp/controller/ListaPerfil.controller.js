@@ -54,14 +54,18 @@ sap.ui.define([
                 //     }
                 // ]
 
+                try {
+                    var perfis = oController.getOwnerComponent().getModel("listaPerfilModel").getData()
+                    perfis.forEach(element => {
+                        element.Selecionado = false
 
-                var perfis = oController.getOwnerComponent().getModel("listaPerfilModel").getData()
-                perfis.forEach(element => {
-                    element.Selecionado = false
+                    });
+                    oController.getOwnerComponent().getModel("listaPerfilModel").refresh()
+                    // oController.getOwnerComponent().getModel("listaPerfilModel").refresh()
+                } catch (error) {
 
-                });
-                oController.getOwnerComponent().getModel("listaPerfilModel").refresh()
-                // oController.getOwnerComponent().getModel("listaPerfilModel").refresh()
+                }
+
 
 
                 oView.bindElement("listaPerfilModel>/");
@@ -188,8 +192,9 @@ sap.ui.define([
                 try {
 
                     var oObjetoNovo = JSON.parse(JSON.stringify(oPerfil));
+
                     oObjetoNovo.HabilitarTelaCriarPerfil = false
-                    oObjetoNovo.HabilitarTelaCriarPerfil = false
+
                     oObjetoNovo.AutorizacaoSet.forEach(element => {
                         element.Selecionado = false
                     });
@@ -199,12 +204,25 @@ sap.ui.define([
 
                 } catch (error) {
 
-                    oPerfil.HabilitarTelaCriarPerfil = false
-                    oPerfil.AutorizacaoSet.forEach(element => {
-                        element.Selecionado = false
+                    var oPerfil = oController.getOwnerComponent().getModel("perfilCriarModel").getData();
+
+                    var aPerfil = {
+                        CodigoPerfil: oPerfil.CodigoPerfil,
+                        DescrPerfil: oPerfil.DescrPerfil,
+                        Sincronizado: "N",
+                        HabilitarTelaCriarPerfil: true,
+                        AutorizacaoSet: []
+                    }
+
+                    oPerfil.AutorizacaoSet.forEach(element => {                        
+                        if (element.Selecionado == true) {
+                            aPerfil.AutorizacaoSet.push(element)
+                        }
+
+
                     });
 
-                    oController.getOwnerComponent().getModel("perfilCriarModel").setData(oPerfil);
+                    oController.getOwnerComponent().getModel("perfilCriarModel").setData(aPerfil);
                     oController.getOwnerComponent().getModel("perfilCriarModel").refresh()
                     oController.getOwnerComponent().getRouter().navTo("CriarPerfil", null, true);
                 }

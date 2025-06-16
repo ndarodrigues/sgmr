@@ -252,6 +252,61 @@ sap.ui.define([
             v
         },
 
+        enviarDados: function (pServico, pDados) {
+
+            oController = this;
+            return new Promise((resolve, reject) => {
+                var cmmODataModel = oController.getConnectionModel("cmmODataModel");
+                cmmODataModel.setHeaders(oController.getModelHeader());
+                cmmODataModel.setUseBatch(false);
+                cmmODataModel.create("/" + pServico, pDados, {
+                    success: function (oData) {
+                        resolve(oData);
+                    },
+                    error: function (oError) {
+                        oController.closeBusyDialog();
+                        reject(oError);
+                    }
+                });
+                cmmODataModel.attachRequestSent(function () {
+
+                });
+                cmmODataModel.attachRequestCompleted(function () {
+
+                });
+                cmmODataModel.attachRequestFailed(function (oError) {
+                    oController.atualizarBusyDialog(oError.getParameter("message"));
+                    oController.closeBusyDialog()
+                    var oMockMessage = {
+                        type: 'Error',
+                        title: 'Sem Conexão',
+                        description: 'Sem conexão com internet no momento. Tente mais tarde novamente',
+                        subtitle: 'Problemas de conexão',
+                        counter: 1
+                    };
+                    oController.getOwnerComponent().getModel("mensagensModel").getData().push(oMockMessage)
+                    reject(oError);
+                });
+                cmmODataModel.attachMetadataLoaded(function () {
+
+                });
+                cmmODataModel.attachMetadataFailed(function (oError) {
+                    oController.atualizarBusyDialog(oError.getParameter("message"));
+                    oController.closeBusyDialog()
+                    var oMockMessage = {
+                        type: 'Error',
+                        title: 'Sem Conexão',
+                        description: 'Sem conexão com internet no momento. Tente mais tarde novamente',
+                        subtitle: 'Problemas de conexão',
+                        counter: 1
+                    };
+                    oController.getOwnerComponent().getModel("mensagensModel").getData().push(oMockMessage)
+                    reject(oError);
+                });
+            })
+
+        },
+
         carregarDados: function (pServico, pFiltros) {
             oController = this;
             return new Promise((resolve, reject) => {
@@ -268,7 +323,7 @@ sap.ui.define([
                     case "ListaAutorizacaoSet":
                         oExpand = ""
                         aFilters = [];
-                        break;hh
+                        break; hh
 
                     default:
                         break;
@@ -546,6 +601,90 @@ sap.ui.define([
             };
 
             return oHeader;
+        },
+
+        prepararPerfil: function () {
+            // return new Promise((resolve, reject) => {
+                // oController.atualizarBusyDialog(oController.getView().getModel("i18n").getResourceBundle().getText("atualizandoperfis"));
+                var aPerfis = oController.getOwnerComponent().getModel("listaPerfilModel").getData();
+                var aPerfilSet = []
+
+                aPerfis.forEach(oPerfil => {
+                    switch (oPerfil.Sincronizado) {
+                        case "N":
+                            var oPerfilSet = {
+                                "CodigoPerfil": 0,
+                                "DescrPerfil": oPerfil.DescrPerfil,
+                                "Sincronizado": "N",
+                                "AutorizacaoSet": []
+                            }
+                            oPerfil.AutorizacaoSet.forEach(oAutorizacao => {
+                                if (oAutorizacao.Selecionado == true) {
+                                    var oAutorizacaoSet =
+                                    {
+                                        "CodigoPerfil": 0,
+                                        "CodigoAutorizacao": oAutorizacao.CodigoAutorizacao,
+                                        "DescrAutorizacao": oAutorizacao.DescrAutorizacao
+                                    }
+                                    oPerfilSet.AutorizacaoSet.push(oAutorizacaoSet)
+                                }
+                            })
+                            aPerfilSet.push(oController.enviarDados("PerfilSet", oPerfilSet))
+                            break;
+                        case "E":
+                            var oPerfilSet = {
+                                "CodigoPerfil": oPerfil.CodigoPerfil,
+                                "DescrPerfil": oPerfil.DescrPerfil,
+                                "Sincronizado": "E",
+                                "AutorizacaoSet": []
+                            }
+                            aPerfilSet.push(oController.enviarDados("PerfilSet", oPerfilSet))
+                            break;
+
+                        default:
+                            break;
+                    }
+
+
+                });
+
+                if (aPerfilSet.length > 0) {
+                    Promise.all(aPerfilSet).then(
+                        function (result) {
+                            result.forEach(oPerfil => {
+                                var vTipo
+                                switch (oPerfil.Tipomensagem) {
+                                    case "S":
+                                        vTipo = "Success"
+                                        break;
+                                    case "E":
+                                        vTipo = "Error"
+                                        break;
+                                    default:
+                                        break;
+                                }
+                                var oMensagem = {
+                                    "title": "Gestão de perfil",
+                                    "description": oPerfil.Mensagem,
+                                    "type": vTipo,
+                                    "subtitle": oPerfil.Mensagem
+                                }
+                                oController.getOwnerComponent().getModel("mensagensModel").getData().push(oMensagem)
+
+                            });
+
+                            resolve()
+                        }).catch(
+                            function (result) {
+                                oController.closeBusyDialog();
+                                reject()
+                            })
+                } else {
+                    resolve()
+                }
+
+            // })
         }
+
     });
 });

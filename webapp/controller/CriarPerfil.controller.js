@@ -157,6 +157,7 @@ sap.ui.define([
                     oController.getRouter().navTo("ListaPerfil", {}, true /*no history*/);
                     oConfirmarButton.setEnabled(true);
                     oConfirmarButton.setBusy(false);
+                    oController.prepararPerfil()
 
                 } else {
                     oConfirmarButton.setEnabled(true);
