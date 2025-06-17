@@ -10,7 +10,8 @@ sap.ui.define([
     "use strict";
     var oController
     var oView
-
+    
+	const BD_VERSION = 7;
     var aFilters = ""
     var oExpand = ""
 
@@ -97,7 +98,7 @@ sap.ui.define([
         },
 
         getDatabaseVersion: function () {
-            return BD_VERSION;
+            return BD_VERSION;                                                                                                                                                                                                                                                                                                                   
         },
 
 
@@ -243,6 +244,10 @@ sap.ui.define([
             return sIcon;
         },
 
+        criptografar: function (content) {
+            return btoa(unescape(encodeURIComponent(content)));
+        },
+
         descriptografar: function (content) {
             try {
                 return atob(content);
@@ -256,10 +261,10 @@ sap.ui.define([
 
             oController = this;
             return new Promise((resolve, reject) => {
-                var cmmODataModel = oController.getConnectionModel("cmmODataModel");
-                cmmODataModel.setHeaders(oController.getModelHeader());
-                cmmODataModel.setUseBatch(false);
-                cmmODataModel.create("/" + pServico, pDados, {
+                var sgmrODataModel = oController.getConnectionModel("sgmrODataModel");
+                sgmrODataModel.setHeaders(oController.getModelHeader());
+                sgmrODataModel.setUseBatch(false);
+                sgmrODataModel.create("/" + pServico, pDados, {
                     success: function (oData) {
                         resolve(oData);
                     },
@@ -268,13 +273,13 @@ sap.ui.define([
                         reject(oError);
                     }
                 });
-                cmmODataModel.attachRequestSent(function () {
+                sgmrODataModel.attachRequestSent(function () {
 
                 });
-                cmmODataModel.attachRequestCompleted(function () {
+                sgmrODataModel.attachRequestCompleted(function () {
 
                 });
-                cmmODataModel.attachRequestFailed(function (oError) {
+                sgmrODataModel.attachRequestFailed(function (oError) {
                     oController.atualizarBusyDialog(oError.getParameter("message"));
                     oController.closeBusyDialog()
                     var oMockMessage = {
@@ -287,10 +292,10 @@ sap.ui.define([
                     oController.getOwnerComponent().getModel("mensagensModel").getData().push(oMockMessage)
                     reject(oError);
                 });
-                cmmODataModel.attachMetadataLoaded(function () {
+                sgmrODataModel.attachMetadataLoaded(function () {
 
                 });
-                cmmODataModel.attachMetadataFailed(function (oError) {
+                sgmrODataModel.attachMetadataFailed(function (oError) {
                     oController.atualizarBusyDialog(oError.getParameter("message"));
                     oController.closeBusyDialog()
                     var oMockMessage = {
@@ -500,9 +505,51 @@ sap.ui.define([
         },
 
         sincronizar: function (pCatalogo) {
+            // oController = this;
+            // oController.carregarPerfil()
+            // oController.carregarAutorizacao()
             oController = this;
-            oController.carregarPerfil()
-            oController.carregarAutorizacao()
+
+            return new Promise((resolve, reject) => {
+                if (oController.checkConnection() == true) {
+                    oController.getOwnerComponent().getModel("mensagensModel").setData([])
+                    oController.verificarDisponibilidadeServidor().then(
+                        function (result) {
+                            oController.sincronizarEnviar(pCatalogo).then(
+                                function (result) {
+                                    oController.sincronizarReceber(pCatalogo).then(
+                                        function (result) {
+                                            var loginInProgress = false;
+                                            try {
+                                                loginInProgress = oController.getOwnerComponent().getModel("busyDialogModel").getProperty("/loginInProgress");
+                                            } catch (e) {
+                                                loginInProgress = false;
+                                            }
+
+                                            if (!loginInProgress) {
+                                                oController.closeBusyDialog();
+                                            }
+                                            resolve(result)
+                                        }).catch(
+                                            function (result) {
+                                                oController.forceCloseBusyDialog();
+                                                reject(result)
+                                            })
+                                }).catch(
+                                    function (result) {
+                                        oController.forceCloseBusyDialog();
+                                        reject(result)
+                                    })
+                        }).catch(
+                            function (result) {
+                                oController.closeBusyDialog();
+                                reject(result)
+                            })
+                } else {
+                    reject()
+                }
+            })
+
 
         },
 
@@ -603,9 +650,93 @@ sap.ui.define([
             return oHeader;
         },
 
-        prepararPerfil: function () {
+        prepararPerfil1: function () {
             // return new Promise((resolve, reject) => {
-                // oController.atualizarBusyDialog(oController.getView().getModel("i18n").getResourceBundle().getText("atualizandoperfis"));
+            // oController.atualizarBusyDialog(oController.getView().getModel("i18n").getResourceBundle().getText("atualizandoperfis"));
+            var aPerfis = oController.getOwnerComponent().getModel("listaPerfilModel").getData();
+            var aPerfilSet = []
+
+            aPerfis.forEach(oPerfil => {
+                switch (oPerfil.Sincronizado) {
+                    case "N":
+                        var oPerfilSet = {
+                            "CodigoPerfil": 0,
+                            "DescrPerfil": oPerfil.DescrPerfil,
+                            "Sincronizado": "N",
+                            "AutorizacaoSet": []
+                        }
+                        oPerfil.AutorizacaoSet.forEach(oAutorizacao => {
+                            if (oAutorizacao.Selecionado == true) {
+                                var oAutorizacaoSet =
+                                {
+                                    "CodigoPerfil": 0,
+                                    "CodigoAutorizacao": oAutorizacao.CodigoAutorizacao,
+                                    "DescrAutorizacao": oAutorizacao.DescrAutorizacao
+                                }
+                                oPerfilSet.AutorizacaoSet.push(oAutorizacaoSet)
+                            }
+                        })
+                        aPerfilSet.push(oController.enviarDados("PerfilSet", oPerfilSet))
+                        break;
+                    case "E":
+                        var oPerfilSet = {
+                            "CodigoPerfil": oPerfil.CodigoPerfil,
+                            "DescrPerfil": oPerfil.DescrPerfil,
+                            "Sincronizado": "E",
+                            "AutorizacaoSet": []
+                        }
+                        aPerfilSet.push(oController.enviarDados("PerfilSet", oPerfilSet))
+                        break;
+
+                    default:
+                        break;
+                }
+
+
+            });
+
+            if (aPerfilSet.length > 0) {
+                // Promise.all(aPerfilSet).then(
+                // function (result) {
+                result.forEach(oPerfil => {
+                    var vTipo
+                    switch (oPerfil.Tipomensagem) {
+                        case "S":
+                            vTipo = "Success"
+                            break;
+                        case "E":
+                            vTipo = "Error"
+                            break;
+                        default:
+                            break;
+                    }
+                    var oMensagem = {
+                        "title": "Gestão de perfil",
+                        "description": oPerfil.Mensagem,
+                        "type": vTipo,
+                        "subtitle": oPerfil.Mensagem
+                    }
+                    oController.getOwnerComponent().getModel("mensagensModel").getData().push(oMensagem)
+
+                });
+
+                // resolve()
+                // }).catch(
+                //     function (result) {
+                //         oController.closeBusyDialog();
+                //         // reject()
+                //     })
+                // } else {
+                // resolve()
+                // }
+
+                // })
+            }
+        },
+
+        prepararPerfil: function () {
+            return new Promise((resolve, reject) => {
+                oController.atualizarBusyDialog(oController.getView().getModel("i18n").getResourceBundle().getText("atualizandoperfis"));
                 var aPerfis = oController.getOwnerComponent().getModel("listaPerfilModel").getData();
                 var aPerfilSet = []
 
@@ -683,8 +814,313 @@ sap.ui.define([
                     resolve()
                 }
 
-            // })
-        }
+            })
+        },
+
+        onSincronizarGeral: function (pController, pCatalogo) {
+            var aMockMessages = []
+            if (oController.checkConnection() == true) {
+                oController = pController
+                oController.openBusyDialog();
+                oController.sincronizar(pCatalogo).then(function (result) {
+                    oController.closeBusyDialog();
+
+                    var aMensagens = oController.getOwnerComponent().getModel("mensagensModel").getData();
+
+                    aMensagens.forEach(mensagem => {
+                        var oMockMessage = {
+                            type: mensagem.type,
+                            title: mensagem.title,
+                            active: false,
+                            description: mensagem.description,
+                            subtitle: mensagem.subtitle
+                        }
+                        aMockMessages.push(oMockMessage)
+                    });
+
+                    var oModel = new JSONModel();
+                    oModel.setData(aMockMessages);
+                    oController.getView().setModel(oModel);
+                    oController.getView().getModel().refresh()
+
+                }).catch(
+                    function (result) {
+                        oController.closeBusyDialog();
+                    });
+            } else {
+                MessageToast.show("Dispositivo sem conexão com a internet no momento.");
+                var oMockMessage = {
+                    type: 'Error',
+                    title: 'Sem Conexão',
+                    description: 'Sem conexão com internet no momento. Tente mais tarde novamente',
+                    subtitle: 'Problemas de conexão',
+                    counter: 1
+                };
+                aMockMessages.push(oMockMessage)
+
+                var oModel = new JSONModel();
+                oModel.setData(aMockMessages);
+                this.getView().setModel(oModel);
+            }
+
+
+        },
+
+        sincronizarEnviar: function (pCatalogo) {
+            oController = this;
+            return new Promise((resolve, reject) => {
+                if (oController.checkConnection() == true) {
+                    Promise.all([oController.finalizarOperacoes(pCatalogo),
+                    oController.atualizarPerfil(),
+                    oController.atualizarUsuario(),
+                    oController.atualizarComboio(),
+                    oController.atualizarOrdemCorretiva(),
+                    oController.criarOrdens()]).then(
+                        function (result) {
+                            resolve()
+                        }).catch(
+                            function (result) {
+                                reject()
+                            });
+                } else {
+                    reject()
+                }
+            })
+        },
+
+        atualizarPerfil: function () {
+            return new Promise((resolve, reject) => {
+                oController.lerTabelaIndexDB("tb_perfil").then(
+                    function (result) {
+                        if (result.tb_perfil) {
+                            oController.getOwnerComponent().getModel("listaPerfilModel").setData(result.tb_perfil);
+                            oController.prepararPerfil().then(
+                                function (result) {
+                                    resolve()
+                                }).catch(
+                                    function (result) {
+                                        reject()
+                                    })
+                        }
+
+                    }).catch(
+                        function (result) {
+                            reject(result)
+                        })
+
+            })
+        },
+
+        carregarOffline: function (pCatalogo) {
+
+            oController = this;
+            return new Promise((resolve, reject) => {
+
+                oController.atualizarBusyDialog(oController.getView().getModel("i18n").getResourceBundle().getText("carregaroffline"));
+                var aLeituras = [
+                    oController.carregarDadosIndexDB("tb_autorizacao", "autorizacoesModel"),
+                    oController.carregarDadosIndexDB("tb_perfil", "listaPerfilModel"),
+                    oController.carregarDadosIndexDB("tb_usuario", "listaUsuariosModel")
+                ]
+                Promise.all(aLeituras).then(
+                    function (result) {
+                        resolve()
+
+                    }).catch(
+                        function (result) {
+                            oController.closeBusyDialog();
+                            reject(result)
+                        })
+
+            })
+
+        },
+
+        carregarDadosIndexDB: function (pTabela, pModel) {
+            oController = this;
+
+            return new Promise((resolve, reject) => {
+
+                oController.lerTabelaIndexDB(pTabela).then(
+                    function (result) {
+                        oController.getOwnerComponent().getModel(pModel).setData(result[pTabela])
+                        resolve()
+                    }).catch(
+                        function (result) {
+                            reject()
+                        })
+
+            })
+        },
+
+        lerTabelaIndexDB: function (pTabela) {
+
+            oController = this;
+
+            return new Promise((resolve, reject) => {
+
+                console.log("Iniciando leitura da tabela " + pTabela);
+
+                var oDBData
+
+                var db;
+                var databaseName = oController.getDatabaseName();
+                var databaseVersion = oController.getDatabaseVersion();
+                var openRequest = window.indexedDB.open(databaseName, databaseVersion);
+
+                openRequest.onerror = function (event) {
+                    console.log(openRequest.errorCode);
+                    reject('Erro durante a leitura do banco de dados!')
+                };
+
+                openRequest.onsuccess = function (event) {
+                    db = event.target.result;
+                    db.onerror = function () {
+                        console.log(db.errorCode);
+                        reject('Erro durante a leitura do banco de dados!')
+                    };
+
+                    const transaction = db.transaction([pTabela], "readwrite")
+                    transaction.oncomplete = event => {
+                        db.close();
+                        var data = {};
+                        data[pTabela] = oDBData;
+                        resolve(data)
+                    };
+
+                    const objectStore = transaction.objectStore(pTabela);
+
+                    if ('getAll' in objectStore) {
+                        var values = objectStore.getAll().onsuccess = function (event) {
+                            oDBData = {};
+                            oDBData = event.target.result;
+
+                        };
+                    } else {
+                        objectStore.openCursor().onsuccess = function (event) {
+                            var cursor = event.target.result;
+                            if (cursor) {
+                                var value = cursor.value;
+                                values.push(value);
+                                cursor.continue();
+                            } else {
+                                oDBData = {};
+                                oDBData = values;
+                            }
+                        };
+                    }
+                };
+            })
+        },
+
+        checkConnection: function () {
+            if (window.hasOwnProperty("cordova")) {
+                switch (navigator.connection.type) {
+                    case 'unknown':
+                        this.getOwnerComponent().getModel("conexaoModel").setProperty("/iconeConexao", "sap-icon://disconnected")
+                        this.getOwnerComponent().getModel("conexaoModel").setProperty("/corIconeConexao", "Error")
+                        this.getOwnerComponent().getModel("conexaoModel").setProperty("/statusConexao", "offline")
+                        this.getOwnerComponent().getModel("conexaoModel").refresh(true)
+                        return false
+                    case 'none':
+                        this.getOwnerComponent().getModel("conexaoModel").setProperty("/iconeConexao", "sap-icon://disconnected")
+                        this.getOwnerComponent().getModel("conexaoModel").setProperty("/corIconeConexao", "Error")
+                        this.getOwnerComponent().getModel("conexaoModel").setProperty("/statusConexao", "offline")
+                        this.getOwnerComponent().getModel("conexaoModel").refresh(true)
+                        return false
+                    default:
+                        this.getOwnerComponent().getModel("conexaoModel").setProperty("/iconeConexao", "sap-icon://connected")
+                        this.getOwnerComponent().getModel("conexaoModel").setProperty("/corIconeConexao", "Success")
+                        this.getOwnerComponent().getModel("conexaoModel").setProperty("/statusConexao", "online")
+                        this.getOwnerComponent().getModel("conexaoModel").refresh(true)
+                        return true;
+                }
+            } else {
+                this.getOwnerComponent().getModel("conexaoModel").setProperty("/iconeConexao", "sap-icon://connected")
+                this.getOwnerComponent().getModel("conexaoModel").setProperty("/corIconeConexao", "Success")
+                this.getOwnerComponent().getModel("conexaoModel").setProperty("/statusConexao", "online")
+                this.getOwnerComponent().getModel("conexaoModel").refresh(true)
+                return navigator.onLine
+
+            }
+        },
+
+        verificarDisponibilidadeServidor: function () {
+            oController = this;
+            var oConexao = oController.lerLocalStorage("CMM_DadosConexao")
+            oController.getOwnerComponent().getModel("configurarModel").setData(oConexao)
+
+            return new Promise((resolve, reject) => {
+
+                if (oConexao.verificarDisponibilidade) {
+                    if (oController.checkConnection() == true) {
+                        if (oConexao.url) {
+                            oController.openBusyDialog();
+                            oController.atualizarBusyDialog("Tentando conexão com o endereço " + oConexao.url);
+
+                            fetch(oConexao.urlsemclient, { mode: 'no-cors' }).then(r => {
+                                oController.atualizarBusyDialog("Conexão com o endereço " + oConexao.urlsemclient + " estabelecida com sucesso");
+
+                                var oMockMessage = {
+                                    type: 'Success',
+                                    title: oController.getView().getModel("i18n").getResourceBundle().getText("sucessoservidor"),
+                                    description: "Conexão com o endereço " + oConexao.urlsemclient + " estabelecida com sucesso",
+                                    subtitle: oController.getView().getModel("i18n").getResourceBundle().getText("conexaosucesso"),
+                                    counter: 1
+                                };
+
+                                oController.getOwnerComponent().getModel("mensagensModel").getData().push(oMockMessage)
+
+                                resolve()
+
+                            })
+                                .catch(e => {
+                                    oController.atualizarBusyDialog("Não foi possível alcançar o endereço " + oConexao.urlsemclient + "informado");
+
+                                    var oMockMessage = {
+                                        type: 'Error',
+                                        title: oController.getView().getModel("i18n").getResourceBundle().getText("erroservidor"),
+                                        description: "Não foi possível alcançar o endereço " + oConexao.urlsemclient + " informado.",
+                                        subtitle: oController.getView().getModel("i18n").getResourceBundle().getText("conexaoerro"),
+                                        counter: 1
+                                    };
+
+                                    oController.getOwnerComponent().getModel("mensagensModel").getData().push(oMockMessage)
+                                    reject()
+                                });
+                        } else {
+                            var oMockMessage = {
+                                type: 'Error',
+                                title: oController.getView().getModel("i18n").getResourceBundle().getText("configurarconexao"),
+                                description: "Configure os dados de conexão antes de continuar",
+                                subtitle: oController.getView().getModel("i18n").getResourceBundle().getText("conexaosem"),
+                                counter: 1
+                            };
+
+                            oController.getOwnerComponent().getModel("mensagensModel").getData().push(oMockMessage)
+
+                            reject()
+                        }
+
+                    } else {
+                        var oMockMessage = {
+                            type: 'Error',
+                            title: oController.getView().getModel("i18n").getResourceBundle().getText("testeerro"),
+                            description: "Por favor verifque a disponibilidade de rede ou wi-fi.",
+                            subtitle: oController.getView().getModel("i18n").getResourceBundle().getText("conexaosem"),
+                            counter: 1
+                        };
+
+                        oController.getOwnerComponent().getModel("mensagensModel").getData().push(oMockMessage)
+
+                        reject()
+                    }
+                } else {
+                    resolve()
+                }
+            })
+
+        },
 
     });
 });

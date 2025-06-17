@@ -178,16 +178,93 @@ sap.ui.define([
             },
 
             onLogin: function (oEvent) {
+                // oController.iniciarAplicativo()
+                // oController.getOwnerComponent().getRouter().navTo("Inicio", null, true);
+                // var aListaUsuarios = oController.getOwnerComponent().getModel("usuariosLoginModel").getData()
+                // if (aListaUsuarios.length == undefined) {
+                //     oController.carregarUsuariosOffLine();
+                //     aListaUsuarios = oController.getOwnerComponent().getModel("usuariosLoginModel").getData()
+                // }
+                // var vUsuario = oView.byId("usuarioInput").getValue()
+                // var vSenha = oController.criptografar(oView.byId("senhaInput").getValue())
+                // if (vUsuario != "" && vSenha != "") {
+                //     var oUsuario = aListaUsuarios.find((oElement) => oElement.CodUsuario.toUpperCase() == vUsuario.toUpperCase() && oElement.Senha == vSenha);
+                //     if (oUsuario) {
+                //         oController.getOwnerComponent().getModel("usuarioModel").setData(oUsuario);
+                //         if (oUsuario.Bloqueado == false) {
                 oController.iniciarAplicativo()
-                oController.getOwnerComponent().getRouter().navTo("Inicio", null, true);
+                //         } else {
+                //             MessageToast.show("Usuário bloqueado");
+                //             var oMockMessage = {
+                //                 type: 'Error',
+                //                 title: 'Bloqueado',
+                //                 description: 'Usuário bloqueado',
+                //                 subtitle: 'Usuário e Senha',
+                //                 counter: 1
+                //             };
+                //             oController.getView().getModel().setData([oMockMessage]);
+                //             oController.getView().getModel().refresh()
+                //         }
+                //     } else {
+                //         MessageToast.show("Usuário ou senha inválidos");
+                //         var oMockMessage = {
+                //             type: 'Error',
+                //             title: 'Inválido',
+                //             description: 'Usuário ou Senha inválido',
+                //             subtitle: 'Usuário e Senha',
+                //             counter: 1
+                //         };
+                //         oController.getView().getModel().setData([oMockMessage]);
+                //         oController.getView().getModel().refresh()
+                //     }
+                // } else {
+                //     // MessageToast.show("Por favor, informe usuário e senha");
+                //     // var oMockMessage = {
+                //     //     type: 'Error',
+                //     //     title: 'Campos obrigatórios',
+                //     //     description: 'Por favor, informe usuário e senha',
+                //     //     subtitle: 'Usuário e Senha',
+                //     //     counter: 1
+                //     // };
+                //     // oController.getView().getModel().setData([oMockMessage]);
+                //     // oController.getView().getModel().refresh()
+                //     oController.iniciarAplicativo()
+                // }
             },
 
             iniciarAplicativo: function (oEvent) {
-                // oController.openBusyDialog();
-                // oController.getOwnerComponent().getModel("busyDialogModel").setProperty("/loginInProgress", true);
-                // var vUsuario = oView.byId("usuarioInput").getValue();
-                // var vUsuario = "master"
-                oController.sincronizar(true)
+                // oController.sincronizar(true)
+                oController.openBusyDialog();
+                oController.getOwnerComponent().getModel("busyDialogModel").setProperty("/loginInProgress", true);
+                var vUsuario = oView.byId("usuarioInput").getValue();
+
+                oController.prepararIndexDB(vUsuario.toUpperCase()).then(
+                    function (result) {
+                        oController.sincronizar(true).then(function (result) {
+                            // Busy será fechado no controller Inicio após carregamento completo
+                            oController.carregarAcessos()
+                            oController.getOwnerComponent().getRouter().navTo("Inicio", null, true);
+                        }).catch(
+                            function (result) {
+                                oController.carregarOffline().then(function (result) {
+                                    var aMensagens = oController.getOwnerComponent().getModel("mensagensModel").getData();
+                                    oController.getView().getModel().setData(aMensagens);
+                                    oController.getView().getModel().refresh()
+                                    // Busy será fechado no controller Inicio após carregamento completo
+                                    oController.carregarAcessos()
+                                    oController.getOwnerComponent().getRouter().navTo("Inicio", null, true);
+                                })
+
+                            });
+                    }
+                ).catch(
+                    function (result) {
+                        var aMensagens = oController.getOwnerComponent().getModel("mensagensModel").getData();
+                        oController.getView().getModel().setData(aMensagens);
+                        oController.getView().getModel().refresh()
+                        oController.getOwnerComponent().getModel("busyDialogModel").setProperty("/loginInProgress", false);
+                        oController.forceCloseBusyDialog();
+                    });
             },
 
             handleMessagePopoverPress: function (oEvent) {
@@ -201,17 +278,52 @@ sap.ui.define([
 
             prepararIndexDB: function (pUsuario) {
 
+
                 return new Promise((resolve, reject) => {
-                    // oController = this;
+                    oController = this;
 
-                    // //check for support
-                    // if (!('indexedDB' in window)) {
-                    //     console.log('Armazenamento offline não suportado.');
-                    //     reject();
-                    //     return;
-                    // }
-                    resolve()
+                    //check for support
+                    if (!('indexedDB' in window)) {
+                        console.log('Armazenamento offline não suportado.');
+                        reject();
+                        return;
+                    }
 
+                    oController.gravarNomeBancoDados(pUsuario)
+
+                    var db;
+                    var databaseName = oController.getDatabaseName();
+                    var databaseVersion = oController.getDatabaseVersion();
+                    var openRequest = window.indexedDB.open(databaseName, databaseVersion);
+
+                    openRequest.onupgradeneeded = function (e) {
+                        db = e.target.result;
+                        console.log('Banco de dados sendo criado');
+
+                        if (!db.objectStoreNames.contains('tb_perfil')) {
+                            db.createObjectStore("tb_perfil", { autoIncrement: true });
+                        }
+
+                        if (!db.objectStoreNames.contains('tb_usuario')) {
+                            db.createObjectStore("tb_usuario", { autoIncrement: true });
+                        }
+
+                        if (!db.objectStoreNames.contains('tb_autorizacao')) {
+                            db.createObjectStore("tb_autorizacao", { autoIncrement: true });
+                        }
+
+                    };
+
+                    openRequest.onsuccess = function (e) {
+                        console.log('Banco de dados iniciado com sucesso!');
+                        db = e.target.result;
+                        db.close();
+                        resolve();
+                    };
+
+                    openRequest.onerror = function (e) {
+                        reject('Erro durante a criação do banco de dados!')
+                    }
                 }
                 )
             },

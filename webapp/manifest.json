@@ -81,6 +81,9 @@
       "acessosModel": {
         "type": "sap.ui.model.json.JSONModel"
       },
+      "autorizacoesModel": {
+        "type": "sap.ui.model.json.JSONModel"
+      },
       "busyDialogModel": {
         "type": "sap.ui.model.json.JSONModel"
       },
