@@ -10,8 +10,8 @@ sap.ui.define([
     "use strict";
     var oController
     var oView
-    
-	const BD_VERSION = 7;
+
+    const BD_VERSION = 7;
     var aFilters = ""
     var oExpand = ""
 
@@ -98,7 +98,7 @@ sap.ui.define([
         },
 
         getDatabaseVersion: function () {
-            return BD_VERSION;                                                                                                                                                                                                                                                                                                                   
+            return BD_VERSION;
         },
 
 
@@ -424,7 +424,7 @@ sap.ui.define([
             })
         },
 
-        carregarAutorizacao: function () {
+        carregarAutorizacoes: function () {
             return new Promise((resolve, reject) => {
                 oController.atualizarBusyDialog(oController.getView().getModel("i18n").getResourceBundle().getText("sincronizandoautorizacoes"));
                 oController.carregarDados("ListaAutorizacaoSet", []).then(function (result) {
@@ -483,7 +483,7 @@ sap.ui.define([
             }
         },
 
-        sincronizarReceber: function (pCatalogo) {
+        sincronizarReceber1: function (pCatalogo) {
 
             // oController = this;
             // return new Promise((resolve, reject) => {
@@ -501,6 +501,123 @@ sap.ui.define([
             //     }
             // })
             resolve()
+
+        },
+
+        sincronizarReceber: function (pCatalogo) {
+
+            oController = this;
+            return new Promise((resolve, reject) => {
+
+                if (oController.checkConnection() == true) {
+
+                    //Preencher aqui com todos os serviços que precisam ser chamados e carregados
+                    var aLeituras = [
+                        oController.carregarAutorizacoes(),
+                        oController.carregarPerfil(),
+                        // oController.carregarUsuario(),
+                        oController.carregarDadosIndexDB("tb_autorizacao", "listaAutorizacao"),
+                        oController.carregarDadosIndexDB("tb_perfil", "listaPerfilModel"),
+                        // oController.carregarDadosIndexDB("tb_usuario", "listaUsuariosModel")
+                    ]
+
+                    Promise.all(aLeituras).then(
+                        function (result) {
+                            //Preencher aqui as tabelas que precisam ser limpas antes da atualização
+                            oController.atualizarBusyDialog(oController.getView().getModel("i18n").getResourceBundle().getText("preparandobancos"));
+                            var aLimpezas = [
+                                oController.limparTabelaIndexDB("tb_autorizacao"),
+                                oController.limparTabelaIndexDB("tb_perfil"),
+                                oController.limparTabelaIndexDB("tb_usuario")]
+                            Promise.all(aLimpezas).then(
+                                function (result) {
+                                    var aAutorizacoes = oController.getOwnerComponent().getModel("listaAutorizacao").getData();
+                                    var aPerfis = oController.getOwnerComponent().getModel("listaPerfilModel").getData();
+                                    var aUsuarios = oController.getOwnerComponent().getModel("listaUsuariosModel").getData();
+                                    var aGravacoes = [
+                                        oController.gravarTabelaIndexDB("tb_autorizacao", aAutorizacoes),
+                                        oController.gravarTabelaIndexDB("tb_perfil", aPerfis),
+                                        oController.gravarTabelaIndexDB("tb_usuario", aUsuarios)]
+                                    Promise.all(aGravacoes).then(
+                                        function (result) {
+                                            if (pCatalogo) {
+                                                oController.carregarCatalogos().then(
+                                                    function (result) {
+                                                        oController.limparTabelaIndexDB("tb_catalogo").then(
+                                                            function (result) {
+                                                                var aCatalogos = oController.getOwnerComponent().getModel("catalogosModel").getData();
+                                                                oController.gravarTabelaIndexDB("tb_catalogo", aCatalogos).then(
+                                                                    function (result) {
+                                                                        oController.carregarCodes().then(
+                                                                            function (result) {
+                                                                                oController.limparTabelaIndexDB("tb_code").then(
+                                                                                    function (result) {
+                                                                                        var aCodes = oController.getOwnerComponent().getModel("codesModel").getData();
+                                                                                        oController.gravarTabelaIndexDB("tb_code", aCodes).then(
+                                                                                            function (result) {
+
+                                                                                                resolve(result)
+                                                                                            }).catch(
+                                                                                                function (result) {
+
+                                                                                                    oController.closeBusyDialog();
+                                                                                                    reject(result)
+                                                                                                })
+                                                                                        //resolve()
+                                                                                    }).catch(
+                                                                                        function (result) {
+                                                                                            oController.closeBusyDialog();
+                                                                                            reject(result)
+                                                                                        })
+                                                                                //resolve()
+                                                                            }).catch(
+                                                                                function (result) {
+                                                                                    oController.closeBusyDialog();
+                                                                                    reject(result)
+                                                                                });
+                                                                    }).catch(
+                                                                        function (result) {
+                                                                            oController.closeBusyDialog();
+                                                                            reject(result)
+                                                                        })
+                                                                //resolve()
+                                                            }).catch(
+                                                                function (result) {
+                                                                    oController.closeBusyDialog();
+                                                                    reject(result)
+                                                                })
+                                                        //resolve()
+                                                    }).catch(
+                                                        function (result) {
+                                                            oController.closeBusyDialog();
+                                                            reject(result)
+                                                        })
+                                            } else {
+                                                resolve()
+                                            }
+
+                                        }).catch(
+                                            function (result) {
+                                                oController.closeBusyDialog();
+                                                reject(result)
+                                            })
+                                    //resolve()
+                                }).catch(
+                                    function (result) {
+                                        oController.closeBusyDialog();
+                                        reject(result)
+                                    })
+                            //resolve()
+                        }).catch(
+                            function (result) {
+                                oController.closeBusyDialog();
+                                reject(result)
+                            })
+                } else {
+                    oController.closeBusyDialog();
+                    reject()
+                }
+            })
 
         },
 
@@ -870,18 +987,15 @@ sap.ui.define([
             oController = this;
             return new Promise((resolve, reject) => {
                 if (oController.checkConnection() == true) {
-                    Promise.all([oController.finalizarOperacoes(pCatalogo),
-                    oController.atualizarPerfil(),
-                    oController.atualizarUsuario(),
-                    oController.atualizarComboio(),
-                    oController.atualizarOrdemCorretiva(),
-                    oController.criarOrdens()]).then(
-                        function (result) {
-                            resolve()
-                        }).catch(
+                    Promise.all([
+                        oController.atualizarPerfil(),
+                        oController.atualizarUsuario()]).then(
                             function (result) {
-                                reject()
-                            });
+                                resolve()
+                            }).catch(
+                                function (result) {
+                                    reject()
+                                });
                 } else {
                     reject()
                 }
@@ -1047,7 +1161,7 @@ sap.ui.define([
 
         verificarDisponibilidadeServidor: function () {
             oController = this;
-            var oConexao = oController.lerLocalStorage("CMM_DadosConexao")
+            var oConexao = oController.lerLocalStorage("SGMR_DadosConexao")
             oController.getOwnerComponent().getModel("configurarModel").setData(oConexao)
 
             return new Promise((resolve, reject) => {
@@ -1086,7 +1200,8 @@ sap.ui.define([
                                     };
 
                                     oController.getOwnerComponent().getModel("mensagensModel").getData().push(oMockMessage)
-                                    reject()
+                                    // reject()
+                                    resolve()
                                 });
                         } else {
                             var oMockMessage = {
@@ -1121,6 +1236,295 @@ sap.ui.define([
             })
 
         },
+
+        atualizarUsuario: function () {
+            return new Promise((resolve, reject) => {
+                oController.lerTabelaIndexDB("tb_usuario").then(
+                    function (result) {
+                        if (result.tb_usuario) {
+                            oController.getOwnerComponent().getModel("listaUsuariosModel").setData(result.tb_usuario);
+                            oController.prepararUsuario().then(
+                                function (result) {
+                                    resolve()
+                                }).catch(
+                                    function (result) {
+                                        reject()
+                                    })
+                        }
+
+                    }).catch(
+                        function (result) {
+                            reject(result)
+                        })
+
+            })
+        },
+
+        prepararUsuario: function () {
+            return new Promise((resolve, reject) => {
+                oController.atualizarBusyDialog(oController.getView().getModel("i18n").getResourceBundle().getText("atualizandousuarios"));
+                var aUsuarios = oController.getOwnerComponent().getModel("listaUsuariosModel").getData();
+                var aUsuarioSet = []
+
+                aUsuarios.forEach(oUsuario => {
+                    if (oUsuario.Bloqueado == true) {
+                        oUsuario.Bloqueado = "X"
+                    } else {
+                        oUsuario.Bloqueado = ""
+                    }
+                    switch (oUsuario.Sincronizado) {
+                        case "N":
+                            var oUsuarioSet = {
+                                "CodUsuario": oUsuario.CodUsuario,
+                                "Nome": oUsuario.Nome,
+                                "Senha": oUsuario.Senha,
+                                "Centro": oUsuario.Centro,
+                                "Deposito": oUsuario.Deposito,
+                                "Bloqueado": oUsuario.Bloqueado,
+                                "Perfil": oUsuario.CodigoPerfil,
+                                "Sincronizado": "N"
+                            }
+                            aUsuarioSet.push(oController.enviarDados("UsuarioSet", oUsuarioSet))
+                            break;
+                        case "U":
+                            var oUsuarioSet = {
+                                "CodUsuario": oUsuario.CodUsuario,
+                                "Nome": oUsuario.Nome,
+                                "Senha": oUsuario.Senha,
+                                "Centro": oUsuario.Centro,
+                                "Deposito": oUsuario.Deposito,
+                                "Bloqueado": oUsuario.Bloqueado,
+                                "Perfil": oUsuario.CodigoPerfil,
+                                "Sincronizado": "U"
+                            }
+                            aUsuarioSet.push(oController.enviarDados("UsuarioSet", oUsuarioSet))
+                            break;
+
+                        case "E":
+                            var oUsuarioSet = {
+                                "CodUsuario": oUsuario.CodUsuario,
+                                "Nome": oUsuario.Nome,
+                                "Senha": oUsuario.Senha,
+                                "Centro": oUsuario.Centro,
+                                "Deposito": oUsuario.Deposito,
+                                "Bloqueado": oUsuario.Bloqueado,
+                                "Perfil": oUsuario.CodigoPerfil,
+                                "Sincronizado": "E"
+                            }
+                            aUsuarioSet.push(oController.enviarDados("UsuarioSet", oUsuarioSet))
+                            break;
+                        default:
+                            break;
+                    }
+
+                });
+
+                if (aUsuarioSet.length > 0) {
+                    Promise.all(aUsuarioSet).then(
+                        function (result) {
+                            result.forEach(oUsuario => {
+                                var vTipo
+                                switch (oUsuario.Tipomensagem) {
+                                    case "S":
+                                        vTipo = "Success"
+                                        break;
+                                    case "E":
+                                        vTipo = "Error"
+                                        break;
+                                    default:
+                                        break;
+                                }
+                                var oMensagem = {
+                                    "title": "Gestão de usuário",
+                                    "description": oUsuario.Mensagem,
+                                    "type": vTipo,
+                                    "subtitle": oUsuario.Mensagem
+                                }
+                                oController.getOwnerComponent().getModel("mensagensModel").getData().push(oMensagem)
+
+                            });
+
+                            resolve()
+                        }).catch(
+                            function (result) {
+                                oController.closeBusyDialog();
+                                reject()
+                            })
+                } else {
+                    resolve()
+                }
+
+            })
+        },
+
+        carregarUsuario: function () {
+            oController = this
+            return new Promise((resolve, reject) => {
+                var aPerfis = oController.getOwnerComponent().getModel("listaPerfilModel").getData()
+                oController.atualizarBusyDialog(oController.getView().getModel("i18n").getResourceBundle().getText("sincronizandousuarios"));
+                oController.carregarDados("UsuarioSet", []).then(function (result) {
+                    var aUsuarios = []
+                    for (let x = 0; x < result.results.length; x++) {
+                        const oUsuario = result.results[x];
+                        if (aPerfis.length != undefined) {
+                            var oPerfil = aPerfis.find((oElement) => oUsuario.Perfil == oElement.CodigoPerfil);
+                            if (oPerfil != undefined) {
+                                oUsuario.Perfil = oPerfil.DescrPerfil;
+                                oUsuario.CodigoPerfil = oPerfil.CodigoPerfil
+                                oUsuario.Autorizacoes = oPerfil.AutorizacaoSet
+                            }
+                        }
+
+                        if (oUsuario.Bloqueado == 'X') {
+                            oUsuario.Bloqueado = true
+                        } else {
+                            oUsuario.Bloqueado = false
+                        }
+
+                        delete oUsuario.__metadata
+                        aUsuarios.push(oUsuario);
+                    }
+                    oController.getOwnerComponent().getModel("listaUsuariosModel").setData(aUsuarios)
+
+
+                    var vDescricao = "Usuários sincronizados " + aUsuarios.length
+                    var oMensagem = {
+                        "title": vDescricao,
+                        "description": "Usuários encaminhados para o dispositivo",
+                        "type": "Success",
+                        "subtitle": "Usuários download"
+                    }
+                    oController.getOwnerComponent().getModel("mensagensModel").getData().push(oMensagem)
+
+                    resolve()
+                }).catch(
+                    function (result) {
+                        oController.closeBusyDialog();
+                        reject(result)
+                    })
+            })
+        },
+
+        limparTabelaIndexDB: function (pTabela) {
+
+            oController = this;
+
+            return new Promise((resolve, reject) => {
+
+                var db;
+                var databaseName = oController.getDatabaseName();
+                var databaseVersion = oController.getDatabaseVersion();
+                var openRequest = window.indexedDB.open(databaseName, databaseVersion);
+
+                openRequest.onerror = function (event) {
+                    console.log(openRequest.errorCode);
+                    oController.closeBusyDialog();
+                    reject();
+                };
+
+                openRequest.onsuccess = function (event) {
+                    db = event.target.result;
+                    db.onerror = function () {
+                        console.log(db.errorCode);
+                        oController.closeBusyDialog();
+                        reject();
+                    };
+                    var oTransaction = db.transaction([pTabela], "readwrite");
+                    oTransaction.oncomplete = function (event) {
+                        db.close();
+                        oController.closeBusyDialog();
+                        resolve();
+                    };
+
+                    oTransaction.onerror = function (event) {
+                        db.close();
+                        oController.closeBusyDialog();
+                        reject();
+                    };
+                    var oObjectStore = oTransaction.objectStore(pTabela);
+                    oObjectStore.clear();
+
+                };
+            })
+        },
+
+        gravarTabelaIndexDB: function (pTabela, pData) {
+            var oController = this;
+
+            return new Promise((resolve, reject) => {
+
+
+                var vMsg = oController.getView().getModel("i18n").getResourceBundle().getText("gravandotabela") + " " + pTabela;
+                oController.atualizarBusyDialog(vMsg);
+
+                var db;
+                var databaseName = oController.getDatabaseName();
+                var databaseVersion = oController.getDatabaseVersion();
+                var openRequest = window.indexedDB.open(databaseName, databaseVersion);
+
+                openRequest.onerror = function (event) {
+                    console.log(openRequest.errorCode);
+                    oController.closeBusyDialog();
+                    reject()
+                };
+
+                openRequest.onsuccess = function (event) {
+                    db = event.target.result;
+                    db.onerror = function () {
+                        console.log(db.errorCode);
+                        oController.closeBusyDialog();
+                        reject()
+                    };
+                    var objectStore = db.transaction([pTabela], "readwrite").objectStore(pTabela);
+                    objectStore.openCursor().onsuccess = function (event) {
+                        var transaction = db.transaction([pTabela], "readwrite");
+                        transaction.oncomplete = function (event) {
+
+                            db.close();
+                            resolve()
+                        };
+
+                        transaction.onerror = function (event) {
+                            db.close();
+                            oController.closeBusyDialog();
+                            reject();
+                        };
+                        var values = pData
+                        var objectStore = transaction.objectStore(pTabela);
+                        if (values.length == undefined) {
+                            var objectStoreRequest = objectStore.add(values);
+                            objectStoreRequest.onsuccess = function (event) {
+                                console.table(event);
+                            }
+
+                            objectStoreRequest.onerror = function (oError) {
+                                console.table(oError);
+
+                            }
+                        } else {
+                            for (var i = 0; i < values.length; i++) {
+                                var objectStoreRequest = objectStore.add(values[i]);
+                                objectStoreRequest.onsuccess = function (event) {
+                                    console.table(event);
+                                }
+
+                                objectStoreRequest.onerror = function (oError) {
+                                    console.table(oError);
+
+                                }
+                            }
+                        }
+
+
+                    };
+                };
+            })
+        },
+
+
+
+
+
 
     });
 });

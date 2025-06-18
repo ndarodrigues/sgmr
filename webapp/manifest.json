@@ -93,6 +93,9 @@
       "condicaoModel": {
         "type": "sap.ui.model.json.JSONModel"
       },
+      "configurarModel": {
+        "type": "sap.ui.model.json.JSONModel"
+      },
       "conexaoModel": {
         "type": "sap.ui.model.json.JSONModel"
       },
