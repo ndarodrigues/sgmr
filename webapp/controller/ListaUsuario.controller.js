@@ -18,39 +18,39 @@ sap.ui.define([
                 oController = this;
                 oView = oController.getView();
 
-                var oUsuario = [{
-                    CodUsuario: "01",
-                    Nome: "USUARIO1",
-                    Senha: "",
-                    ConfirmarSenha: "",
-                    Centro: "UMYA",
-                    Deposito: "DPLU",
-                    Perfil: "MASTER",
-                    CodigoPerfil: "01",
-                    Sincronizado: "N",
-                    Bloqueado: false,
-                    Tipomensagem: "",
-                    Mensagem: "",
-                    Autorizacoes: []
-                },
-                {
-                    CodUsuario: "02",
-                    Nome: "USUARIO2",
-                    Senha: "",
-                    ConfirmarSenha: "",
-                    Centro: "UMYA",
-                    Deposito: "DPLU",
-                    Perfil: "INSPETOR",
-                    CodigoPerfil: "01",
-                    Sincronizado: "N",
-                    Bloqueado: false,
-                    Tipomensagem: "",
-                    Mensagem: "",
-                    Autorizacoes: []
-                }]
+                // var oUsuario = [{
+                //     CodUsuario: "01",
+                //     Nome: "USUARIO1",
+                //     Senha: "",
+                //     ConfirmarSenha: "",
+                //     Centro: "UMYA",
+                //     Deposito: "DPLU",
+                //     Perfil: "MASTER",
+                //     CodigoPerfil: "01",
+                //     Sincronizado: "N",
+                //     Bloqueado: false,
+                //     Tipomensagem: "",
+                //     Mensagem: "",
+                //     Autorizacoes: []
+                // },
+                // {
+                //     CodUsuario: "02",
+                //     Nome: "USUARIO2",
+                //     Senha: "",
+                //     ConfirmarSenha: "",
+                //     Centro: "UMYA",
+                //     Deposito: "DPLU",
+                //     Perfil: "INSPETOR",
+                //     CodigoPerfil: "01",
+                //     Sincronizado: "N",
+                //     Bloqueado: false,
+                //     Tipomensagem: "",
+                //     Mensagem: "",
+                //     Autorizacoes: []
+                // }]
 
-                oController.getOwnerComponent().getModel("listaUsuariosModel").setData(oUsuario);
-                oController.getOwnerComponent().getModel("listaUsuariosModel").refresh()
+                // oController.getOwnerComponent().getModel("listaUsuariosModel").setData(oUsuario);
+                // oController.getOwnerComponent().getModel("listaUsuariosModel").refresh()
 
 
                 oView.bindElement("listaUsuariosModel>/");
@@ -189,8 +189,8 @@ sap.ui.define([
             },
 
             onExibirUsuario: function (oEvent) {
-                // var oUsuario = oEvent.getSource().getBindingContext("listaUsuariosModel").getModel().getProperty(oEvent.getSource().getBindingContext("listaUsuariosModel").getPath());
-                 var oUsuario = {
+                var oUsuario = oEvent.getSource().getBindingContext("listaUsuariosModel").getModel().getProperty(oEvent.getSource().getBindingContext("listaUsuariosModel").getPath());
+                var oUsuario = {
                     CodUsuario: "",
                     Nome: "",
                     Senha: "123",
@@ -203,16 +203,16 @@ sap.ui.define([
                     Bloqueado: false,
                     Tipomensagem: "",
                     Mensagem: "",
-                    Autorizacoes: [ {
-                            CodigoAutorizacao: "01",
-                            DescrAutorizacao: "INSPEÇÃO MATERIAL RODANTE",
-                            Selecionado: true
-                        },
-                        {
-                            CodigoAutorizacao: "02",
-                            DescrAutorizacao: "MOVIMENTAÇÃO MATERIAL RODANTE",
-                            Selecionado: true
-                        }]
+                    Autorizacoes: [{
+                        CodigoAutorizacao: "01",
+                        DescrAutorizacao: "INSPEÇÃO MATERIAL RODANTE",
+                        Selecionado: true
+                    },
+                    {
+                        CodigoAutorizacao: "02",
+                        DescrAutorizacao: "MOVIMENTAÇÃO MATERIAL RODANTE",
+                        Selecionado: true
+                    }]
                 }
                 var oUsuario = JSON.parse(JSON.stringify(oUsuario));
                 oUsuario.Senha = oController.descriptografar(oUsuario.Senha)
@@ -237,17 +237,16 @@ sap.ui.define([
                     Bloqueado: false,
                     Tipomensagem: "",
                     Mensagem: "",
-                    Autorizacoes: [ {
-                            CodigoAutorizacao: "01",
-                            DescrAutorizacao: "INSPEÇÃO MATERIAL RODANTE",
-                            Selecionado: true
-                        },
-                        {
-                            CodigoAutorizacao: "02",
-                            DescrAutorizacao: "MOVIMENTAÇÃO MATERIAL RODANTE",
-                            Selecionado: true
-                        }]
+                    Autorizacoes: []
                 }
+
+                // var listaAutorizacao = oController.getOwnerComponent().getModel("listaAutorizacao").getData()
+
+                // listaAutorizacao.forEach(element => {
+                //     element.Selecionado = false
+                //     oUsuario.Autorizacoes.push(element)
+
+                // });
 
                 oController.getOwnerComponent().getModel("criarUsuarioModel").setData(oUsuario);
                 oController.getOwnerComponent().getModel("layoutTelaModel").setProperty("/HabilitarTelaCriarUsuario", true);

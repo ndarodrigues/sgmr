@@ -328,7 +328,12 @@ sap.ui.define([
                     case "ListaAutorizacaoSet":
                         oExpand = ""
                         aFilters = [];
-                        break; hh
+                        break;
+
+                    case "UsuarioSet":
+                        oExpand = ""
+                        aFilters = [];
+                        break;
 
                     default:
                         break;
@@ -515,10 +520,10 @@ sap.ui.define([
                     var aLeituras = [
                         oController.carregarAutorizacoes(),
                         oController.carregarPerfil(),
-                        // oController.carregarUsuario(),
+                        oController.carregarUsuario(),
                         oController.carregarDadosIndexDB("tb_autorizacao", "listaAutorizacao"),
                         oController.carregarDadosIndexDB("tb_perfil", "listaPerfilModel"),
-                        // oController.carregarDadosIndexDB("tb_usuario", "listaUsuariosModel")
+                        oController.carregarDadosIndexDB("tb_usuario", "listaUsuariosModel")
                     ]
 
                     Promise.all(aLeituras).then(
@@ -1518,6 +1523,47 @@ sap.ui.define([
 
                     };
                 };
+            })
+        },
+
+        usuarioUpdate: function () {
+            oController = this;
+            return new Promise((resolve, reject) => {
+
+                oController.atualizarUsuario().then(
+                    function (result) {
+                        var aLeituras = [oController.carregarUsuario()]
+                        Promise.all(aLeituras).then(
+                            function (result) {
+                                //Preencher aqui as tabelas que precisam ser limpas antes da atualização
+                                oController.atualizarBusyDialog(oController.getView().getModel("i18n").getResourceBundle().getText("atualizandousuarios"));
+                                var aLimpezas = [oController.limparTabelaIndexDB("tb_usuario")]
+                                Promise.all(aLimpezas).then(
+                                    function (result) {
+                                        var aPerfis = oController.getOwnerComponent().getModel("listaUsuariosModel").getData();
+                                        var aGravacoes = [oController.gravarTabelaIndexDB("tb_usuario", aPerfis)]
+                                        Promise.all(aGravacoes).then(
+                                            function (result) {
+                                                resolve()
+                                            })
+                                    }).catch(
+                                        function (result) {
+                                            oController.closeBusyDialog();
+                                            reject()
+                                        })
+
+                            }).catch(
+                                function (result) {
+                                    oController.closeBusyDialog();
+                                    reject()
+                                })
+
+                    }).catch(
+                        function (result) {
+                            oController.closeBusyDialog();
+                            reject()
+                        })
+
             })
         },
 
