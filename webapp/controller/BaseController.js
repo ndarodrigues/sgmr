@@ -992,15 +992,17 @@ sap.ui.define([
             oController = this;
             return new Promise((resolve, reject) => {
                 if (oController.checkConnection() == true) {
-                    Promise.all([
-                        oController.atualizarPerfil(),
-                        oController.atualizarUsuario()]).then(
-                            function (result) {
+                    // Promise.all([
+                        // oController.atualizarPerfil(),
+                        // oController.atualizarUsuario()
+                    // ]).then(
+                            // function (result) {
                                 resolve()
-                            }).catch(
-                                function (result) {
-                                    reject()
-                                });
+                            // }).catch(
+                                // function (result) {
+                                //     reject()
+                                // }
+                            // );
                 } else {
                     reject()
                 }
