@@ -30,7 +30,7 @@ server:
       configuration:
         mountPath: /
         services:
-          - urlPath: /sap/opu/odata/sap/ZSGMR_MOBILE_SRV
+          - urlPath: /sap/opu/odata/ptlgmr/SGMR_MOB_SRV
             metadataPath: ./webapp/localService/metadata.xml
             mockdataPath: ./webapp/localService/data
             generateMockData: true

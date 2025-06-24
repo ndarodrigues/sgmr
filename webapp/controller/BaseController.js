@@ -1288,8 +1288,9 @@ sap.ui.define([
                                 "Centro": oUsuario.Centro,
                                 "Deposito": oUsuario.Deposito,
                                 "Bloqueado": oUsuario.Bloqueado,
-                                "Perfil": oUsuario.CodigoPerfil,
-                                "Sincronizado": "N"
+                                "Perfil": oUsuario.CodigoPerfil.toString(),
+                                "Sincronizado": "N"                               
+                                             
                             }
                             aUsuarioSet.push(oController.enviarDados("UsuarioSet", oUsuarioSet))
                             break;

@@ -17,7 +17,7 @@
     },
     "dataSources": {
       "mainService": {
-        "uri": "/sap/opu/odata/sap/ZSGMR_MOBILE_SRV/",
+        "uri": "/sap/opu/odata/ptlgmr/SGMR_MOB_SRV",
         "type": "OData",
         "settings": {
           "annotations": [],

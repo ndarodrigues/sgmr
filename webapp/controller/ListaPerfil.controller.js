@@ -214,7 +214,7 @@ sap.ui.define([
                         AutorizacaoSet: []
                     }
 
-                    oPerfil.AutorizacaoSet.forEach(element => {                        
+                    oPerfil.AutorizacaoSet.forEach(element => {
                         if (element.Selecionado == true) {
                             aPerfil.AutorizacaoSet.push(element)
                         }
@@ -241,12 +241,14 @@ sap.ui.define([
                     AutorizacaoSet: []
                 }
 
+                if (listaAutorizacao.length != undefined) {
+                    listaAutorizacao.forEach(element => {
+                        element.Selecionado = false
+                        oPerfil.AutorizacaoSet.push(element)
 
-                listaAutorizacao.forEach(element => {
-                    element.Selecionado = false
-                    oPerfil.AutorizacaoSet.push(element)
+                    });
+                }
 
-                });
 
                 oController.getOwnerComponent().getModel("perfilCriarModel").setData(oPerfil);
                 oController.getOwnerComponent().getModel("perfilCriarModel").refresh()
