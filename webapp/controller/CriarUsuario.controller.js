@@ -151,14 +151,16 @@ sap.ui.define([
 
                 if (oSelectedItem) {
                     var oPerfil = oSelectedItem.getModel("listaPerfilModel").getProperty(oSelectedItem.getBindingContext("listaPerfilModel").getPath())
+
+
                     oController.getOwnerComponent().getModel("criarUsuarioModel").setProperty("/Perfil", oSelectedItem.getTitle());
                     oController.getOwnerComponent().getModel("criarUsuarioModel").setProperty("/CodigoPerfil", oPerfil.CodigoPerfil);
                     oController.getOwnerComponent().getModel("criarUsuarioModel").setProperty("/Autorizacoes", oPerfil.AutorizacaoSet);
-
-                    var aFilters = []
-                    var filter = new sap.ui.model.Filter({ path: "Selecionado", operator: sap.ui.model.FilterOperator.EQ, value1: true });
-                    aFilters.push(filter);
-                    this.getView().byId("idListaAutorizacoesTable").getBinding("items").filter(aFilters, "Application");
+                    oController.getOwnerComponent().getModel("criarUsuarioModel").refresh()
+                    // var aFilters = []
+                    // var filter = new sap.ui.model.Filter({ path: "Selecionado", operator: sap.ui.model.FilterOperator.EQ, value1: true });
+                    // aFilters.push(filter);
+                    // this.getView().byId("idListaAutorizacoesTable").getBinding("items").filter(aFilters, "Application");
 
                 }
 
@@ -281,7 +283,7 @@ sap.ui.define([
                 if (oUsuario.Centro == "") {
                     oCentroInput.setValueState("Error");
                     var oMockMessage = {
-           
+
                         type: 'Error',
                         title: oController.getView().getModel("i18n").getResourceBundle().getText("campoobrigatorio"),
                         description: oController.getView().getModel("i18n").getResourceBundle().getText("campocentro"),
@@ -353,8 +355,8 @@ sap.ui.define([
                     oNomeInput.setValueState("None");
                     oSenhaInput.setValueState("None");
                     oConfirmarInput.setValueState("None");
-                    oCentroInput.setValueState("None");
-                    oDepositoInput.setValueState("None");
+                    // oCentroInput.setValueState("None");
+                    // oDepositoInput.setValueState("None");
                     oPerfilInput.setValueState("None");
                     oUsuario.Centro = oUsuario.Centro.toUpperCase();
                     oUsuario.Deposito = oUsuario.Deposito.toUpperCase();
@@ -367,7 +369,7 @@ sap.ui.define([
                         } else {
                             oController.getOwnerComponent().getModel("listaUsuariosModel").getData().push(oUsuario)
                         }
-                    }else{
+                    } else {
                         var vIndex = oController.getOwnerComponent().getModel("listaUsuariosModel").getData().findIndex((oElement) => oUsuario.CodUsuario == oElement.CodUsuario);
                         oController.getOwnerComponent().getModel("listaUsuariosModel").getData()[vIndex] = oUsuario
                     }
@@ -403,10 +405,10 @@ sap.ui.define([
                                     function (result) {
                                     })
                         }).catch(
-                            function (result) {                            
+                            function (result) {
                             })
 
-                }else{
+                } else {
                     oConfirmarButton.setEnabled(true);
                     oConfirmarButton.setBusy(false);
                 }

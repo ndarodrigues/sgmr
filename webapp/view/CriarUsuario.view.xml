@@ -101,7 +101,7 @@
 					</f:FormContainer>		
 					<f:FormContainer title="{i18n>dadosperfil}">
 						<f:formElements>
-							<f:FormElement label="{i18n>centro}">
+							<!-- <f:FormElement label="{i18n>centro}">
 								<f:fields>
 									<Input 
 										id="centroInput"
@@ -124,7 +124,7 @@
 										enabled="{layoutTelaModel>HabilitarTelaCriarUsuario}"										
 										/>
 								</f:fields>
-							</f:FormElement>  
+							</f:FormElement>   -->
 							<f:FormElement label="{i18n>perfil}">
 								<f:fields>
 									<Input 

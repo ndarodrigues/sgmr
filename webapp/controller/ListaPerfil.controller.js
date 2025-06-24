@@ -18,45 +18,54 @@ sap.ui.define([
                 oController = this;
                 oView = oController.getView();
 
-                var oPerfil = [{
-                    CodigoPerfil: 0,
-                    DescrPerfil: "MASTER",
-                    Sincronizado: "N",
-                    HabilitarTelaCriarPerfil: true,
-                    AutorizacaoSet: [
-                        {
-                            CodigoAutorizacao: "01",
-                            DescrAutorizacao: "INSPEÇÃO MATERIAL RODANTE",
-                            Selecionado: true
-                        },
-                        {
-                            CodigoAutorizacao: "02",
-                            DescrAutorizacao: "MOVIMENTAÇÃO MATERIAL RODANTE",
-                            Selecionado: true
-                        }
+                // var oPerfil = [{
+                //     CodigoPerfil: 0,
+                //     DescrPerfil: "MASTER",
+                //     Sincronizado: "N",
+                //     HabilitarTelaCriarPerfil: true,
+                //     AutorizacaoSet: [
+                //         {
+                //             CodigoAutorizacao: "01",
+                //             DescrAutorizacao: "INSPEÇÃO MATERIAL RODANTE",
+                //             Selecionado: true
+                //         },
+                //         {
+                //             CodigoAutorizacao: "02",
+                //             DescrAutorizacao: "MOVIMENTAÇÃO MATERIAL RODANTE",
+                //             Selecionado: true
+                //         }
 
 
-                    ]},
-                    {
-                        CodigoPerfil: 1,
-                        DescrPerfil: "INSPETOR",
-                        Sincronizado: "N",
-                        HabilitarTelaCriarPerfil: true,
-                        AutorizacaoSet: [
-                            {
-                                CodigoAutorizacao: "01",
-                                DescrAutorizacao: "INSPEÇÃO MATERIAL RODANTE",
-                                Selecionado: true
-                            },
+                //     ]},
+                //     {
+                //         CodigoPerfil: 1,
+                //         DescrPerfil: "INSPETOR",
+                //         Sincronizado: "N",
+                //         HabilitarTelaCriarPerfil: true,
+                //         AutorizacaoSet: [
+                //             {
+                //                 CodigoAutorizacao: "01",
+                //                 DescrAutorizacao: "INSPEÇÃO MATERIAL RODANTE",
+                //                 Selecionado: true
+                //             },
 
 
-                        ]
-                    }
-                ]
+                //         ]
+                //     }
+                // ]
 
+                try {
+                    var perfis = oController.getOwnerComponent().getModel("listaPerfilModel").getData()
+                    perfis.forEach(element => {
+                        element.Selecionado = false
 
-                oController.getOwnerComponent().getModel("listaPerfilModel").setData(oPerfil);
-                oController.getOwnerComponent().getModel("listaPerfilModel").refresh()
+                    });
+                    oController.getOwnerComponent().getModel("listaPerfilModel").refresh()
+                    // oController.getOwnerComponent().getModel("listaPerfilModel").refresh()
+                } catch (error) {
+
+                }
+
 
 
                 oView.bindElement("listaPerfilModel>/");
@@ -180,35 +189,66 @@ sap.ui.define([
 
             onPerfilPress: function (oEvent) {
                 var oPerfil = oEvent.getSource().getBindingContext("listaPerfilModel").getModel().getProperty(oEvent.getSource().getBindingContext("listaPerfilModel").getPath());
-                var oObjetoNovo = JSON.parse(JSON.stringify(oPerfil));
-                oObjetoNovo.HabilitarTelaCriarPerfil = false
-                oController.getOwnerComponent().getModel("perfilCriarModel").setData(oObjetoNovo);
-                oController.getOwnerComponent().getModel("perfilCriarModel").refresh()
-                oController.getOwnerComponent().getRouter().navTo("CriarPerfil", null, true);
+                try {
+
+                    var oObjetoNovo = JSON.parse(JSON.stringify(oPerfil));
+
+                    oObjetoNovo.HabilitarTelaCriarPerfil = false
+
+                    oObjetoNovo.AutorizacaoSet.forEach(element => {
+                        element.Selecionado = false
+                    });
+                    oController.getOwnerComponent().getModel("perfilCriarModel").setData(oObjetoNovo);
+                    oController.getOwnerComponent().getModel("perfilCriarModel").refresh()
+                    oController.getOwnerComponent().getRouter().navTo("CriarPerfil", null, true);
+
+                } catch (error) {
+
+                    var oPerfil = oController.getOwnerComponent().getModel("perfilCriarModel").getData();
+
+                    var aPerfil = {
+                        CodigoPerfil: oPerfil.CodigoPerfil,
+                        DescrPerfil: oPerfil.DescrPerfil,
+                        Sincronizado: "N",
+                        HabilitarTelaCriarPerfil: true,
+                        AutorizacaoSet: []
+                    }
+
+                    oPerfil.AutorizacaoSet.forEach(element => {
+                        if (element.Selecionado == true) {
+                            aPerfil.AutorizacaoSet.push(element)
+                        }
+
+
+                    });
+
+                    oController.getOwnerComponent().getModel("perfilCriarModel").setData(aPerfil);
+                    oController.getOwnerComponent().getModel("perfilCriarModel").refresh()
+                    oController.getOwnerComponent().getRouter().navTo("CriarPerfil", null, true);
+                }
+
             },
 
             onCriarPerfil: function (oEvent) {
+
+                var listaAutorizacao = oController.getOwnerComponent().getModel("listaAutorizacao").getData()
 
                 var oPerfil = {
                     CodigoPerfil: 0,
                     DescrPerfil: "",
                     Sincronizado: "N",
                     HabilitarTelaCriarPerfil: true,
-                    AutorizacaoSet: [
-                        {
-                            CodigoAutorizacao: "01",
-                            DescrAutorizacao: "INSPEÇÃO MATERIAL RODANTE",
-                            Selecionado: false
-                        }, {
-                            CodigoAutorizacao: "02",
-                            DescrAutorizacao: "MOVIMENTAÇÃO MATERIAL RODANTE",
-                            Selecionado: false
-                        }
-                        
-
-
-                    ]
+                    AutorizacaoSet: []
                 }
+
+                if (listaAutorizacao.length != undefined) {
+                    listaAutorizacao.forEach(element => {
+                        element.Selecionado = false
+                        oPerfil.AutorizacaoSet.push(element)
+
+                    });
+                }
+
 
                 oController.getOwnerComponent().getModel("perfilCriarModel").setData(oPerfil);
                 oController.getOwnerComponent().getModel("perfilCriarModel").refresh()

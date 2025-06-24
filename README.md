@@ -7,7 +7,7 @@
 |**Generation Platform**<br>Visual Studio Code|
 |**Floorplan Used**<br>simple|
 |**Service Type**<br>SAP System (ABAP On Premise)|
-|**Service URL**<br>http://192.168.9.4:8000//sap/opu/odata/sap/ZSGMR_MOBILE_SRV
+|**Service URL**<br>http://192.168.9.4:8000//sap/opu/odata/ptlgmr/SGMR_MOB_SRV
 |**Module Name**<br>sgmr|
 |**Application Title**<br>SGMR Mobile|
 |**Namespace**<br>com.pontual|

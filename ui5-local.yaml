@@ -31,14 +31,14 @@ server:
         ignoreCertError: false # If set to true, certificate errors will be ignored. E.g. self-signed certificates will be accepted
         backend:
           - path: /sap
-            url: http://192.168.9.4:8000/
-            client: '400'
+            url: https://sap.pontualca.com.br:44301/
+            client: '111'
     - name: sap-fe-mockserver
       beforeMiddleware: csp
       configuration:
         mountPath: /
         services:
-          - urlPath: /sap/opu/odata/sap/ZSGMR_MOBILE_SRV
+          - urlPath: /sap/opu/odata/ptlgmr/SGMR_MOB_SRV
             metadataPath: ./webapp/localService/metadata.xml
             mockdataPath: ./webapp/localService/data
             generateMockData: true
