@@ -281,17 +281,17 @@ sap.ui.define([
                 }
 
                 if (oUsuario.Centro == "") {
-                    oCentroInput.setValueState("Error");
-                    var oMockMessage = {
+                    // oCentroInput.setValueState("Error");
+                    // var oMockMessage = {
 
-                        type: 'Error',
-                        title: oController.getView().getModel("i18n").getResourceBundle().getText("campoobrigatorio"),
-                        description: oController.getView().getModel("i18n").getResourceBundle().getText("campocentro"),
-                        subtitle: oController.getView().getModel("i18n").getResourceBundle().getText("centro"),
-                        counter: 1
-                    };
-                    aMockMessages.push(oMockMessage)
-                    vPodeGravar = false;
+                    //     type: 'Error',
+                    //     title: oController.getView().getModel("i18n").getResourceBundle().getText("campoobrigatorio"),
+                    //     description: oController.getView().getModel("i18n").getResourceBundle().getText("campocentro"),
+                    //     subtitle: oController.getView().getModel("i18n").getResourceBundle().getText("centro"),
+                    //     counter: 1
+                    // };
+                    // aMockMessages.push(oMockMessage)
+                    // vPodeGravar = false;
                 } else {
                     if (oUsuario.Centro.length < 4) {
                         oCentroInput.setValueState("Error");
@@ -308,16 +308,16 @@ sap.ui.define([
                 }
 
                 if (oUsuario.Deposito == "") {
-                    oDepositoInput.setValueState("Error");
-                    var oMockMessage = {
-                        type: 'Error',
-                        title: oController.getView().getModel("i18n").getResourceBundle().getText("campoobrigatorio"),
-                        description: oController.getView().getModel("i18n").getResourceBundle().getText("campodeposito"),
-                        subtitle: oController.getView().getModel("i18n").getResourceBundle().getText("deposito"),
-                        counter: 1
-                    };
-                    aMockMessages.push(oMockMessage)
-                    vPodeGravar = false;
+                    // oDepositoInput.setValueState("Error");
+                    // var oMockMessage = {
+                    //     type: 'Error',
+                    //     title: oController.getView().getModel("i18n").getResourceBundle().getText("campoobrigatorio"),
+                    //     description: oController.getView().getModel("i18n").getResourceBundle().getText("campodeposito"),
+                    //     subtitle: oController.getView().getModel("i18n").getResourceBundle().getText("deposito"),
+                    //     counter: 1
+                    // };
+                    // aMockMessages.push(oMockMessage)
+                    // vPodeGravar = false;
                 } else {
                     if (oUsuario.Deposito.length < 4) {
                         oDepositoInput.setValueState("Error");
@@ -386,18 +386,19 @@ sap.ui.define([
                                                 oController.usuarioUpdate().then(
                                                     function (result) {
                                                         oController.closeBusyDialog();
+                                                        oConfirmarButton.setEnabled(true);
+                                                        oConfirmarButton.setBusy(false);
                                                         oController.getRouter().navTo("ListaUsuario", {}, true /*no history*/);
-                                                        oConfirmarButton.setEnabled(false);
-                                                        oConfirmarButton.setBusy(true);
                                                     }).catch(
                                                         function (result) {
                                                         })
 
                                             } else {
                                                 oController.closeBusyDialog();
+                                                oConfirmarButton.setEnabled(true);
+                                                oConfirmarButton.setBusy(false);
                                                 oController.getRouter().navTo("ListaUsuario", {}, true /*no history*/);
-                                                oConfirmarButton.setEnabled(false);
-                                                oConfirmarButton.setBusy(true);
+
                                             }
                                         }
                                     });

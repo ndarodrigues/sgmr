@@ -189,31 +189,7 @@ sap.ui.define([
             },
 
             onExibirUsuario: function (oEvent) {
-                var oUsuario = oEvent.getSource().getBindingContext("listaUsuariosModel").getModel().getProperty(oEvent.getSource().getBindingContext("listaUsuariosModel").getPath());
-                var oUsuario = {
-                    CodUsuario: "",
-                    Nome: "",
-                    Senha: "123",
-                    ConfirmarSenha: "",
-                    Centro: "UMYA",
-                    Deposito: "DPLU",
-                    Perfil: "",
-                    CodigoPerfil: "",
-                    Sincronizado: "N",
-                    Bloqueado: false,
-                    Tipomensagem: "",
-                    Mensagem: "",
-                    Autorizacoes: [{
-                        CodigoAutorizacao: "01",
-                        DescrAutorizacao: "INSPEÇÃO MATERIAL RODANTE",
-                        Selecionado: true
-                    },
-                    {
-                        CodigoAutorizacao: "02",
-                        DescrAutorizacao: "MOVIMENTAÇÃO MATERIAL RODANTE",
-                        Selecionado: true
-                    }]
-                }
+                var oUsuario = oEvent.getSource().getBindingContext("listaUsuariosModel").getModel().getProperty(oEvent.getSource().getBindingContext("listaUsuariosModel").getPath());               
                 var oUsuario = JSON.parse(JSON.stringify(oUsuario));
                 oUsuario.Senha = oController.descriptografar(oUsuario.Senha)
                 oUsuario.ConfirmarSenha = oUsuario.Senha
