@@ -423,7 +423,7 @@ sap.ui.define([
                     resolve()
                 }).catch(
                     function (result) {
-                        oController.closeBusyDialog();
+                        // Não fechar o busy dialog aqui - será fechado no método sincronizar principal
                         reject(result)
                     })
             })
@@ -845,7 +845,7 @@ sap.ui.define([
                             resolve()
                         }).catch(
                             function (result) {
-                                oController.closeBusyDialog();
+                                // Não fechar o busy dialog aqui - será fechado no método sincronizar principal
                                 reject()
                             })
                 } else {
@@ -908,20 +908,145 @@ sap.ui.define([
             oController = this;
             return new Promise((resolve, reject) => {
                 if (oController.checkConnection() == true) {
-                    // Promise.all([
-                    // oController.atualizarPerfil(),
-                    // oController.atualizarUsuario()
-                    // ]).then(
-                    // function (result) {
-                    resolve()
-                    // }).catch(
-                    // function (result) {
-                    //     reject()
-                    // }
-                    // );
+                    Promise.all([
+                        oController.atualizarPerfil(),
+                        oController.atualizarUsuario(),
+                        oController.atualizarMaterialRodante()
+                    ]).then(
+                        function (result) {
+                            resolve()
+                        }).catch(
+                            function (result) {
+                                reject()
+                            });
                 } else {
                     reject()
                 }
+            })
+        },
+
+        atualizarUsuario: function () {
+            return new Promise((resolve, reject) => {
+                oController.lerTabelaIndexDB("tb_usuario").then(
+                    function (result) {
+                        if (result.tb_usuario) {
+                            oController.getOwnerComponent().getModel("listaUsuariosModel").setData(result.tb_usuario);
+                            oController.prepararUsuario().then(
+                                function (result) {
+                                    resolve()
+                                }).catch(
+                                    function (result) {
+                                        reject()
+                                    })
+                        } else {
+                            resolve()
+                        }
+                    }).catch(
+                        function (result) {
+                            reject(result)
+                        })
+            })
+        },
+
+        prepararUsuario: function () {
+            return new Promise((resolve, reject) => {
+                oController.atualizarBusyDialog(oController.getView().getModel("i18n").getResourceBundle().getText("atualizandousuarios"));
+                var aUsuarios = oController.getOwnerComponent().getModel("listaUsuariosModel").getData();
+                var aUsuarioSet = []
+
+                if (aUsuarios && aUsuarios.length) {
+                    aUsuarios.forEach(oUsuario => {
+                        if (oUsuario.Bloqueado == true) {
+                            oUsuario.Bloqueado = "X"
+                        } else {
+                            oUsuario.Bloqueado = ""
+                        }
+                        switch (oUsuario.Sincronizado) {
+                            case "N":
+                                var oUsuarioSet = {
+                                    "CodUsuario": oUsuario.CodUsuario,
+                                    "Nome": oUsuario.Nome,
+                                    "Senha": oUsuario.Senha,
+                                    "Centro": oUsuario.Centro,
+                                    "Deposito": oUsuario.Deposito,
+                                    "Bloqueado": oUsuario.Bloqueado,
+                                    "Perfil": oUsuario.CodigoPerfil,
+                                    "Sincronizado": "N"
+                                }
+                                aUsuarioSet.push(oController.enviarDados("UsuarioSet", oUsuarioSet))
+                                break;
+                            case "U":
+                                var oUsuarioSet = {
+                                    "CodUsuario": oUsuario.CodUsuario,
+                                    "Nome": oUsuario.Nome,
+                                    "Senha": oUsuario.Senha,
+                                    "Centro": oUsuario.Centro,
+                                    "Deposito": oUsuario.Deposito,
+                                    "Bloqueado": oUsuario.Bloqueado,
+                                    "Perfil": oUsuario.CodigoPerfil,
+                                    "Sincronizado": "U"
+                                }
+                                aUsuarioSet.push(oController.enviarDados("UsuarioSet", oUsuarioSet))
+                                break;
+                            case "E":
+                                var oUsuarioSet = {
+                                    "CodUsuario": oUsuario.CodUsuario,
+                                    "Nome": oUsuario.Nome,
+                                    "Senha": oUsuario.Senha,
+                                    "Centro": oUsuario.Centro,
+                                    "Deposito": oUsuario.Deposito,
+                                    "Bloqueado": oUsuario.Bloqueado,
+                                    "Perfil": oUsuario.CodigoPerfil,
+                                    "Sincronizado": "E"
+                                }
+                                aUsuarioSet.push(oController.enviarDados("UsuarioSet", oUsuarioSet))
+                                break;
+                            default:
+                                break;
+                        }
+                    });
+                }
+
+                if (aUsuarioSet.length > 0) {
+                    Promise.all(aUsuarioSet).then(
+                        function (result) {
+                            result.forEach(oUsuario => {
+                                var vTipo
+                                switch (oUsuario.Tipomensagem) {
+                                    case "S":
+                                        vTipo = "Success"
+                                        break;
+                                    case "E":
+                                        vTipo = "Error"
+                                        break;
+                                    default:
+                                        break;
+                                }
+                                var oMensagem = {
+                                    "title": "Gestão de usuário",
+                                    "description": oUsuario.Mensagem,
+                                    "type": vTipo,
+                                    "subtitle": oUsuario.Mensagem
+                                }
+                                oController.getOwnerComponent().getModel("mensagensModel").getData().push(oMensagem)
+                            });
+                            resolve()
+                        }).catch(
+                            function (result) {
+                                // Não fechar o busy dialog aqui - será fechado no método sincronizar principal
+                                reject()
+                            })
+                } else {
+                    resolve()
+                }
+            })
+        },
+
+        atualizarMaterialRodante: function () {
+            return new Promise((resolve, reject) => {
+                // Material Rodante pode não existir em todas as implementações
+                // Por isso, sempre resolve com sucesso
+                resolve()
             })
         },
 
@@ -1342,7 +1467,7 @@ sap.ui.define([
 
                 openRequest.onerror = function (event) {
                     console.log(openRequest.errorCode);
-                    oController.closeBusyDialog();
+                    // Não fechar o busy dialog aqui - será fechado no onSincronizarGeral
                     reject();
                 };
 
@@ -1350,19 +1475,19 @@ sap.ui.define([
                     db = event.target.result;
                     db.onerror = function () {
                         console.log(db.errorCode);
-                        oController.closeBusyDialog();
+                        // Não fechar o busy dialog aqui - será fechado no onSincronizarGeral
                         reject();
                     };
                     var oTransaction = db.transaction([pTabela], "readwrite");
                     oTransaction.oncomplete = function (event) {
                         db.close();
-                        oController.closeBusyDialog();
+                        // Não fechar o busy dialog aqui - será fechado no onSincronizarGeral
                         resolve();
                     };
 
                     oTransaction.onerror = function (event) {
                         db.close();
-                        oController.closeBusyDialog();
+                        // Não fechar o busy dialog aqui - será fechado no onSincronizarGeral
                         reject();
                     };
                     var oObjectStore = oTransaction.objectStore(pTabela);
@@ -1388,7 +1513,7 @@ sap.ui.define([
 
                 openRequest.onerror = function (event) {
                     console.log(openRequest.errorCode);
-                    oController.closeBusyDialog();
+                    // Não fechar o busy dialog aqui - será fechado no onSincronizarGeral
                     reject()
                 };
 
@@ -1396,7 +1521,7 @@ sap.ui.define([
                     db = event.target.result;
                     db.onerror = function () {
                         console.log(db.errorCode);
-                        oController.closeBusyDialog();
+                        // Não fechar o busy dialog aqui - será fechado no onSincronizarGeral
                         reject()
                     };
                     var objectStore = db.transaction([pTabela], "readwrite").objectStore(pTabela);
@@ -1410,7 +1535,7 @@ sap.ui.define([
 
                         transaction.onerror = function (event) {
                             db.close();
-                            oController.closeBusyDialog();
+                            // Não fechar o busy dialog aqui - será fechado no onSincronizarGeral
                             reject();
                         };
                         var values = pData
@@ -1508,19 +1633,19 @@ sap.ui.define([
                                             })
                                     }).catch(
                                         function (result) {
-                                            oController.closeBusyDialog();
+                                            // Não fechar o busy dialog aqui - será fechado no método sincronizar principal
                                             reject()
                                         })
 
                             }).catch(
                                 function (result) {
-                                    oController.closeBusyDialog();
+                                    // Não fechar o busy dialog aqui - será fechado no método sincronizar principal
                                     reject()
                                 })
 
                     }).catch(
                         function (result) {
-                            oController.closeBusyDialog();
+                            // Não fechar o busy dialog aqui - será fechado no método sincronizar principal
                             reject()
                         })
 

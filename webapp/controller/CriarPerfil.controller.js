@@ -142,7 +142,7 @@ sap.ui.define([
                 if (vPodeGravar == true) {
                     oPerfilInput.setValueState("None");
                     oView.byId("idListaAutorizacoesTable").getSelectedContextPaths().forEach(element => {
-                        // oController.getOwnerComponent().getModel("perfilCriarModel").setProperty(element + '/Selecionado', true )
+                       // oController.getOwnerComponent().getModel("perfilCriarModel").setProperty(element + '/Selecionado', true )
                     });
 
                     if (oController.getOwnerComponent().getModel("listaPerfilModel").getData().length == undefined) {
@@ -151,15 +151,71 @@ sap.ui.define([
                     } else {
                         oController.getOwnerComponent().getModel("listaPerfilModel").getData().push(oPerfil)
                     }
+                    // Clonagem segura para evitar referências circulares
+                    var aPerfilData = oController.getOwnerComponent().getModel("listaPerfilModel").getData();
+                    var oObjetoNovo = [];
+                    
+                    if (aPerfilData && aPerfilData.length) {
+                        aPerfilData.forEach(function(perfil) {
+                            var oPerfilClone = {
+                                CodigoPerfil: perfil.CodigoPerfil,
+                                DescrPerfil: perfil.DescrPerfil,
+                                Sincronizado: perfil.Sincronizado,
+                                HabilitarTelaCriarPerfil: perfil.HabilitarTelaCriarPerfil,
+                                AutorizacaoSet: []
+                            };
+                            
+                            if (perfil.AutorizacaoSet && perfil.AutorizacaoSet.length) {
+                                perfil.AutorizacaoSet.forEach(function(auth) {
+                                    oPerfilClone.AutorizacaoSet.push({
+                                        CodigoPerfil: auth.CodigoPerfil,
+                                        CodigoAutorizacao: auth.CodigoAutorizacao,
+                                        DescrAutorizacao: auth.DescrAutorizacao,
+                                        Selecionado: auth.Selecionado
+                                    });
+                                });
+                            }
+                            
+                            oObjetoNovo.push(oPerfilClone);
+                        });
+                    }
+                    oController.getOwnerComponent().getModel("listaPerfilModel").refresh();
+                    oController.limparTabelaIndexDB("tb_perfil").then(
+                        function (result) {
+                            oController.gravarTabelaIndexDB("tb_perfil", oObjetoNovo).then(
+                                function (result) {
+                                    MessageToast.show(oController.getView().getModel("i18n").getResourceBundle().getText("dadossucesso"), {
+                                        duration: 500,                  // default
+                                        onClose: function () {
+                                            if (oController.checkConnection() == true) {
+                                                oController.perfilUpdate().then(
+                                                    function (result) {
+                                                        oController.closeBusyDialog();
+                                                        oController.getRouter().navTo("ListaPerfil", {}, true /*no history*/);
+                                                        oConfirmarButton.setEnabled(true);
+                                                        oConfirmarButton.setBusy(false);
+                                                    }).catch(
+                                                        function (result) {
 
-                    oController.getOwnerComponent().getModel("listaPerfilModel").refresh()
-                    oController.closeBusyDialog();
-                    oController.getRouter().navTo("ListaPerfil", {}, true /*no history*/);
-                    oConfirmarButton.setEnabled(true);
-                    oConfirmarButton.setBusy(false);
-                    oController.prepararPerfil()
+                                                        })
+                                            } else {
+                                                oController.closeBusyDialog();
+                                                oController.getRouter().navTo("ListaPerfil", {}, true /*no history*/);
+                                                oConfirmarButton.setEnabled(true);
+                                                oConfirmarButton.setBusy(false);
+                                            }
 
-                } else {
+                                        }
+                                    });
+                                }).catch(
+                                    function (result) {
+
+                                    })
+                        }).catch(
+                            function (result) {
+
+                            })
+                }else{
                     oConfirmarButton.setEnabled(true);
                     oConfirmarButton.setBusy(false);
                 }
