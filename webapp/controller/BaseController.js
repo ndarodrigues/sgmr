@@ -772,90 +772,6 @@ sap.ui.define([
             return oHeader;
         },
 
-        prepararPerfil1: function () {
-            // return new Promise((resolve, reject) => {
-            // oController.atualizarBusyDialog(oController.getView().getModel("i18n").getResourceBundle().getText("atualizandoperfis"));
-            var aPerfis = oController.getOwnerComponent().getModel("listaPerfilModel").getData();
-            var aPerfilSet = []
-
-            aPerfis.forEach(oPerfil => {
-                switch (oPerfil.Sincronizado) {
-                    case "N":
-                        var oPerfilSet = {
-                            "CodigoPerfil": 0,
-                            "DescrPerfil": oPerfil.DescrPerfil,
-                            "Sincronizado": "N",
-                            "AutorizacaoSet": []
-                        }
-                        oPerfil.AutorizacaoSet.forEach(oAutorizacao => {
-                            if (oAutorizacao.Selecionado == true) {
-                                var oAutorizacaoSet =
-                                {
-                                    "CodigoPerfil": 0,
-                                    "CodigoAutorizacao": oAutorizacao.CodigoAutorizacao,
-                                    "DescrAutorizacao": oAutorizacao.DescrAutorizacao
-                                }
-                                oPerfilSet.AutorizacaoSet.push(oAutorizacaoSet)
-                            }
-                        })
-                        aPerfilSet.push(oController.enviarDados("PerfilSet", oPerfilSet))
-                        break;
-                    case "E":
-                        var oPerfilSet = {
-                            "CodigoPerfil": oPerfil.CodigoPerfil,
-                            "DescrPerfil": oPerfil.DescrPerfil,
-                            "Sincronizado": "E",
-                            "AutorizacaoSet": []
-                        }
-                        aPerfilSet.push(oController.enviarDados("PerfilSet", oPerfilSet))
-                        break;
-
-                    default:
-                        break;
-                }
-
-
-            });
-
-            if (aPerfilSet.length > 0) {
-                // Promise.all(aPerfilSet).then(
-                // function (result) {
-                result.forEach(oPerfil => {
-                    var vTipo
-                    switch (oPerfil.Tipomensagem) {
-                        case "S":
-                            vTipo = "Success"
-                            break;
-                        case "E":
-                            vTipo = "Error"
-                            break;
-                        default:
-                            break;
-                    }
-                    var oMensagem = {
-                        "title": "Gestão de perfil",
-                        "description": oPerfil.Mensagem,
-                        "type": vTipo,
-                        "subtitle": oPerfil.Mensagem
-                    }
-                    oController.getOwnerComponent().getModel("mensagensModel").getData().push(oMensagem)
-
-                });
-
-                // resolve()
-                // }).catch(
-                //     function (result) {
-                //         oController.closeBusyDialog();
-                //         // reject()
-                //     })
-                // } else {
-                // resolve()
-                // }
-
-                // })
-            }
-        },
-
         prepararPerfil: function () {
             return new Promise((resolve, reject) => {
                 oController.atualizarBusyDialog(oController.getView().getModel("i18n").getResourceBundle().getText("atualizandoperfis"));
@@ -993,16 +909,16 @@ sap.ui.define([
             return new Promise((resolve, reject) => {
                 if (oController.checkConnection() == true) {
                     // Promise.all([
-                        // oController.atualizarPerfil(),
-                        // oController.atualizarUsuario()
+                    // oController.atualizarPerfil(),
+                    // oController.atualizarUsuario()
                     // ]).then(
-                            // function (result) {
-                                resolve()
-                            // }).catch(
-                                // function (result) {
-                                //     reject()
-                                // }
-                            // );
+                    // function (result) {
+                    resolve()
+                    // }).catch(
+                    // function (result) {
+                    //     reject()
+                    // }
+                    // );
                 } else {
                     reject()
                 }
@@ -1289,8 +1205,8 @@ sap.ui.define([
                                 "Deposito": oUsuario.Deposito,
                                 "Bloqueado": oUsuario.Bloqueado,
                                 "Perfil": oUsuario.CodigoPerfil.toString(),
-                                "Sincronizado": "N"                               
-                                             
+                                "Sincronizado": "N"
+
                             }
                             aUsuarioSet.push(oController.enviarDados("UsuarioSet", oUsuarioSet))
                             break;
@@ -1545,6 +1461,47 @@ sap.ui.define([
                                     function (result) {
                                         var aPerfis = oController.getOwnerComponent().getModel("listaUsuariosModel").getData();
                                         var aGravacoes = [oController.gravarTabelaIndexDB("tb_usuario", aPerfis)]
+                                        Promise.all(aGravacoes).then(
+                                            function (result) {
+                                                resolve()
+                                            })
+                                    }).catch(
+                                        function (result) {
+                                            oController.closeBusyDialog();
+                                            reject()
+                                        })
+
+                            }).catch(
+                                function (result) {
+                                    oController.closeBusyDialog();
+                                    reject()
+                                })
+
+                    }).catch(
+                        function (result) {
+                            oController.closeBusyDialog();
+                            reject()
+                        })
+
+            })
+        },
+
+        perfilUpdate: function () {
+            oController = this;
+            return new Promise((resolve, reject) => {
+
+                oController.atualizarPerfil().then(
+                    function (result) {
+                        var aLeituras = [oController.carregarPerfil()]
+                        Promise.all(aLeituras).then(
+                            function (result) {
+                                //Preencher aqui as tabelas que precisam ser limpas antes da atualização
+                                oController.atualizarBusyDialog(oController.getView().getModel("i18n").getResourceBundle().getText("atualizandoperfis"));
+                                var aLimpezas = [oController.limparTabelaIndexDB("tb_perfil")]
+                                Promise.all(aLimpezas).then(
+                                    function (result) {
+                                        var aPerfis = oController.getOwnerComponent().getModel("listaPerfilModel").getData();
+                                        var aGravacoes = [oController.gravarTabelaIndexDB("tb_perfil", aPerfis)]
                                         Promise.all(aGravacoes).then(
                                             function (result) {
                                                 resolve()
