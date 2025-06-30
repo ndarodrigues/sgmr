@@ -49,8 +49,8 @@ sap.ui.define([
                 oNomeInput.setValueState("None");
                 oSenhaInput.setValueState("None");
                 oConfirmarInput.setValueState("None");
-                oCentroInput.setValueState("None");
-                oDepositoInput.setValueState("None");
+                //oCentroInput.setValueState("None");
+                //oDepositoInput.setValueState("None");
                 oPerfilInput.setValueState("None");
 
                 var oConfirmarButton = oView.byId("confirmarUsuarioButton")
