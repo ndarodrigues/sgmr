@@ -57,7 +57,7 @@
                                         maxLength="12"
 										required="true"
 										showClearIcon="true"
-										enabled="{layoutTelaModel>HabilitarTelaCriarUsuario}"
+										enabled="{layoutTelaModel>HabilitarEditarUsuario}"
 										/>
 								</f:fields>
 							</f:FormElement>
@@ -141,7 +141,7 @@
 							</f:FormElement>      
 							<f:FormElement label="{i18n>bloqueado}">
 								<f:fields>
-									<Switch state="{criarUsuarioModel>Bloqueado}" customTextOn="{i18n>sim}" customTextOff="{i18n>nao}" enabled="{layoutTelaModel>HabilitarTelaCriarUsuario}"	>
+									<Switch id="bloqueadoSwitch" state="{criarUsuarioModel>Bloqueado}" customTextOn="{i18n>sim}" customTextOff="{i18n>nao}" enabled="{layoutTelaModel>HabilitarTelaCriarUsuario}"	>
 										<layoutData>
 											<FlexItemData growFactor="1" />
 										</layoutData>

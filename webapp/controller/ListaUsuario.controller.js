@@ -18,41 +18,6 @@ sap.ui.define([
                 oController = this;
                 oView = oController.getView();
 
-                // var oUsuario = [{
-                //     CodUsuario: "01",
-                //     Nome: "USUARIO1",
-                //     Senha: "",
-                //     ConfirmarSenha: "",
-                //     Centro: "UMYA",
-                //     Deposito: "DPLU",
-                //     Perfil: "MASTER",
-                //     CodigoPerfil: "01",
-                //     Sincronizado: "N",
-                //     Bloqueado: false,
-                //     Tipomensagem: "",
-                //     Mensagem: "",
-                //     Autorizacoes: []
-                // },
-                // {
-                //     CodUsuario: "02",
-                //     Nome: "USUARIO2",
-                //     Senha: "",
-                //     ConfirmarSenha: "",
-                //     Centro: "UMYA",
-                //     Deposito: "DPLU",
-                //     Perfil: "INSPETOR",
-                //     CodigoPerfil: "01",
-                //     Sincronizado: "N",
-                //     Bloqueado: false,
-                //     Tipomensagem: "",
-                //     Mensagem: "",
-                //     Autorizacoes: []
-                // }]
-
-                // oController.getOwnerComponent().getModel("listaUsuariosModel").setData(oUsuario);
-                // oController.getOwnerComponent().getModel("listaUsuariosModel").refresh()
-
-
                 oView.bindElement("listaUsuariosModel>/");
                 oView.bindElement("layoutTelaModel>/");
                 oView.bindElement("busyDialogModel>/")
@@ -183,7 +148,16 @@ sap.ui.define([
                 oUsuario.Sincronizado = "U"
                 oUsuario.Senha = oController.descriptografar(oUsuario.Senha)
                 oUsuario.ConfirmarSenha = oUsuario.Senha
+                
+                // Garantir que Bloqueado seja sempre boolean para o Switch
+                if (oUsuario.Bloqueado === "X" || oUsuario.Bloqueado === true) {
+                    oUsuario.Bloqueado = true;
+                } else {
+                    oUsuario.Bloqueado = false;
+                }
+                
                 oController.getOwnerComponent().getModel("criarUsuarioModel").setData(oUsuario);
+                oController.getOwnerComponent().getModel("layoutTelaModel").setProperty("/HabilitarEditarUsuario", false);
                 oController.getOwnerComponent().getModel("layoutTelaModel").setProperty("/HabilitarTelaCriarUsuario", true);
                 oController.getOwnerComponent().getRouter().navTo("CriarUsuario", null, true);
             },
@@ -193,7 +167,16 @@ sap.ui.define([
                 var oUsuario = JSON.parse(JSON.stringify(oUsuario));
                 oUsuario.Senha = oController.descriptografar(oUsuario.Senha)
                 oUsuario.ConfirmarSenha = oUsuario.Senha
+                
+                // Garantir que Bloqueado seja sempre boolean para o Switch
+                if (oUsuario.Bloqueado === "X" || oUsuario.Bloqueado === true) {
+                    oUsuario.Bloqueado = true;
+                } else {
+                    oUsuario.Bloqueado = false;
+                }
+                
                 oController.getOwnerComponent().getModel("criarUsuarioModel").setData(oUsuario);
+                oController.getOwnerComponent().getModel("layoutTelaModel").setProperty("/HabilitarEditarUsuario", false);
                 oController.getOwnerComponent().getModel("layoutTelaModel").setProperty("/HabilitarTelaCriarUsuario", false);
                 oController.getOwnerComponent().getRouter().navTo("CriarUsuario", null, true);
             },
@@ -225,6 +208,7 @@ sap.ui.define([
                 // });
 
                 oController.getOwnerComponent().getModel("criarUsuarioModel").setData(oUsuario);
+                oController.getOwnerComponent().getModel("layoutTelaModel").setProperty("/HabilitarEditarUsuario", true);
                 oController.getOwnerComponent().getModel("layoutTelaModel").setProperty("/HabilitarTelaCriarUsuario", true);
                 oController.getOwnerComponent().getRouter().navTo("CriarUsuario", null, true);
             },

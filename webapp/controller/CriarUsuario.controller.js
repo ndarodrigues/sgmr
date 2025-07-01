@@ -157,10 +157,10 @@ sap.ui.define([
                     oController.getOwnerComponent().getModel("criarUsuarioModel").setProperty("/CodigoPerfil", oPerfil.CodigoPerfil);
                     oController.getOwnerComponent().getModel("criarUsuarioModel").setProperty("/Autorizacoes", oPerfil.AutorizacaoSet);
                     oController.getOwnerComponent().getModel("criarUsuarioModel").refresh()
-                    // var aFilters = []
-                    // var filter = new sap.ui.model.Filter({ path: "Selecionado", operator: sap.ui.model.FilterOperator.EQ, value1: true });
-                    // aFilters.push(filter);
-                    // this.getView().byId("idListaAutorizacoesTable").getBinding("items").filter(aFilters, "Application");
+                    var aFilters = []
+                    var filter = new sap.ui.model.Filter({ path: "Selecionado", operator: sap.ui.model.FilterOperator.EQ, value1: true });
+                    aFilters.push(filter);
+                    this.getView().byId("idListaAutorizacoesTable").getBinding("items").filter(aFilters, "Application");
 
                 }
 
@@ -391,6 +391,8 @@ sap.ui.define([
                                                         oController.getRouter().navTo("ListaUsuario", {}, true /*no history*/);
                                                     }).catch(
                                                         function (result) {
+                                                        oConfirmarButton.setBusy(false);
+                                                      oController.getRouter().navTo("ListaUsuario", {}, true /*no history*/);
                                                         })
 
                                             } else {

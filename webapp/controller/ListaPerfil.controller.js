@@ -195,9 +195,9 @@ sap.ui.define([
 
                     oObjetoNovo.HabilitarTelaCriarPerfil = false
 
-                    oObjetoNovo.AutorizacaoSet.forEach(element => {
+                    /* oObjetoNovo.AutorizacaoSet.forEach(element => {
                         element.Selecionado = false
-                    });
+                    }); */
                     oController.getOwnerComponent().getModel("perfilCriarModel").setData(oObjetoNovo);
                     oController.getOwnerComponent().getModel("perfilCriarModel").refresh()
                     oController.getOwnerComponent().getRouter().navTo("CriarPerfil", null, true);

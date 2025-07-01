@@ -428,6 +428,23 @@ sap.ui.define([
             })
         },
 
+        carregarPerfilIndexDB: function () {
+			oController = this;
+
+			return new Promise((resolve, reject) => {
+
+				oController.lerTabelaIndexDB("tb_perfil").then(
+					function (result) {
+						oController.getOwnerComponent().getModel("listaPerfilModel").setData(result.tb_perfil)
+						resolve()
+					}).catch(
+						function (result) {
+							reject()
+						})
+
+			})
+		},
+
         carregarAutorizacoes: function () {
             return new Promise((resolve, reject) => {
                 oController.atualizarBusyDialog(oController.getView().getModel("i18n").getResourceBundle().getText("sincronizandoautorizacoes"));
@@ -435,7 +452,7 @@ sap.ui.define([
                     var aAutorizacoes = []
                     for (let x = 0; x < result.results.length; x++) {
                         const oAutorizacao = result.results[x];
-                        oAutorizacao.AutorizacaoSet = oAutorizacao;
+                        //oAutorizacao.AutorizacaoSet = oAutorizacao;
                         // oAutorizacao.forEach(element => {
                         //     delete element.__metadata
 
@@ -515,11 +532,11 @@ sap.ui.define([
 
                 if (oController.checkConnection() == true) {
 
-                    //Preencher aqui com todos os serviços que precisam ser chamados e carregados
+                    //Carregar dados do servidor quando há conexão
                     var aLeituras = [
-                        oController.carregarAutorizacoes(),
-                        oController.carregarPerfil(),
-                        oController.carregarUsuario()
+                        oController.carregarAutorizacoes().catch(() => oController.carregarDadosIndexDB("tb_autorizacao", "listaAutorizacao")),
+                        oController.carregarPerfil().catch(() => oController.carregarDadosIndexDB("tb_perfil", "listaPerfilModel")),
+                        oController.carregarUsuario().catch(() => oController.carregarDadosIndexDB("tb_usuario", "listaUsuariosModel"))
                     ]
 
                     Promise.all(aLeituras).then(
@@ -615,8 +632,23 @@ sap.ui.define([
                                 reject(result)
                             })
                 } else {
-                    oController.closeBusyDialog();
-                    reject()
+                    // Sem conexão - carregar dados do IndexedDB
+                    oController.atualizarBusyDialog(oController.getView().getModel("i18n").getResourceBundle().getText("carregaroffline"));
+                    var aLeituras = [
+                        oController.carregarDadosIndexDB("tb_autorizacao", "listaAutorizacao"),
+                        oController.carregarDadosIndexDB("tb_perfil", "listaPerfilModel"),
+                        oController.carregarDadosIndexDB("tb_usuario", "listaUsuariosModel")
+                    ]
+                    
+                    Promise.all(aLeituras).then(
+                        function (result) {
+                            oController.closeBusyDialog();
+                            resolve()
+                        }).catch(
+                            function (result) {
+                                oController.closeBusyDialog();
+                                reject(result)
+                            })
                 }
             })
 
@@ -966,7 +998,7 @@ sap.ui.define([
                                     "Centro": oUsuario.Centro,
                                     "Deposito": oUsuario.Deposito,
                                     "Bloqueado": oUsuario.Bloqueado,
-                                    "Perfil": oUsuario.CodigoPerfil,
+                                    "Perfil": oUsuario.CodigoPerfil.toString(),
                                     "Sincronizado": "N"
                                 }
                                 aUsuarioSet.push(oController.enviarDados("UsuarioSet", oUsuarioSet))
@@ -979,7 +1011,7 @@ sap.ui.define([
                                     "Centro": oUsuario.Centro,
                                     "Deposito": oUsuario.Deposito,
                                     "Bloqueado": oUsuario.Bloqueado,
-                                    "Perfil": oUsuario.CodigoPerfil,
+                                    "Perfil": oUsuario.CodigoPerfil.toString(),
                                     "Sincronizado": "U"
                                 }
                                 aUsuarioSet.push(oController.enviarDados("UsuarioSet", oUsuarioSet))
@@ -992,7 +1024,7 @@ sap.ui.define([
                                     "Centro": oUsuario.Centro,
                                     "Deposito": oUsuario.Deposito,
                                     "Bloqueado": oUsuario.Bloqueado,
-                                    "Perfil": oUsuario.CodigoPerfil,
+                                    "Perfil": oUsuario.CodigoPerfil.toString(),
                                     "Sincronizado": "E"
                                 }
                                 aUsuarioSet.push(oController.enviarDados("UsuarioSet", oUsuarioSet))
@@ -1396,7 +1428,20 @@ sap.ui.define([
 
                 oController.lerTabelaIndexDB(pTabela).then(
                     function (result) {
-                        oController.getOwnerComponent().getModel(pModel).setData(result[pTabela])
+                        var data = result[pTabela];
+                        
+                        // Converter campo Bloqueado para boolean se for dados de usuário
+                        if (pTabela === "tb_usuario" && data && Array.isArray(data)) {
+                            data.forEach(function(oUsuario) {
+                                if (oUsuario.Bloqueado === "X" || oUsuario.Bloqueado === true) {
+                                    oUsuario.Bloqueado = true;
+                                } else {
+                                    oUsuario.Bloqueado = false;
+                                }
+                            });
+                        }
+                        
+                        oController.getOwnerComponent().getModel(pModel).setData(data)
                         resolve()
                     }).catch(
                         function (result) {
@@ -1507,11 +1552,35 @@ sap.ui.define([
 
                 if (oConexao.verificarDisponibilidade) {
                     if (oController.checkConnection() == true) {
-                        if (oConexao.url) {
-                            oController.openBusyDialog();
-                            oController.atualizarBusyDialog("Tentando conexão com o endereço " + oConexao.url);
+                        if (oConexao.url && oConexao.urlsemclient) {
+                            // Validar se a URL tem formato válido
+                            try {
+                                new URL(oConexao.urlsemclient);
+                            } catch (urlError) {
+                                console.error("URL inválida:", oConexao.urlsemclient, urlError);
+                                var oMockMessage = {
+                                    type: 'Error',
+                                    title: 'URL Inválida',
+                                    description: "O endereço configurado não é válido: " + oConexao.urlsemclient,
+                                    subtitle: oController.getView().getModel("i18n").getResourceBundle().getText("conexaoerro"),
+                                    counter: 1
+                                };
+                                oController.getOwnerComponent().getModel("mensagensModel").getData().push(oMockMessage)
+                                reject()
+                                return;
+                            }
 
-                            fetch(oConexao.urlsemclient, { mode: 'no-cors' }).then(r => {
+                            oController.openBusyDialog();
+                            oController.atualizarBusyDialog("Tentando conexão com o endereço " + oConexao.urlsemclient);
+
+                            console.log("Testando conexão com:", oConexao.urlsemclient);
+
+                            fetch(oConexao.urlsemclient, { 
+                                mode: 'no-cors',
+                                method: 'GET',
+                                cache: 'no-cache'
+                            }).then(r => {
+                                console.log("Fetch success:", r);
                                 oController.atualizarBusyDialog("Conexão com o endereço " + oConexao.urlsemclient + " estabelecida com sucesso");
 
                                 var oMockMessage = {
@@ -1523,25 +1592,23 @@ sap.ui.define([
                                 };
 
                                 oController.getOwnerComponent().getModel("mensagensModel").getData().push(oMockMessage)
-
                                 resolve()
-
                             })
-                                .catch(e => {
-                                    oController.atualizarBusyDialog("Não foi possível alcançar o endereço " + oConexao.urlsemclient + "informado");
+                            .catch(e => {
+                                console.error("Fetch error:", e);
+                                oController.atualizarBusyDialog("Não foi possível alcançar o endereço " + oConexao.urlsemclient + " informado");
 
-                                    var oMockMessage = {
-                                        type: 'Error',
-                                        title: oController.getView().getModel("i18n").getResourceBundle().getText("erroservidor"),
-                                        description: "Não foi possível alcançar o endereço " + oConexao.urlsemclient + " informado.",
-                                        subtitle: oController.getView().getModel("i18n").getResourceBundle().getText("conexaoerro"),
-                                        counter: 1
-                                    };
+                                var oMockMessage = {
+                                    type: 'Error',
+                                    title: oController.getView().getModel("i18n").getResourceBundle().getText("erroservidor"),
+                                    description: "Erro de conexão: " + e.message + " - Endereço: " + oConexao.urlsemclient,
+                                    subtitle: oController.getView().getModel("i18n").getResourceBundle().getText("conexaoerro"),
+                                    counter: 1
+                                };
 
-                                    oController.getOwnerComponent().getModel("mensagensModel").getData().push(oMockMessage)
-                                    // reject()
-                                    resolve()
-                                });
+                                oController.getOwnerComponent().getModel("mensagensModel").getData().push(oMockMessage)
+                                resolve() // Resolve para não quebrar o fluxo
+                            });
                         } else {
                             var oMockMessage = {
                                 type: 'Error',
@@ -1576,126 +1643,7 @@ sap.ui.define([
 
         },
 
-        atualizarUsuario: function () {
-            return new Promise((resolve, reject) => {
-                oController.lerTabelaIndexDB("tb_usuario").then(
-                    function (result) {
-                        if (result.tb_usuario) {
-                            oController.getOwnerComponent().getModel("listaUsuariosModel").setData(result.tb_usuario);
-                            oController.prepararUsuario().then(
-                                function (result) {
-                                    resolve()
-                                }).catch(
-                                    function (result) {
-                                        reject()
-                                    })
-                        }
 
-                    }).catch(
-                        function (result) {
-                            reject(result)
-                        })
-
-            })
-        },
-
-        prepararUsuario: function () {
-            return new Promise((resolve, reject) => {
-                oController.atualizarBusyDialog(oController.getView().getModel("i18n").getResourceBundle().getText("atualizandousuarios"));
-                var aUsuarios = oController.getOwnerComponent().getModel("listaUsuariosModel").getData();
-                var aUsuarioSet = []
-
-                aUsuarios.forEach(oUsuario => {
-                    if (oUsuario.Bloqueado == true) {
-                        oUsuario.Bloqueado = "X"
-                    } else {
-                        oUsuario.Bloqueado = ""
-                    }
-                    switch (oUsuario.Sincronizado) {
-                        case "N":
-                            var oUsuarioSet = {
-                                "CodUsuario": oUsuario.CodUsuario,
-                                "Nome": oUsuario.Nome,
-                                "Senha": oUsuario.Senha,
-                                "Centro": oUsuario.Centro,
-                                "Deposito": oUsuario.Deposito,
-                                "Bloqueado": oUsuario.Bloqueado,
-                                "Perfil": oUsuario.CodigoPerfil.toString(),
-                                "Sincronizado": "N"
-
-                            }
-                            aUsuarioSet.push(oController.enviarDados("UsuarioSet", oUsuarioSet))
-                            break;
-                        case "U":
-                            var oUsuarioSet = {
-                                "CodUsuario": oUsuario.CodUsuario,
-                                "Nome": oUsuario.Nome,
-                                "Senha": oUsuario.Senha,
-                                "Centro": oUsuario.Centro,
-                                "Deposito": oUsuario.Deposito,
-                                "Bloqueado": oUsuario.Bloqueado,
-                                "Perfil": oUsuario.CodigoPerfil.toString(),
-                                "Sincronizado": "U"
-                            }
-                            aUsuarioSet.push(oController.enviarDados("UsuarioSet", oUsuarioSet))
-                            break;
-
-                        case "E":
-                            var oUsuarioSet = {
-                                "CodUsuario": oUsuario.CodUsuario,
-                                "Nome": oUsuario.Nome,
-                                "Senha": oUsuario.Senha,
-                                "Centro": oUsuario.Centro,
-                                "Deposito": oUsuario.Deposito,
-                                "Bloqueado": oUsuario.Bloqueado,
-                                "Perfil": oUsuario.CodigoPerfil,
-                                "Sincronizado": "E"
-                            }
-                            aUsuarioSet.push(oController.enviarDados("UsuarioSet", oUsuarioSet))
-                            break;
-                        default:
-                            break;
-                    }
-
-                });
-
-                if (aUsuarioSet.length > 0) {
-                    Promise.all(aUsuarioSet).then(
-                        function (result) {
-                            result.forEach(oUsuario => {
-                                var vTipo
-                                switch (oUsuario.Tipomensagem) {
-                                    case "S":
-                                        vTipo = "Success"
-                                        break;
-                                    case "E":
-                                        vTipo = "Error"
-                                        break;
-                                    default:
-                                        break;
-                                }
-                                var oMensagem = {
-                                    "title": "Gestão de usuário",
-                                    "description": oUsuario.Mensagem,
-                                    "type": vTipo,
-                                    "subtitle": oUsuario.Mensagem
-                                }
-                                oController.getOwnerComponent().getModel("mensagensModel").getData().push(oMensagem)
-
-                            });
-
-                            resolve()
-                        }).catch(
-                            function (result) {
-                                oController.closeBusyDialog();
-                                reject()
-                            })
-                } else {
-                    resolve()
-                }
-
-            })
-        },
 
         carregarUsuario: function () {
             oController = this
@@ -1883,6 +1831,7 @@ sap.ui.define([
                                         var aGravacoes = [oController.gravarTabelaIndexDB("tb_usuario", aPerfis)]
                                         Promise.all(aGravacoes).then(
                                             function (result) {
+                                            oController.closeBusyDialog();
                                                 resolve()
                                             })
                                     }).catch(

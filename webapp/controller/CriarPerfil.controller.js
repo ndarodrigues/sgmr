@@ -65,9 +65,11 @@ sap.ui.define([
                 oConfirmarButton.setBusy(false);
 
                  var oPerfil = oController.getOwnerComponent().getModel("perfilCriarModel").getData()
-                 oPerfil.AutorizacaoSet.forEach(element => {
-                    element.Selecionado = false
-                 });
+                 if (oPerfil.AutorizacaoSet != undefined) {
+                    oPerfil.AutorizacaoSet.forEach(element => {
+                        element.Selecionado = false
+                    });
+                 }
                  oController.getOwnerComponent().getModel("perfilCriarModel").refresh()
 
             },
