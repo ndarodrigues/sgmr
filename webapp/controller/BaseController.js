@@ -45,26 +45,40 @@ sap.ui.define([
             var aAutorizacoes = oController.getOwnerComponent().getModel("usuarioModel").getProperty("/Autorizacoes")
 
             var oAcesso = {
-                administrativo: true
+                administrativo: false,
+                materialrodante: false,
+                perfil: false,
+                usuario: false,
+                associar: false,
+                sincronizar: false
             }
 
             if (aAutorizacoes) {
                 aAutorizacoes.forEach(oAutorizacao => {
-                    if (oAutorizacao.CodigoAutorizacao == "016" || oAutorizacao.CodigoAutorizacao == "017" || oAutorizacao.CodigoAutorizacao == "018" ||
-                        oAutorizacao.CodigoAutorizacao == "019" || oAutorizacao.CodigoAutorizacao == "020") {
-                        oAcesso.ordem = true;
-                    }
-                    if (oAutorizacao.CodigoAutorizacao == "000") {
-                        oAcesso.comboio = true;
-                    }
                     if (oAutorizacao.CodigoAutorizacao == "001") {
+                        oAcesso.materialrodante = true;
+                    }
+                    if (oAutorizacao.CodigoAutorizacao == "002" || oAutorizacao.CodigoAutorizacao == "003" || oAutorizacao.CodigoAutorizacao == "004" || oAutorizacao.CodigoAutorizacao == "005"){
                         oAcesso.administrativo = true;
+                        if(oAutorizacao.CodigoAutorizacao == "002"){
+                            oAcesso.perfil = true;
+                        }
+                        if(oAutorizacao.CodigoAutorizacao == "003"){
+                            oAcesso.usuario = true;
+                        }
+                        if(oAutorizacao.CodigoAutorizacao == "004"){
+                            oAcesso.associar = true;
+                        }
+                        if(oAutorizacao.CodigoAutorizacao == "005"){
+                            oAcesso.sincronizar = true;
+                        }
                     }
                 });
-            }
+            
 
             oController.getOwnerComponent().getModel("acessosModel").setData(oAcesso)
             oController.getOwnerComponent().getModel("acessosModel").refresh();
+            }
         },
 
         /** Funções de Banco de Dados */
@@ -655,8 +669,7 @@ sap.ui.define([
         },
 
         sincronizar: function (pCatalogo) {
-            oController = this;
-            oController.carregarPerfil()
+            //oController.carregarPerfil();
             //oController.carregarAutorizacao()
             oController = this;
 
@@ -682,17 +695,17 @@ sap.ui.define([
                                             resolve(result)
                                         }).catch(
                                             function (result) {
-                                                oController.forceCloseBusyDialog();
+                                                //oController.forceCloseBusyDialog();
                                                 reject(result)
                                             })
                                 }).catch(
                                     function (result) {
-                                        oController.forceCloseBusyDialog();
+                                        //oController.forceCloseBusyDialog();
                                         reject(result)
                                     })
                         }).catch(
                             function (result) {
-                                oController.closeBusyDialog();
+                                //oController.closeBusyDialog();
                                 reject(result)
                             })
                 } else {
