@@ -183,15 +183,15 @@ sap.ui.define([
                 var oSelectedItem = oEvent.getParameter("selectedItem");
 
                 if (oSelectedItem) {
-                    var formulario = oSelectedItem.getModel("formularioModel").getProperty(oSelectedItem.getBindingContext("formularioModel").getPath()).key
-                    oController.getOwnerComponent().getModel("criarUsuarioModel").setProperty("/Perfil", oSelectedItem.getTitle());
+                    var formulario = oSelectedItem.getModel("formularioModel").getProperty(oSelectedItem.getBindingContext("formularioModel").getPath()).key;
+                  /*   oController.getOwnerComponent().getModel("criarUsuarioModel").setProperty("/Perfil", oSelectedItem.getTitle());
                     oController.getOwnerComponent().getModel("criarUsuarioModel").setProperty("/CodigoPerfil", oPerfil.CodigoPerfil);
-                    oController.getOwnerComponent().getModel("criarUsuarioModel").setProperty("/Autorizacoes", oPerfil.AutorizacaoSet);
+                    oController.getOwnerComponent().getModel("criarUsuarioModel").setProperty("/Autorizacoes", oPerfil.AutorizacaoSet); */
 
-                    var aFilters = []
+                    /* var aFilters = []
                     var filter = new sap.ui.model.Filter({ path: "Selecionado", operator: sap.ui.model.FilterOperator.EQ, value1: true });
                     aFilters.push(filter);
-                    this.getView().byId("idListaAutorizacoesTable").getBinding("items").filter(aFilters, "Application");
+                    this.getView().byId("idListaAutorizacoesTable").getBinding("items").filter(aFilters, "Application"); */
 
                 }
 
