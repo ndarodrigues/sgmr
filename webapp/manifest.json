@@ -115,7 +115,9 @@
       "listaAutorizacao": {
         "type": "sap.ui.model.json.JSONModel"
       },
-
+      "listaAssociarFormularioModel": {
+        "type": "sap.ui.model.json.JSONModel"
+      },
       "listaMaterialRodante": {
         "type": "sap.ui.model.json.JSONModel"
       },

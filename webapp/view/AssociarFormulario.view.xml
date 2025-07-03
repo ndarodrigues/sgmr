@@ -1,7 +1,8 @@
 <mvc:View controllerName="com.pontual.sgmr.controller.AssociarFormulario"
     height="100%"
     xmlns:mvc="sap.ui.core.mvc" 
-	xmlns:core="sap.ui.core"       
+	xmlns:core="sap.ui.core"   
+	xmlns:f="sap.ui.layout.form"
     displayBlock="true"
     xmlns="sap.m">
     <Page id="pageInicio" 
@@ -26,8 +27,83 @@
                         formatter: 'com.pontual.sgmr.model.formatter.getCorIconeConexao'}"
             />
         </headerContent>            
-		<content>               
-                    <Table id="idListaMaterialRodanteTable" 
+		<content>   
+        <VBox class="sapUiSmallMargin">     
+				<f:Form id="associarFormularioForm"
+				editable="true">
+				<f:title>
+					<core:Title text="{i18n>associarformulariotitle}" />
+				</f:title>
+				<f:layout>
+					<f:ResponsiveGridLayout
+						labelSpanXL="4"
+						labelSpanL="4"
+						labelSpanM="12"
+						labelSpanS="12"
+						adjustLabelSpan="false"
+						emptySpanXL="0"
+						emptySpanL="0"
+						emptySpanM="0"
+						emptySpanS="0"
+						columnsXL="2"
+						columnsL="2"
+						columnsM="2"
+						singleContainerFullSize="false" />
+				</f:layout>
+				<f:formContainers>
+					<f:FormContainer >
+						<f:formElements>
+							<f:FormElement label="{i18n>formulario}">
+								<f:fields>
+									<Input 
+										id="formularioInput"
+										value="{listaAssociarFormularioModel>Codigo}"
+                                        showValueHelp="true"
+										showClearIcon="true"
+										valueHelpOnly="true"
+										required="true"
+										valueHelpRequest="_handleAssociarFormularioValueHelpRequest"
+										enabled="true"										
+										/>
+								</f:fields>
+							</f:FormElement>
+						</f:formElements>
+					</f:FormContainer>		
+
+				</f:formContainers>				
+			</f:Form>           
+        <Table id="idListaModelosEquipamentosTable" 
+        alternateRowColors="true"
+        autoPopinMode="true" 
+        contextualWidth="Auto"		
+        mode="{= ${perfilCriarModel>HabilitarTelaCriarPerfil} ? 'MultiSelect' : 'None' }" 
+        items="{perfilCriarModel>/AutorizacaoSet}">
+            <headerToolbar>
+                <OverflowToolbar id="otbSubheader">
+                    <Title text="{i18n>modelodeequipamentos}" level="H2" />
+                    <ToolbarSpacer />  
+                                
+                </OverflowToolbar>
+            </headerToolbar>
+            <columns>
+                <Column hAlign="Begin" width="20%">
+                    <Text text="{i18n>equipamento}" />
+                </Column>
+                <!-- <Column hAlign="Begin" width="80%">
+                    <Text text="{i18n>descricao}" />
+                </Column> -->									
+            </columns>
+            <items>
+                <ColumnListItem vAlign="Middle" navigated="true" type="Inactive" press="onOrdemPress" selected="{perfilCriarModel>Selecionado}">	
+                    <cells>
+                        <ObjectIdentifier title="{equipamentosModel>CodigoAutorizacao}"/>
+                        <ObjectIdentifier title="{equipamentosModel>DescrAutorizacao}"/>
+                    </cells>
+                </ColumnListItem>
+            </items>
+        </Table>
+	</VBox>              
+                    <!-- <Table id="idListaMaterialRodanteTable" 
                             alternateRowColors="true"
                             autoPopinMode="false" 
                             contextualWidth="Auto"		
@@ -36,10 +112,10 @@
                             paste="onPaste" 
                     items="{listaMaterialRodanteModel>/}">
                         <headerToolbar>
-                            <OverflowToolbar id="otbSubheader">
-                                <Title text="Material Rodante" level="H2" />
+                            <OverflowToolbar id="otbSubheader2">
+                                <Title text="{i18n>associarformulariotitle}" level="H2" />
                                 <ToolbarSpacer />
-                                <SearchField id="searchOrdem" search="onSearchOrdem" width="50%" placeholder="Pesquisa" />	   
+                                <SearchField id="searchOrdem2" search="onSearchOrdem" width="50%" placeholder="Pesquisa" />	   
                             </OverflowToolbar>
                         </headerToolbar>
                         <columns>
@@ -64,7 +140,7 @@
                                 </cells>
                             </ColumnListItem>
                         </items>
-                    </Table>
+                    </Table> -->
 		</content>
 		<footer>
 			<OverflowToolbar>

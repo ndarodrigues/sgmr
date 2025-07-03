@@ -15,7 +15,7 @@ sap.ui.define([
     var aFilters = ""
     var oExpand = ""
 
-    return Controller.extend("com.pontual.sgmr.controller.App", {
+    return Controller.extend("com.pontual.sgmr.controller.BaseController", {
 
         getRouter: function () {
             return UIComponent.getRouterFor(this);
@@ -69,9 +69,9 @@ sap.ui.define([
                         if(oAutorizacao.CodigoAutorizacao == "004"){
                             oAcesso.associar = true;
                         }
-                        if(oAutorizacao.CodigoAutorizacao == "005"){
+/*                         if(oAutorizacao.CodigoAutorizacao == "005"){
                             oAcesso.sincronizar = true;
-                        }
+                        } */
                     }
                 });
             
@@ -538,7 +538,7 @@ sap.ui.define([
             resolve()
 
         },
-
+        //Revisar
         sincronizarReceber: function (pCatalogo) {
 
             oController = this;
@@ -552,6 +552,8 @@ sap.ui.define([
                         oController.carregarPerfil().catch(() => oController.carregarDadosIndexDB("tb_perfil", "listaPerfilModel")),
                         oController.carregarUsuario().catch(() => oController.carregarDadosIndexDB("tb_usuario", "listaUsuariosModel"))
                     ]
+
+                    
 
                     Promise.all(aLeituras).then(
                         function (result) {
@@ -573,13 +575,13 @@ sap.ui.define([
                                     Promise.all(aGravacoes).then(
                                         function (result) {
                                             if (pCatalogo) {
-                                                oController.carregarCatalogos().then(
+                                                /* oController.carregarCatalogos().then(
                                                     function (result) {
                                                         oController.limparTabelaIndexDB("tb_catalogo").then(
                                                             function (result) {
                                                                 var aCatalogos = oController.getOwnerComponent().getModel("catalogosModel").getData();
                                                                 oController.gravarTabelaIndexDB("tb_catalogo", aCatalogos).then(
-                                                                    function (result) {
+                                                                    function (result) { */
                                                                         oController.carregarCodes().then(
                                                                             function (result) {
                                                                                 oController.limparTabelaIndexDB("tb_code").then(
@@ -607,7 +609,7 @@ sap.ui.define([
                                                                                     oController.closeBusyDialog();
                                                                                     reject(result)
                                                                                 });
-                                                                    }).catch(
+                                                                    /* }).catch(
                                                                         function (result) {
                                                                             oController.closeBusyDialog();
                                                                             reject(result)
@@ -623,7 +625,7 @@ sap.ui.define([
                                                         function (result) {
                                                             oController.closeBusyDialog();
                                                             reject(result)
-                                                        })
+                                                        })*/
                                             } else {
                                                 resolve()
                                             }
@@ -647,7 +649,7 @@ sap.ui.define([
                             })
                 } else {
                     // Sem conexão - carregar dados do IndexedDB
-                    oController.atualizarBusyDialog(oController.getView().getModel("i18n").getResourceBundle().getText("carregaroffline"));
+                    oController.atualizarBusyDialog(oController.getView().getModel("i18n").getResourceBundle().getText("carregarIDB"));
                     var aLeituras = [
                         oController.carregarDadosIndexDB("tb_autorizacao", "listaAutorizacao"),
                         oController.carregarDadosIndexDB("tb_perfil", "listaPerfilModel"),

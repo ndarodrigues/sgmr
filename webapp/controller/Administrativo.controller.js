@@ -79,6 +79,8 @@ sap.ui.define([
                 this.getView().setModel(oModel);
                 this.byId("messagePopoverBtn").addDependent(oMessagePopover);
 
+                oView.bindElement("acessosModel>/");
+
             },
 
             onEntrarPerfil: function (oEvent) {

@@ -1,12 +1,15 @@
 sap.ui.define([
     "com/pontual/sgmr/controller/BaseController",
     "com/pontual/sgmr/model/formatter",
+	"sap/ui/core/Fragment",
+    'sap/ui/model/Filter',
+    'sap/ui/model/FilterOperator',
     'sap/m/MessageToast',
     'sap/m/MessagePopover',
     'sap/m/MessageItem',
     'sap/ui/model/json/JSONModel'
 ],
-    function (Controller, formatter, MessageToast, MessagePopover, MessageItem, JSONModel) {
+    function (Controller, formatter, Fragment, Filter, FilterOperator, MessageToast, MessagePopover, MessageItem, JSONModel) {
         "use strict";
         var oController;
         var oView;
@@ -87,7 +90,7 @@ sap.ui.define([
                 var aFilters = []
                 var filter = new sap.ui.model.Filter({ path: "Sincronizado", operator: sap.ui.model.FilterOperator.NE, value1: "E" });
                 aFilters.push(filter);
-                this.getView().byId("idListaMaterialRodanteTable").getBinding("items").filter(aFilters, "Application");
+                this.getView().byId("idListaModelosEquipamentosTable").getBinding("items").filter(aFilters, "Application");
 
                 var oModel = new JSONModel();
                 oModel.setData([]);
@@ -139,6 +142,61 @@ sap.ui.define([
             onNavBack: function () {
                 this.getRouter().navTo("Administrativo", {}, true /*no history*/);
             },
+
+            //Formulários
+            _handleAssociarFormularioValueHelpRequest: function (oEvent) {
+                var oView = this.getView();
+                this._sInputId = oEvent.getSource().getId();
+
+                // create value help dialog
+                if (!this._pPerfilValueHelpDialog) {
+                    this._pPerfilValueHelpDialog = Fragment.load({
+                        id: oView.getId(),
+                        name: "com.pontual.sgmr.fragment.FormularioDialog",
+                        controller: this
+                    }).then(function (oValueHelpDialog) {
+                        oView.addDependent(oValueHelpDialog);
+                        return oValueHelpDialog;
+                    });
+                }
+
+                // open value help dialog
+                this._pPerfilValueHelpDialog.then(function (oValueHelpDialog) {
+                    oValueHelpDialog.open();
+                });
+            },
+
+            _handleAssociarFormularioValueHelpSearch: function (oEvent) {
+                var sValue = oEvent.getParameter("value");
+                var oFilter = new Filter(
+                    "key",
+                    FilterOperator.Contains, sValue
+                );
+                /* var oFilter2 = new Filter(
+                    "Sincronizado",
+                    FilterOperator.EQ, "N"
+                ); */
+                oEvent.getSource().getBinding("items").filter([oFilter]);
+            },
+
+            _handleAssociarFormularioValueHelpClose: function (oEvent) {
+                var oSelectedItem = oEvent.getParameter("selectedItem");
+
+                if (oSelectedItem) {
+                    var formulario = oSelectedItem.getModel("formularioModel").getProperty(oSelectedItem.getBindingContext("formularioModel").getPath()).key
+                    oController.getOwnerComponent().getModel("criarUsuarioModel").setProperty("/Perfil", oSelectedItem.getTitle());
+                    oController.getOwnerComponent().getModel("criarUsuarioModel").setProperty("/CodigoPerfil", oPerfil.CodigoPerfil);
+                    oController.getOwnerComponent().getModel("criarUsuarioModel").setProperty("/Autorizacoes", oPerfil.AutorizacaoSet);
+
+                    var aFilters = []
+                    var filter = new sap.ui.model.Filter({ path: "Selecionado", operator: sap.ui.model.FilterOperator.EQ, value1: true });
+                    aFilters.push(filter);
+                    this.getView().byId("idListaAutorizacoesTable").getBinding("items").filter(aFilters, "Application");
+
+                }
+
+            },
+            //Formulários
 
 
             onEliminarmaterialRodante: function (oEvent) {
