@@ -21,45 +21,11 @@ sap.ui.define([
                 oController = this;
                 oView = oController.getView();
 
-                var omaterialRodante = [{
-                    Codigo: "EX12005",
-                    DescrMaterialRodante: "HITACHI - EX 1200-5",
-                    Sincronizado: "N",
-                    HabilitarTelaCriarmaterialRodante: true,
-                    AutorizacaoSet: [
-                        {
-                            CodigoAutorizacao: "01",
-                            DescrAutorizacao: "INSPEÇÃO MATERIAL RODANTE",
-                            Selecionado: true
-                        },
-                        {
-                            CodigoAutorizacao: "02",
-                            DescrAutorizacao: "MOVIMENTAÇÃO MATERIAL RODANTE",
-                            Selecionado: true
-                        }
+                var oFormularioSet = { Codigo: "" };
 
 
-                    ]},
-                    {
-                        Codigo: "EX12006",
-                        DescrMaterialRodante: "HITACHI - EX 1200-6",
-                        Sincronizado: "N",
-                        HabilitarTelaCriarmaterialRodante: true,
-                        AutorizacaoSet: [
-                            {
-                                CodigoAutorizacao: "01",
-                                DescrAutorizacao: "INSPEÇÃO MATERIAL RODANTE",
-                                Selecionado: true
-                            },
-
-
-                        ]
-                    }
-                ]
-
-
-                oController.getOwnerComponent().getModel("listaMaterialRodanteModel").setData(omaterialRodante);
-                oController.getOwnerComponent().getModel("listaMaterialRodanteModel").refresh()
+                oController.getOwnerComponent().getModel("listaAssociarFormularioModel").setData(oFormularioSet);
+                oController.getOwnerComponent().getModel("listaAssociarFormularioModel").refresh();
 
 
                 oView.bindElement("listaMaterialRodanteModel>/");
@@ -70,10 +36,12 @@ sap.ui.define([
                 oView.bindElement("inspecaoModel>/")
                 oView.bindElement("condicaoModel>/")
                 oView.bindElement("formularioModel>/")
+                oView.bindElement("modeloEquipamentoModel>/")
+                oView.bindElement("listaAssociarFormularioModel>/")
                 
-                var aCondicoes = [{ key: "Formulário 321" }, { key: "Formulário 322" }, { key: "Formulário 323" }]
+                /* var aCondicoes = [{ key: "Formulário 321" }, { key: "Formulário 322" }, { key: "Formulário 323" }]
                 oController.getOwnerComponent().getModel("formularioModel").setData(aCondicoes);
-                oController.getOwnerComponent().getModel("formularioModel").refresh();
+                oController.getOwnerComponent().getModel("formularioModel").refresh(); */
 
                 var oModel = new JSONModel();
                 oModel.setData([]);
@@ -86,11 +54,6 @@ sap.ui.define([
 
 
             _handleRouteMatched: function (oEvent) {
-
-                var aFilters = []
-                var filter = new sap.ui.model.Filter({ path: "Sincronizado", operator: sap.ui.model.FilterOperator.NE, value1: "E" });
-                aFilters.push(filter);
-                this.getView().byId("idListaModelosEquipamentosTable").getBinding("items").filter(aFilters, "Application");
 
                 var oModel = new JSONModel();
                 oModel.setData([]);
@@ -134,7 +97,27 @@ sap.ui.define([
 
                 oModel.setData(aMockMessages);
                 this.getView().setModel(oModel);
-                this.byId("messagePopoverBtn").addDependent(oMessagePopover);
+                this.byId("idMessagePopoverBtn").addDependent(oMessagePopover);
+                
+                var aCondicoes = [{ key: "EX1200 - 6" }, 
+                                  { key: "EX2500 - 5" },   
+                                  { key: "320" }, 
+                                  { key: "930" }]
+                oController.getOwnerComponent().getModel("formularioModel").setData(aCondicoes);
+                oController.getOwnerComponent().getModel("formularioModel").refresh();
+
+                var aModelosEquipamentos = [{ cod: "EX1200", desc: "HITACHI", Selecionado: false}, 
+                                            { cod: "EX2500", desc: "HITACHI", Selecionado: false }, 
+                                            { cod: "320", desc: "CAT", Selecionado: false }, 
+                                            { cod: "930", desc: "KOMATSU", Selecionado: false }]
+                oController.getOwnerComponent().getModel("modeloEquipamentoModel").setData(aModelosEquipamentos);
+                oController.getOwnerComponent().getModel("modeloEquipamentoModel").refresh();
+
+                var oFormularioSet = { Codigo: "" };
+
+                oController.getOwnerComponent().getModel("listaAssociarFormularioModel").setData(oFormularioSet);
+                oController.getOwnerComponent().getModel("listaAssociarFormularioModel").refresh();
+
 
             },
 
@@ -142,6 +125,137 @@ sap.ui.define([
             onNavBack: function () {
                 this.getRouter().navTo("Administrativo", {}, true /*no history*/);
             },
+
+            //Cancelar
+            onCancelarFormulario: function () {
+                oController.getRouter().navTo("Administrativo", {}, true /*no history*/);
+            },
+            //Cancelar
+
+            //Confirmar
+            onConfirmarFormulario: function () {
+
+                var aMockMessages = [];
+                var vPodeGravar = true;
+                var oMockMessage = {}
+                var oFormulario = oController.getOwnerComponent().getModel("listaAssociarFormularioModel").getData()
+                var oFormularioInput = oView.byId("formularioInput")
+                var oConfirmarButton = oView.byId("idConfirmarFormularioButton")
+                oConfirmarButton.setEnabled(false);
+                oConfirmarButton.setBusy(true);
+
+                if (oFormulario.Codigo == "") {
+                    oFormularioInput.setValueState("Error");
+                    var oMockMessage = {
+                        type: 'Error',
+                        title: oController.getView().getModel("i18n").getResourceBundle().getText("campoobrigatorio"),
+                        description: oController.getView().getModel("i18n").getResourceBundle().getText("campoformulario"),
+                        subtitle: oController.getView().getModel("i18n").getResourceBundle().getText("formulario"),
+                        counter: 1
+                    };
+                    aMockMessages.push(oMockMessage)
+                    vPodeGravar = false;
+
+                } 
+
+                var oModel = new JSONModel();
+                oModel.setData(aMockMessages);
+                this.getView().setModel(oModel);
+
+                if (vPodeGravar == true) {
+                    oFormularioInput.setValueState("None");
+                    
+                    // Verificar se há equipamentos selecionados usando o modelo
+                    var aModelosEquipamentos = oController.getOwnerComponent().getModel("modeloEquipamentoModel").getData();
+                    var aEquipamentosSelecionados = aModelosEquipamentos.filter(function(equipamento) {
+                        return equipamento.Selecionado === true;
+                    });
+                    
+                    if (aEquipamentosSelecionados.length === 0) {
+                        var oMockMessage = {
+                            type: 'Error',
+                            title: oController.getView().getModel("i18n").getResourceBundle().getText("campoobrigatorio"),
+                            description: oController.getView().getModel("i18n").getResourceBundle().getText("listaselecionar"),
+                            subtitle: oController.getView().getModel("i18n").getResourceBundle().getText("modeloequipamento"),
+                            counter: 1
+                        };
+                        aMockMessages.push(oMockMessage);
+                        vPodeGravar = false;
+                    } else {
+                        // Pegar os itens selecionados e criar a estrutura para salvar
+                        var aModelosEquipamentosSelecionados = [];
+                        
+                        aEquipamentosSelecionados.forEach(function(oEquipamento) {
+                            aModelosEquipamentosSelecionados.push({
+                                CodigoModeloEquipamento: oEquipamento.cod,
+                                DescricaoModeloEquipamento: oEquipamento.desc,
+                                CodigoFormulario: oFormulario.Codigo,
+                                Sincronizado: false
+                            });
+                        });
+                        
+                        // Atualizar o modelo com os dados para salvar
+                        var oAssociacaoFormulario = {
+                            CodigoFormulario: oFormulario.Codigo,
+                            ModelosEquipamentosAssociados: aModelosEquipamentosSelecionados,
+                            DataAssociacao: new Date().toISOString(),
+                            Sincronizado: false
+                        };
+                        
+                        // Verificar se já existe dados no modelo
+                        var aAssociacoes = oController.getOwnerComponent().getModel("listaAssociarFormularioModel").getData();
+                        if (!Array.isArray(aAssociacoes)) {
+                            aAssociacoes = [];
+                        }
+                        
+                        // Adicionar a nova associação
+                        aAssociacoes.push(oAssociacaoFormulario);
+                        
+                        // Atualizar o modelo
+                        oController.getOwnerComponent().getModel("listaAssociarFormularioModel").setData(aAssociacoes);
+                        oController.getOwnerComponent().getModel("listaAssociarFormularioModel").refresh();
+                        
+                        // Gravar no IndexDB
+                        oController.limparTabelaIndexDB("tb_associarFormulario").then(
+                            function (result) {
+                                oController.gravarTabelaIndexDB("tb_associarFormulario", aAssociacoes).then(
+                                    function (result) {
+                                        MessageToast.show(oController.getView().getModel("i18n").getResourceBundle().getText("dadossucesso"), {
+                                            duration: 500,
+                                            onClose: function () {
+                                                oController.getRouter().navTo("Administrativo", {}, true /*no history*/);
+                                                oConfirmarButton.setEnabled(true);
+                                                oConfirmarButton.setBusy(false);
+                                            }
+                                        });
+                                    }).catch(
+                                        function (result) {
+                                            MessageToast.show("Erro ao gravar dados localmente");
+                                            oConfirmarButton.setEnabled(true);
+                                            oConfirmarButton.setBusy(false);
+                                        })
+                            }).catch(
+                                function (result) {
+                                    MessageToast.show("Erro ao limpar tabela local");
+                                    oConfirmarButton.setEnabled(true);
+                                    oConfirmarButton.setBusy(false);
+                                })
+                    }
+                }
+                
+                // Atualizar o modelo de mensagens se houver erros
+                if (aMockMessages.length > 0) {
+                    var oModel = new JSONModel();
+                    oModel.setData(aMockMessages);
+                    this.getView().setModel(oModel);
+                }
+                
+                if (vPodeGravar === false) {
+                    oConfirmarButton.setEnabled(true);
+                    oConfirmarButton.setBusy(false);
+                }
+            },
+            //Confirmar
 
             //Formulários
             _handleAssociarFormularioValueHelpRequest: function (oEvent) {
@@ -184,17 +298,111 @@ sap.ui.define([
 
                 if (oSelectedItem) {
                     var formulario = oSelectedItem.getModel("formularioModel").getProperty(oSelectedItem.getBindingContext("formularioModel").getPath()).key;
-                  /*   oController.getOwnerComponent().getModel("criarUsuarioModel").setProperty("/Perfil", oSelectedItem.getTitle());
-                    oController.getOwnerComponent().getModel("criarUsuarioModel").setProperty("/CodigoPerfil", oPerfil.CodigoPerfil);
-                    oController.getOwnerComponent().getModel("criarUsuarioModel").setProperty("/Autorizacoes", oPerfil.AutorizacaoSet); */
-
-                    /* var aFilters = []
-                    var filter = new sap.ui.model.Filter({ path: "Selecionado", operator: sap.ui.model.FilterOperator.EQ, value1: true });
-                    aFilters.push(filter);
-                    this.getView().byId("idListaAutorizacoesTable").getBinding("items").filter(aFilters, "Application"); */
-
+                    oController.getOwnerComponent().getModel("listaAssociarFormularioModel").setProperty("/Codigo", formulario);
+                    
+                    // Carregar os equipamentos já associados ao formulário selecionado
+                    oController.carregarEquipamentosAssociados(formulario);
                 }
 
+            },
+            
+            // Carregar equipamentos já associados ao formulário
+            carregarEquipamentosAssociados: function (codigoFormulario) {
+                console.log("Carregando equipamentos para formulário:", codigoFormulario);
+                
+                // Resetar todos os equipamentos como não selecionados
+                var aModelosEquipamentos = oController.getOwnerComponent().getModel("modeloEquipamentoModel").getData();
+                aModelosEquipamentos.forEach(function(equipamento) {
+                    equipamento.Selecionado = false;
+                });
+                
+                // Ler dados do IndexDB para verificar associações existentes
+                oController.lerTabelaIndexDB("tb_associarFormulario").then(function(aAssociacoes) {
+                    console.log("Dados carregados do IndexDB:", aAssociacoes);
+                    
+                    if (aAssociacoes && aAssociacoes.length > 0) {
+                        // Encontrar associações para o formulário selecionado
+                        var aAssociacoesFormulario = aAssociacoes.filter(function(associacao) {
+                            return associacao.CodigoFormulario === codigoFormulario;
+                        });
+                        
+                        console.log("Associações encontradas para o formulário:", aAssociacoesFormulario);
+                        
+                        if (aAssociacoesFormulario.length > 0) {
+                            // Marcar equipamentos como selecionados baseado nas associações existentes
+                            aAssociacoesFormulario.forEach(function(associacao) {
+                                if (associacao.ModelosEquipamentosAssociados) {
+                                    associacao.ModelosEquipamentosAssociados.forEach(function(equipamentoAssociado) {
+                                        // Encontrar o equipamento no modelo e marcar como selecionado
+                                        var equipamentoEncontrado = aModelosEquipamentos.find(function(eq) {
+                                            return eq.cod === equipamentoAssociado.CodigoModeloEquipamento;
+                                        });
+                                        if (equipamentoEncontrado) {
+                                            console.log("Marcando equipamento como selecionado:", equipamentoEncontrado);
+                                            equipamentoEncontrado.Selecionado = true;
+                                        }
+                                    });
+                                }
+                            });
+                        } else {
+                            console.log("Nenhuma associação encontrada para este formulário - todos desmarcados");
+                        }
+                    } else {
+                        console.log("Nenhuma associação encontrada no IndexDB - todos desmarcados");
+                    }
+                    
+                    console.log("Modelo final:", aModelosEquipamentos);
+                    
+                    // Atualizar o modelo - isso deve fazer o binding funcionar automaticamente
+                    oController.getOwnerComponent().getModel("modeloEquipamentoModel").setData(aModelosEquipamentos);
+                    oController.getOwnerComponent().getModel("modeloEquipamentoModel").refresh();
+                    
+                    console.log("Modelo refreshed - seleção deve aparecer automaticamente via binding");
+                    
+                }).catch(function(error) {
+                    console.error("Erro ao carregar associações do IndexDB:", error);
+                    console.log("Usando modelo sem associações - todos desmarcados");
+                    
+                    // Em caso de erro, usar modelo sem seleções
+                    oController.getOwnerComponent().getModel("modeloEquipamentoModel").setData(aModelosEquipamentos);
+                    oController.getOwnerComponent().getModel("modeloEquipamentoModel").refresh();
+                });
+            },
+            
+            // Função simplificada - agora o binding cuida da seleção automaticamente
+            atualizarSelecaoTabela: function() {
+                console.log("Função atualizarSelecaoTabela chamada - mas agora usa binding automático");
+                // Não precisa fazer nada - o binding selected="{modeloEquipamentoModel>Selecionado}" cuida disso
+            },
+
+            // Sincronizar seleção manual do usuário com o modelo
+            onSelectionChange: function(oEvent) {
+                console.log("Usuário mudou seleção manualmente");
+                var oTable = oEvent.getSource();
+                var aSelectedItems = oTable.getSelectedItems();
+                var aModelosEquipamentos = oController.getOwnerComponent().getModel("modeloEquipamentoModel").getData();
+                
+                console.log("Itens selecionados pelo usuário:", aSelectedItems.length);
+                
+                // Resetar todos como não selecionados
+                aModelosEquipamentos.forEach(function(equipamento, index) {
+                    equipamento.Selecionado = false;
+                });
+                
+                // Marcar os selecionados pelo usuário
+                aSelectedItems.forEach(function(oSelectedItem) {
+                    var iIndex = oTable.indexOfItem(oSelectedItem);
+                    if (iIndex >= 0 && aModelosEquipamentos[iIndex]) {
+                        aModelosEquipamentos[iIndex].Selecionado = true;
+                        console.log("Marcado como selecionado:", iIndex, aModelosEquipamentos[iIndex]);
+                    }
+                });
+                
+                // Atualizar o modelo
+                oController.getOwnerComponent().getModel("modeloEquipamentoModel").setData(aModelosEquipamentos);
+                oController.getOwnerComponent().getModel("modeloEquipamentoModel").refresh();
+                
+                console.log("Modelo atualizado com seleção do usuário");
             },
             //Formulários
 

@@ -142,6 +142,9 @@
       "objectPageModel": {
         "type": "sap.ui.model.json.JSONModel"
       },
+      "modeloEquipamentoModel": {
+        "type": "sap.ui.model.json.JSONModel"
+      },
       "perfilCriarModel": {
         "type": "sap.ui.model.json.JSONModel"
       },

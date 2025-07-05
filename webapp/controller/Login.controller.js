@@ -311,6 +311,10 @@ sap.ui.define([
                             db.createObjectStore("tb_autorizacao", { autoIncrement: true });
                         }
 
+                        if (!db.objectStoreNames.contains('tb_associarFormulario')) {
+                            db.createObjectStore("tb_associarFormulario", { autoIncrement: true });
+                        }
+
                     };
 
                     openRequest.onsuccess = function (e) {
