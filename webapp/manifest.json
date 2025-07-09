@@ -261,10 +261,17 @@
           ]
         },
         {
-          "name": "ObjectPageSection",
-          "pattern": "ObjectPageSection",
+          "name": "EX1200-5",
+          "pattern": "EX1200-5",
           "target": [
-            "ObjectPageSection"
+            "EX1200-5"
+          ]
+        },
+        {
+          "name": "EX2500-5",
+          "pattern": "EX2500-5",
+          "target": [
+            "EX2500-5"
           ]
         },
         {
@@ -388,12 +395,19 @@
           "viewId": "RoletesInferiores",
           "viewName": "RoletesInferiores"
         },
-        "ObjectPageSection": {
+        "EX1200-5": {
           "viewType": "XML",
           "transition": "slide",
           "clearControlAggregation": false,
-          "viewId": "ObjectPageSection",
-          "viewName": "ObjectPageSection"
+          "viewId": "EX1200-5",
+          "viewName": "EX1200-5"
+        },
+        "EX2500-5": {
+          "viewType": "XML",
+          "transition": "slide",
+          "clearControlAggregation": false,
+          "viewId": "EX2500-5",
+          "viewName": "EX2500-5"
         },
         "Sincronizar": {
           "viewType": "XML",

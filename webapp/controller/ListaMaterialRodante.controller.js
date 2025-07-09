@@ -18,11 +18,12 @@ sap.ui.define([
                 oController = this;
                 oView = oController.getView();
 
-                var omaterialRodante = [{
-                    Codigo: "EX12005",
-                    DescrMaterialRodante: "HITACHI - EX 1200-5",
+                var oMaterialRodante = [{
+                    Codigo: "EH4009",
+                    DescrMaterialRodante: "ESCAVADEIRA HIDRÁULICA HITACHI - EX 1200-5", 
                     Sincronizado: "N",
                     HabilitarTelaCriarmaterialRodante: true,
+                    CodigoFormulario: "EX1200-5",
                     AutorizacaoSet: [
                         {
                             CodigoAutorizacao: "01",
@@ -38,10 +39,31 @@ sap.ui.define([
 
                     ]},
                     {
-                        Codigo: "EX12006",
-                        DescrMaterialRodante: "HITACHI - EX 1200-6",
+                    Codigo: "EH5001",
+                    DescrMaterialRodante: "ESCAVADEIRA HIDRÁULICA HITACHI - EX2500-5", 
+                    Sincronizado: "N",
+                    HabilitarTelaCriarmaterialRodante: true,
+                    CodigoFormulario: "EX2500-5",
+                    AutorizacaoSet: [
+                        {
+                            CodigoAutorizacao: "01",
+                            DescrAutorizacao: "INSPEÇÃO MATERIAL RODANTE",
+                            Selecionado: true
+                        },
+                        {
+                            CodigoAutorizacao: "02",
+                            DescrAutorizacao: "MOVIMENTAÇÃO MATERIAL RODANTE",
+                            Selecionado: true
+                        }
+
+
+                    ]},
+                    {
+                        Codigo: "EH-1053",
+                        DescrMaterialRodante: "ESCAVADEIRA HIDRÁULICA HYUNDAI - R220LC-9",
                         Sincronizado: "N",
                         HabilitarTelaCriarmaterialRodante: true,
+                        CodigoFormulario: "R220LC-9",
                         AutorizacaoSet: [
                             {
                                 CodigoAutorizacao: "01",
@@ -55,13 +77,13 @@ sap.ui.define([
                 ]
 
 
-                oController.getOwnerComponent().getModel("listaMaterialRodanteModel").setData(omaterialRodante);
+                oController.getOwnerComponent().getModel("listaMaterialRodanteModel").setData(oMaterialRodante);
                 oController.getOwnerComponent().getModel("listaMaterialRodanteModel").refresh()
 
 
                 oView.bindElement("listaMaterialRodanteModel>/");
                 oView.bindElement("layoutTelaModel>/");
-                oView.bindElement("busyDialogModel>/")
+                oView.bindElement("busyDialogModel>/");
 
                 var oModel = new JSONModel();
                 oModel.setData([]);
@@ -133,13 +155,13 @@ sap.ui.define([
 
 
             onEliminarmaterialRodante: function (oEvent) {
-                var omaterialRodante = oEvent.getSource().getBindingContext("listaMaterialRodanteModel").getModel().getProperty(oEvent.getSource().getBindingContext("listaMaterialRodanteModel").getPath());
+                var oMaterialRodante = oEvent.getSource().getBindingContext("listaMaterialRodanteModel").getModel().getProperty(oEvent.getSource().getBindingContext("listaMaterialRodanteModel").getPath());
                 var aUsuarios = oController.getOwnerComponent().getModel("listaUsuariosModel").getData()
                 var oUsuario = aUsuarios.find(function (pUsuario) {
-                    return pUsuario.materialRodante === omaterialRodante.DescrmaterialRodante
+                    return pUsuario.materialRodante === oMaterialRodante.DescrmaterialRodante
                 })
                 if (oUsuario == undefined) {
-                    omaterialRodante.Sincronizado = "E"
+                    oMaterialRodante.Sincronizado = "E"
                     oController.getOwnerComponent().getModel("listaMaterialRodanteModel").refresh()
                     oController.limparTabelaIndexDB("tb_materialRodante").then(
                         function (result) {
@@ -179,17 +201,19 @@ sap.ui.define([
             },
 
             onMaterialRodantePress: function (oEvent) {
-                var omaterialRodante = oEvent.getSource().getBindingContext("listaMaterialRodanteModel").getModel().getProperty(oEvent.getSource().getBindingContext("listaMaterialRodanteModel").getPath());
-                var oObjetoNovo = JSON.parse(JSON.stringify(omaterialRodante));
+                var oMaterialRodante = oEvent.getSource().getBindingContext("listaMaterialRodanteModel").getModel().getProperty(oEvent.getSource().getBindingContext("listaMaterialRodanteModel").getPath());
+                var oObjetoNovo = JSON.parse(JSON.stringify(oMaterialRodante));
                 oObjetoNovo.HabilitarTelaCriarmaterialRodante = false
                 oController.getOwnerComponent().getModel("materialRodanteCriarModel").setData(oObjetoNovo);
                 oController.getOwnerComponent().getModel("materialRodanteCriarModel").refresh()
-                oController.getOwnerComponent().getRouter().navTo("ObjectPageSection", null, true);
+                oController.getOwnerComponent().getRouter().navTo(oMaterialRodante.CodigoFormulario, null, true);
+                //oController.getOwnerComponent().getRouter().navTo("ObjectPageSection", null, true);
+
             },
 
             onCriarmaterialRodante: function (oEvent) {
 
-                var omaterialRodante = {
+                var oMaterialRodante = {
                     CodigomaterialRodante: 0,
                     DescrmaterialRodante: "",
                     Sincronizado: "N",
@@ -210,7 +234,7 @@ sap.ui.define([
                     ]
                 }
 
-                oController.getOwnerComponent().getModel("materialRodanteCriarModel").setData(omaterialRodante);
+                oController.getOwnerComponent().getModel("materialRodanteCriarModel").setData(oMaterialRodante);
                 oController.getOwnerComponent().getModel("materialRodanteCriarModel").refresh()
                 oController.getOwnerComponent().getRouter().navTo("CriarMaterialRodante", null, true);
             },
@@ -222,6 +246,34 @@ sap.ui.define([
 
             handleMessagePopoverPress: function (oEvent) {
                 oMessagePopover.toggle(oEvent.getSource());
+            },
+
+            onSearchOrdem: function(oEvent) {
+                var sQuery = oEvent.getParameter("query") || oEvent.getSource().getValue();
+                var oTable = this.byId("idListaMaterialRodanteTable");
+                var oBinding = oTable.getBinding("items");
+                if (!sQuery) {
+                    oBinding.filter([]);
+                    return;
+                }
+                sQuery = sQuery.toLowerCase();
+                oBinding.filter(new sap.ui.model.Filter({
+                    filters: [
+                        new sap.ui.model.Filter({
+                            path: "Codigo",
+                            test: function(value) {
+                                return value && value.toLowerCase().indexOf(sQuery) !== -1;
+                            }
+                        }),
+                        new sap.ui.model.Filter({
+                            path: "DescrMaterialRodante",
+                            test: function(value) {
+                                return value && value.toLowerCase().indexOf(sQuery) !== -1;
+                            }
+                        })
+                    ],
+                    and: false
+                }));
             }
 
         });

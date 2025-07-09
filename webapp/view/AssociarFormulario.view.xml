@@ -58,7 +58,7 @@
 								<f:fields>
 									<Input 
 										id="formularioInput"
-										value="{listaAssociarFormularioModel>Codigo}"
+										value="{listaAssociarFormularioModel>CodigoFormulario}"
                                         showValueHelp="true"
 										showClearIcon="true"
 										valueHelpOnly="true"
@@ -98,8 +98,8 @@
             <items>
                 <ColumnListItem vAlign="Middle" navigated="true" type="Inactive" press="onOrdemPress" id="idColumnListItem" selected="{modeloEquipamentoModel>Selecionado}">	
                     <cells>
-                        <ObjectIdentifier title="{modeloEquipamentoModel>cod}" id="idObjectIdentifier1"/>
-                        <ObjectIdentifier title="{modeloEquipamentoModel>desc}" id="idObjectIdentifier2"/>
+                        <ObjectIdentifier title="{modeloEquipamentoModel>CodigoModeloEquipamento}" id="idObjectIdentifier1"/>
+                        <ObjectIdentifier title="{modeloEquipamentoModel>DescricaoModeloEquipamento}" id="idObjectIdentifier2"/>
                     </cells>
                 </ColumnListItem>
             </items>
