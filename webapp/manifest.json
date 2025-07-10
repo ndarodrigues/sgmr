@@ -275,6 +275,13 @@
           ]
         },
         {
+          "name": "R220LC-9",
+          "pattern": "R220LC-9",
+          "target": [
+            "R220LC-9"
+          ]
+        },        
+        {
           "name": "RoletesSuperiores",
           "pattern": "RoletesSuperiores",
           "target": [
@@ -408,6 +415,13 @@
           "clearControlAggregation": false,
           "viewId": "EX2500-5",
           "viewName": "EX2500-5"
+        },
+        "R220LC-9": {
+          "viewType": "XML",
+          "transition": "slide",
+          "clearControlAggregation": false,
+          "viewId": "R220LC-9",
+          "viewName": "R220LC-9"
         },
         "Sincronizar": {
           "viewType": "XML",

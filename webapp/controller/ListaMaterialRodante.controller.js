@@ -97,6 +97,8 @@ sap.ui.define([
 
             _handleRouteMatched: function (oEvent) {
 
+                oController.getView().byId("idListaMaterialRodanteTable").setBusy(false);
+
                 var aFilters = []
                 var filter = new sap.ui.model.Filter({ path: "Sincronizado", operator: sap.ui.model.FilterOperator.NE, value1: "E" });
                 aFilters.push(filter);
@@ -205,9 +207,29 @@ sap.ui.define([
                 var oObjetoNovo = JSON.parse(JSON.stringify(oMaterialRodante));
                 oObjetoNovo.HabilitarTelaCriarmaterialRodante = false
                 oController.getOwnerComponent().getModel("materialRodanteCriarModel").setData(oObjetoNovo);
-                oController.getOwnerComponent().getModel("materialRodanteCriarModel").refresh()
-                oController.getOwnerComponent().getRouter().navTo(oMaterialRodante.CodigoFormulario, null, true);
+                oController.getOwnerComponent().getModel("materialRodanteCriarModel").refresh();
+                oController.getView().byId("idListaMaterialRodanteTable").setBusy(true);
+                //oController.getOwnerComponent().getRouter().navTo(oMaterialRodante.CodigoFormulario, null, true);                
                 //oController.getOwnerComponent().getRouter().navTo("ObjectPageSection", null, true);
+                var oRouter = oController.getOwnerComponent().getRouter();
+                var oRoute = oRouter.getRoute(oMaterialRodante.CodigoFormulario);
+
+                if (oRoute !== undefined) {
+                    oRouter.navTo(oMaterialRodante.CodigoFormulario, null, true);
+                } else {
+                    sap.m.MessageBox.error(
+                        "Não foi possível encontrar o formulário: " + oMaterialRodante.CodigoFormulario,
+                        {
+                            title: "Erro ao navegar",
+                            actions: [sap.m.MessageBox.Action.OK],
+                            onClose: function(oAction) {
+                                if (oAction === sap.m.MessageBox.Action.OK) {
+                                    oController.getView().byId("idListaMaterialRodanteTable").setBusy(false);
+                                }
+                            }
+                        }
+                );
+                }
 
             },
 
