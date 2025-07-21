@@ -17,7 +17,7 @@
           class="sapUiContentPadding sapUiResponsivePadding--header sapUiResponsivePadding--subHeader sapUiResponsivePadding--content sapUiResponsivePadding--footer">
 		   <m:headerContent>
 				<m:ObjectStatus
-					id="IdNetworkStatus2"
+					id="IdNetworkStatus2500"
 					active="false"
 					inverted="true"
 					icon="{path: 'conexaoModel>statusConexao',
@@ -26,7 +26,7 @@
 							formatter: 'com.pontual.sgmr.model.formatter.getCorIconeConexao'}"
 				/>
         	</m:headerContent>   
-			<ObjectPageLayout id="ObjectPageLayout_EX2500-5" upperCaseAnchorBar="false">
+			<ObjectPageLayout id="idObjectPageLayout_EX2500-5" upperCaseAnchorBar="false">
 				<headerTitle>
 					<ObjectPageHeader id="IdObjectPageHeader1_EX2500-5" objectTitle="INSPEÇÃO E MEDIÇÃO DE MATERIAL RODANTE"
 						objectSubtitle="">
@@ -47,40 +47,27 @@
 							</ObjectPageSubSection>
 						</subSections>
 					</ObjectPageSection>
+
 					<ObjectPageSection id="idObjectSectionRoleteSup_EX2500-5" titleUppercase="false" title="{i18n>roletesuperior}">
 						<subSections>
-							<ObjectPageSubSection id="idObjectSubSectionRoleteSup_EX2500-5" title="{i18n>roletesuperior}" titleUppercase="false">
-								<actions>
-									<m:Button id="idButtonImgRoleteSup_EX2500-5" icon="sap-icon://image-viewer" press="_handleExibirImagem">
-										<m:customData>
-											<core:CustomData key="imagem" value="roletesuperior" />
-											<core:CustomData key="titulo" value="{i18n>roletesuperior}" />
-										</m:customData>
-									</m:Button>
-								</actions>
+							<ObjectPageSubSection id="idObjectSubSectionRoleteSup_EX2500-5" title="{i18n>roletesuperior}" titleUppercase="false">								
 								<blocks>
 									<blockcolor:RoletesSuperiores id="roletes_supe_EX2500-5"/>
 								</blocks>
 							</ObjectPageSubSection>
 						</subSections>
 					</ObjectPageSection>
+
 					<ObjectPageSection id="idObjectSectionRoleteInf_EX2500-5" titleUppercase="false" title="{i18n>roleteinferior}">
 						<subSections>
-							<ObjectPageSubSection id="idObjectSubSectionRoleteInf_EX2500-5" title="{i18n>roleteinferior}" titleUppercase="false">
-								<actions>
-									<m:Button id="idButtonImgRoleteInf_EX2500-5" icon="sap-icon://image-viewer" press="_handleExibirImagem">
-										<m:customData>
-											<core:CustomData key="imagem" value="roleteinferior" />
-											<core:CustomData key="titulo" value="{i18n>roleteinferior}" />
-										</m:customData>
-									</m:Button>
-								</actions>
+							<ObjectPageSubSection id="idObjectSubSectionRoleteInf_EX2500-5" title="{i18n>roleteinferior}" titleUppercase="false">								
 								<blocks>
 									<blockcolor:RoletesInferiores id="roletes_infe_EX2500-5"/>
 								</blocks>
 							</ObjectPageSubSection>
 						</subSections>
 					</ObjectPageSection>
+
 					<ObjectPageSection id="idObjectSectionSapata_EX2500-5" titleUppercase="false" title="{i18n>sapatas}">
 						<subSections>
 							<ObjectPageSubSection id="idObjectSubSectionSapata_EX2500-5" title="{i18n>sapatas}" titleUppercase="false">
@@ -98,7 +85,6 @@
 							</ObjectPageSubSection>
 						</subSections>
 					</ObjectPageSection>
-
 
 					<ObjectPageSection id="idObjectSectionPassoEsteiras" titleUppercase="false" title="{i18n>passoesteiras}">
 						<subSections>

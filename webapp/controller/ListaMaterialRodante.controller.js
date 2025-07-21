@@ -19,11 +19,11 @@ sap.ui.define([
                 oView = oController.getView();
 
                 var oMaterialRodante = [{
-                    Codigo: "EH4009",
+                    Codigo: "EH-4010",
                     DescrMaterialRodante: "ESCAVADEIRA HIDRÁULICA HITACHI - EX 1200-5", 
                     Sincronizado: "N",
                     HabilitarTelaCriarmaterialRodante: true,
-                    CodigoFormulario: "EX1200-5",
+                    CodigoFormulario: "EX 1200-5",
                     AutorizacaoSet: [
                         {
                             CodigoAutorizacao: "01",
@@ -39,11 +39,139 @@ sap.ui.define([
 
                     ]},
                     {
-                    Codigo: "EH5001",
-                    DescrMaterialRodante: "ESCAVADEIRA HIDRÁULICA HITACHI - EX2500-5", 
+                    Codigo: "EH-4011",
+                    DescrMaterialRodante: "ESCAVADEIRA HIDRÁULICA HITACHI - EX 1200-6", 
                     Sincronizado: "N",
                     HabilitarTelaCriarmaterialRodante: true,
-                    CodigoFormulario: "EX2500-5",
+                    CodigoFormulario: "EX 1200-6",
+                    AutorizacaoSet: [
+                        {
+                            CodigoAutorizacao: "01",
+                            DescrAutorizacao: "INSPEÇÃO MATERIAL RODANTE",
+                            Selecionado: true
+                        },
+                        {
+                            CodigoAutorizacao: "02",
+                            DescrAutorizacao: "MOVIMENTAÇÃO MATERIAL RODANTE",
+                            Selecionado: true
+                        }
+                    ]},
+                    {
+                    Codigo: "EH-4042",
+                    DescrMaterialRodante: "ESCAVADEIRA HIDRÁULICA HITACHI - EX 1200-7", 
+                    Sincronizado: "N",
+                    HabilitarTelaCriarmaterialRodante: true,
+                    CodigoFormulario: "EX1200-7",
+                    AutorizacaoSet: [
+                        {
+                            CodigoAutorizacao: "01",
+                            DescrAutorizacao: "INSPEÇÃO MATERIAL RODANTE",
+                            Selecionado: true
+                        },
+                        {
+                            CodigoAutorizacao: "02",
+                            DescrAutorizacao: "MOVIMENTAÇÃO MATERIAL RODANTE",
+                            Selecionado: true
+                        }
+                    ]},
+                    {
+                    Codigo: "PF-1009",
+                    DescrMaterialRodante: "TRATOR DE ESTEIRA CATERPILLAR - D6", 
+                    Sincronizado: "N",
+                    HabilitarTelaCriarmaterialRodante: true,
+                    CodigoFormulario: "D6",
+                    AutorizacaoSet: [
+                        {
+                            CodigoAutorizacao: "01",
+                            DescrAutorizacao: "INSPEÇÃO MATERIAL RODANTE",
+                            Selecionado: true
+                        },
+                        {
+                            CodigoAutorizacao: "02",
+                            DescrAutorizacao: "MOVIMENTAÇÃO MATERIAL RODANTE",
+                            Selecionado: true
+                        }
+                    ]},
+                    {
+                    Codigo: "TE-3002",
+                    DescrMaterialRodante: "TRATOR DE ESTEIRA CATERPILLAR - D8", 
+                    Sincronizado: "N",
+                    HabilitarTelaCriarmaterialRodante: true,
+                    CodigoFormulario: "D8",
+                    AutorizacaoSet: [
+                        {
+                            CodigoAutorizacao: "01",
+                            DescrAutorizacao: "INSPEÇÃO MATERIAL RODANTE",
+                            Selecionado: true
+                        },
+                        {
+                            CodigoAutorizacao: "02",
+                            DescrAutorizacao: "MOVIMENTAÇÃO MATERIAL RODANTE",
+                            Selecionado: true
+                        }
+                    ]},
+                    {
+                    Codigo: "TE-4021",
+                    DescrMaterialRodante: "TRACK DOOZER CATERPILLAR D9T", 
+                    Sincronizado: "N",
+                    HabilitarTelaCriarmaterialRodante: true,
+                    CodigoFormulario: "D9T",
+                    AutorizacaoSet: [
+                        {
+                            CodigoAutorizacao: "01",
+                            DescrAutorizacao: "INSPEÇÃO MATERIAL RODANTE",
+                            Selecionado: true
+                        },
+                        {
+                            CodigoAutorizacao: "02",
+                            DescrAutorizacao: "MOVIMENTAÇÃO MATERIAL RODANTE",
+                            Selecionado: true
+                        }
+                    ]},
+                    {
+                    Codigo: "TE-6006",
+                    DescrMaterialRodante: "TRATOR DE ESTEIRAS CATERPILLAR D11T CD", 
+                    Sincronizado: "N",
+                    HabilitarTelaCriarmaterialRodante: true,
+                    CodigoFormulario: "D11",
+                    AutorizacaoSet: [
+                        {
+                            CodigoAutorizacao: "01",
+                            DescrAutorizacao: "INSPEÇÃO MATERIAL RODANTE",
+                            Selecionado: true
+                        },
+                        {
+                            CodigoAutorizacao: "02",
+                            DescrAutorizacao: "MOVIMENTAÇÃO MATERIAL RODANTE",
+                            Selecionado: true
+                        }
+                    ]},
+                    {
+                    Codigo: "EH-5001",
+                    DescrMaterialRodante: "ESCAVADEIRA HIDRÁULICA HITACHI - EX 2500-5", 
+                    Sincronizado: "N",
+                    HabilitarTelaCriarmaterialRodante: true,
+                    CodigoFormulario: "EX 2500-5",
+                    AutorizacaoSet: [
+                        {
+                            CodigoAutorizacao: "01",
+                            DescrAutorizacao: "INSPEÇÃO MATERIAL RODANTE",
+                            Selecionado: true
+                        },
+                        {
+                            CodigoAutorizacao: "02",
+                            DescrAutorizacao: "MOVIMENTAÇÃO MATERIAL RODANTE",
+                            Selecionado: true
+                        }
+
+
+                    ]},
+                    {
+                    Codigo: "EH-6001",
+                    DescrMaterialRodante: "ESCAVADEIRA HIDRÁULICA HITACHI - EX 5500", 
+                    Sincronizado: "N",
+                    HabilitarTelaCriarmaterialRodante: true,
+                    CodigoFormulario: "EX 5500",
                     AutorizacaoSet: [
                         {
                             CodigoAutorizacao: "01",
@@ -63,7 +191,7 @@ sap.ui.define([
                         DescrMaterialRodante: "ESCAVADEIRA HIDRÁULICA HYUNDAI - R220LC-9",
                         Sincronizado: "N",
                         HabilitarTelaCriarmaterialRodante: true,
-                        CodigoFormulario: "R220LC-9",
+                        CodigoFormulario: "R 220LC-9",
                         AutorizacaoSet: [
                             {
                                 CodigoAutorizacao: "01",
@@ -212,10 +340,11 @@ sap.ui.define([
                 //oController.getOwnerComponent().getRouter().navTo(oMaterialRodante.CodigoFormulario, null, true);                
                 //oController.getOwnerComponent().getRouter().navTo("ObjectPageSection", null, true);
                 var oRouter = oController.getOwnerComponent().getRouter();
-                var oRoute = oRouter.getRoute(oMaterialRodante.CodigoFormulario);
+                var oDestiny = oMaterialRodante.CodigoFormulario.replace(/\s+/g, '')
+                var oRoute = oRouter.getRoute(oDestiny);
 
                 if (oRoute !== undefined) {
-                    oRouter.navTo(oMaterialRodante.CodigoFormulario, null, true);
+                    oRouter.navTo(oDestiny, null, true);
                 } else {
                     sap.m.MessageBox.error(
                         "Não foi possível encontrar o formulário: " + oMaterialRodante.CodigoFormulario,

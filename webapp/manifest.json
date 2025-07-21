@@ -60,7 +60,9 @@
       "i18n": {
         "type": "sap.ui.model.resource.ResourceModel",
         "settings": {
-          "bundleName": "com.pontual.sgmr.i18n.i18n"
+          "bundleName": "com.pontual.sgmr.i18n.i18n",
+          "supportedLocales": [""],
+          "fallbackLocale": ""
         }
       },
       "": {
@@ -268,10 +270,31 @@
           ]
         },
         {
+          "name": "EX1200-6",
+          "pattern": "EX1200-6",
+          "target": [
+            "EX1200-6"
+          ]
+        },
+        {
+          "name": "EX1200-7",
+          "pattern": "EX1200-7",
+          "target": [
+            "EX1200-7"
+          ]
+        },
+        {
           "name": "EX2500-5",
           "pattern": "EX2500-5",
           "target": [
             "EX2500-5"
+          ]
+        },
+        {
+          "name": "EX5500",
+          "pattern": "EX5500",
+          "target": [
+            "EX5500"
           ]
         },
         {
@@ -280,19 +303,33 @@
           "target": [
             "R220LC-9"
           ]
-        },        
+        },
         {
-          "name": "RoletesSuperiores",
-          "pattern": "RoletesSuperiores",
+          "name": "D6",
+          "pattern": "D6",
           "target": [
-            "RoletesSuperiores"
+            "D6"
           ]
         },
         {
-          "name": "RoletesInferiores",
-          "pattern": "RoletesInferiores",
+          "name": "D8",
+          "pattern": "D8",
           "target": [
-            "RoletesInferiores"
+            "D8"
+          ]
+        },
+        {
+          "name": "D9T",
+          "pattern": "D9T",
+          "target": [
+            "D9T"
+          ]
+        },
+        {
+          "name": "D11",
+          "pattern": "D11 ",
+          "target": [
+            "D11"
           ]
         },
         {
@@ -388,26 +425,34 @@
           "viewId": "ListaUsuario",
           "viewName": "ListaUsuario"
         },
-        "RoletesSuperiores": {
-          "viewType": "XML",
-          "transition": "slide",
-          "clearControlAggregation": false,
-          "viewId": "RoletesSuperiores",
-          "viewName": "RoletesSuperiores"
-        },
-        "RoletesInferiores": {
-          "viewType": "XML",
-          "transition": "slide",
-          "clearControlAggregation": false,
-          "viewId": "RoletesInferiores",
-          "viewName": "RoletesInferiores"
-        },
+
         "EX1200-5": {
           "viewType": "XML",
           "transition": "slide",
           "clearControlAggregation": false,
           "viewId": "EX1200-5",
           "viewName": "EX1200-5"
+        },
+        "EX1200-6": {
+          "viewType": "XML",
+          "transition": "slide",
+          "clearControlAggregation": false,
+          "viewId": "EX1200-6",
+          "viewName": "EX1200-6"
+        },
+        "EX1200-7": {
+          "viewType": "XML",
+          "transition": "slide",
+          "clearControlAggregation": false,
+          "viewId": "EX1200-7",
+          "viewName": "EX1200-7"
+        },
+        "D6": {
+          "viewType": "XML",
+          "transition": "slide",
+          "clearControlAggregation": false,
+          "viewId": "D6",
+          "viewName": "D6"
         },
         "EX2500-5": {
           "viewType": "XML",
@@ -416,12 +461,40 @@
           "viewId": "EX2500-5",
           "viewName": "EX2500-5"
         },
+        "EX5500": {
+          "viewType": "XML",
+          "transition": "slide",
+          "clearControlAggregation": false,
+          "viewId": "EX5500",
+          "viewName": "EX5500"
+        },
         "R220LC-9": {
           "viewType": "XML",
           "transition": "slide",
           "clearControlAggregation": false,
           "viewId": "R220LC-9",
           "viewName": "R220LC-9"
+        },
+        "D8": {
+          "viewType": "XML",
+          "transition": "slide",
+          "clearControlAggregation": false,
+          "viewId": "D8",
+          "viewName": "D8"
+        },
+        "D9T": {
+          "viewType": "XML",
+          "transition": "slide",
+          "clearControlAggregation": false,
+          "viewId": "D9T",
+          "viewName": "D9T"
+        },
+        "D11": {
+          "viewType": "XML",
+          "transition": "slide",
+          "clearControlAggregation": false,
+          "viewId": "D11",
+          "viewName": "D11"
         },
         "Sincronizar": {
           "viewType": "XML",
