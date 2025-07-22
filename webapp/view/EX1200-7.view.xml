@@ -17,7 +17,7 @@
           class="sapUiContentPadding sapUiResponsivePadding--header sapUiResponsivePadding--subHeader sapUiResponsivePadding--content sapUiResponsivePadding--footer">
 		   <m:headerContent>
 				<m:ObjectStatus
-					id="IdNetworkStatus2"
+					id="IdNetworkStatus"
 					active="false"
 					inverted="true"
 					icon="{path: 'conexaoModel>statusConexao',
@@ -26,30 +26,30 @@
 							formatter: 'com.pontual.sgmr.model.formatter.getCorIconeConexao'}"
 				/>
         	</m:headerContent>   
-			<ObjectPageLayout id="ObjectPageLayout_EX1200-7" upperCaseAnchorBar="false">
+			<ObjectPageLayout id="ObjectPageLayout" upperCaseAnchorBar="false">
 				<headerTitle>
-					<ObjectPageHeader id="IdObjectPageHeader1_EX1200-7" objectTitle="INSPEÇÃO E MEDIÇÃO DE MATERIAL RODANTE"
+					<ObjectPageHeader id="IdObjectPageHeader1" objectTitle="INSPEÇÃO E MEDIÇÃO DE MATERIAL RODANTE"
 						objectSubtitle="">
 					</ObjectPageHeader>
 				</headerTitle>
 
 				<headerContent>
-					<m:ObjectAttribute id="idHeader1_EX1200-7" text="Equipamento: {materialRodanteCriarModel>Codigo}&#10; Descrição: {materialRodanteCriarModel>DescrMaterialRodante}&#10;Formulário: {materialRodanteCriarModel>CodigoFormulario}"/>
+					<m:ObjectAttribute id="idHeader1" text="Equipamento: {materialRodanteCriarModel>Codigo}&#10; Descrição: {materialRodanteCriarModel>DescrMaterialRodante}&#10;Formulário: {materialRodanteCriarModel>CodigoFormulario}"/>
 				</headerContent>
 
 				<sections>
-					<ObjectPageSection id="idObjectSectionCabecalho_EX1200-7" titleUppercase="false" title="Cabeçalho">
+					<ObjectPageSection id="idObjectSectionCabecalho" titleUppercase="false" title="Cabeçalho">
 						<subSections>
-							<ObjectPageSubSection id="idObjectSubSectionCabecalho_EX1200-7" title="Cabeçalho" titleUppercase="false">
+							<ObjectPageSubSection id="idObjectSubSectionCabecalho" title="Cabeçalho" titleUppercase="false">
 								<blocks>
-									<blockcolor:Cabecalho id="cabecalho_EX1200-7"/>
+									<blockcolor:Cabecalho id="cabecalho"/>
 								</blocks>
 							</ObjectPageSubSection>
 						</subSections>
 					</ObjectPageSection>
-					<ObjectPageSection id="idObjectSectionRoleteSup_EX1200-7" titleUppercase="false" title="{i18n>roletesuperior}">
+					<ObjectPageSection id="idObjectSectionRoleteSup" titleUppercase="false" title="{i18n>roletesuperior}">
 						<subSections>
-							<ObjectPageSubSection id="idObjectSubSectionRoleteSup_EX1200-7" title="{i18n>roletesuperior}" titleUppercase="false">
+							<ObjectPageSubSection id="idObjectSubSectionRoleteSup" title="{i18n>roletesuperior}" titleUppercase="false">
 								<actions>
 									<m:Button id="idButtonImgRoleteSup" icon="sap-icon://image-viewer" press="_handleExibirImagem">
 										<m:customData>
@@ -58,38 +58,36 @@
 										</m:customData>
 									</m:Button>
 								</actions>
-                                <blocks>
-									<blockcolor:RoletesSuperiores id="roletes_supe_EX1200-7"/>
+								<blocks>
+									<blockcolor:RoletesSuperiores id="roletes_supe"/>
 								</blocks>
 							</ObjectPageSubSection>
 						</subSections>
 					</ObjectPageSection>
-
-					<ObjectPageSection id="idObjectSectionRoleteInf_EX1200-7" titleUppercase="false" title="{i18n>roleteinferior}">
+					<ObjectPageSection id="idObjectSectionRoleteInf" titleUppercase="false" title="{i18n>roleteinferior}">
 						<subSections>
-							<ObjectPageSubSection id="idObjectSubSectionRoleteInf_EX1200-7" title="{i18n>roleteinferior}" titleUppercase="false">	
-                                <actions>
+							<ObjectPageSubSection id="idObjectSubSectionRoleteInf" title="{i18n>roleteinferior}" titleUppercase="false">
+								<actions>
 									<m:Button id="idButtonImgRoleteInf" icon="sap-icon://image-viewer" press="_handleExibirImagem">
 										<m:customData>
 											<core:CustomData key="imagem" value="roleteinferior" />
 											<core:CustomData key="titulo" value="{i18n>roleteinferior}" />
 										</m:customData>
 									</m:Button>
-								</actions>							
+								</actions>
 								<blocks>
-									<blockcolor:RoletesInferiores id="roletes_infe_EX1200-7"/>
+									<blockcolor:RoletesInferiores id="roletes_infe"/>
 								</blocks>
 							</ObjectPageSubSection>
 						</subSections>
 					</ObjectPageSection>
-					
-					<ObjectPageSection id="idObjectSectionSapata_EX1200-7" titleUppercase="false" title="{i18n>sapatas}">
+					<ObjectPageSection id="idObjectSectionSapata" titleUppercase="false" title="{i18n>sapatas}">
 						<subSections>
-							<ObjectPageSubSection id="idObjectSubSectionSapata_EX1200-7" title="{i18n>sapatas}" titleUppercase="false">
+							<ObjectPageSubSection id="idObjectSubSectionSapata" title="{i18n>sapatas}" titleUppercase="false">
 								<actions>
-									<m:Button id="idButtonImgSapata_EX1200-7" icon="sap-icon://image-viewer" press="_handleExibirImagem">
+									<m:Button id="idButtonImgSapata" icon="sap-icon://image-viewer" press="_handleExibirImagem">
 										<m:customData>
-											<core:CustomData key="imagem" value="sapatasAE" />
+											<core:CustomData key="imagem" value="sapata" />
 											<core:CustomData key="titulo" value="{i18n>sapatas}" />
 										</m:customData>
 									</m:Button>
@@ -101,91 +99,109 @@
 						</subSections>
 					</ObjectPageSection>
 
-					<ObjectPageSection id="idObjectSectionPassoEsteiras" titleUppercase="false" title="{i18n>passoesteiras}">
+					<ObjectPageSection id="idObjectSectionBuchas" titleUppercase="false" title="{i18n>buchas}">
 						<subSections>
-							<ObjectPageSubSection id="idObjectSubSectionPassoEsteiras" title="{i18n>passoesteiras}" titleUppercase="false">
+							<ObjectPageSubSection id="idObjectSubSectionBuchas" title="{i18n>buchas}" titleUppercase="false">
 								<actions>
-									<m:Button id="idButtonImgPassoEsteiras" icon="sap-icon://image-viewer" press="_handleExibirImagem">
+									<m:Button id="idButtonImgBuchas" icon="sap-icon://image-viewer" press="_handleExibirImagem">
 										<m:customData>
-											<core:CustomData key="imagem" value="passoesteira4pinos" />
-											<core:CustomData key="titulo" value="{i18n>passoesteiras}" />
+											<core:CustomData key="imagem" value="bucha" />
+											<core:CustomData key="titulo" value="{i18n>buchas}" />
 										</m:customData>
 									</m:Button>
 								</actions>
 								<blocks>
-									<blockcolor:PassoEsteira id="passo_esteiras"/>
+									<blockcolor:Buchas id="buchas"/>
+								</blocks>
+							</ObjectPageSubSection>
+						</subSections>
+					</ObjectPageSection>
+					<!-- Elos -->
+					<ObjectPageSection id="idObjectSectionElos" titleUppercase="false" title="{i18n>elos}">
+						<subSections>
+							<ObjectPageSubSection id="idObjectSubSectionElos" title="{i18n>elos}" titleUppercase="false">
+								<actions>
+									<m:Button id="idButtonImgElos" icon="sap-icon://image-viewer" press="_handleExibirImagem">
+										<m:customData>
+											<core:CustomData key="imagem" value="elos" />
+											<core:CustomData key="titulo" value="{i18n>elos}" />
+										</m:customData>
+									</m:Button>
+								</actions>
+								<blocks>
+									<blockcolor:Elos id="elos"/>
+								</blocks>
+							</ObjectPageSubSection>
+						</subSections>
+					</ObjectPageSection>
+					<!-- Elos -->
+					<ObjectPageSection id="idObjectSectionRodaGuia" titleUppercase="false" title="{i18n>rodaguia}">
+						<subSections>
+							<ObjectPageSubSection id="idObjectSubSectionRodaGuia" title="{i18n>rodaguia}" titleUppercase="false">
+								<actions>
+									<m:Button id="idButtonImgRodaGuia" icon="sap-icon://image-viewer" press="_handleExibirImagem">
+										<m:customData>
+											<core:CustomData key="imagem" value="rodaguia" />
+											<core:CustomData key="titulo" value="{i18n>rodaguia}" />
+										</m:customData>
+									</m:Button>
+								</actions>
+								<blocks>
+									<blockcolor:RodaGuia id="roda_guia"/>
 								</blocks>
 							</ObjectPageSubSection>
 						</subSections>
 					</ObjectPageSection>
 
-					<ObjectPageSection id="idObjectSectionFelchaEsteiras" titleUppercase="false" title="{i18n>flechaesteiras}">
+					<ObjectPageSection id="idObjectSectionPassoEsteira" titleUppercase="false" title="{i18n>passoesteira}">
 						<subSections>
-							<ObjectPageSubSection id="idObjectSubSectionFelchaEsteiras" title="{i18n>flechaesteiras}" titleUppercase="false">
+							<ObjectPageSubSection id="idObjectSubSectionPassoEsteira" title="{i18n>passoesteira}" titleUppercase="false">
 								<actions>
-									<m:Button id="idButtonImgFelchaEsteiras" icon="sap-icon://image-viewer" press="_handleExibirImagem">
+									<m:Button id="idButtonImgPassoEsteira" icon="sap-icon://image-viewer" press="_handleExibirImagem">
 										<m:customData>
-											<core:CustomData key="imagem" value="flechaesteiras" />
-											<core:CustomData key="titulo" value="{i18n>flechaesteiras}" />
+											<core:CustomData key="imagem" value="passoesteira" />
+											<core:CustomData key="titulo" value="{i18n>passoesteira}" />
 										</m:customData>
 									</m:Button>
 								</actions>
 								<blocks>
-									<blockcolor:FlechaEsteiras id="flecha_esteiras"/>
+									<blockcolor:PassoEsteira id="passo_esteira"/>
 								</blocks>
 							</ObjectPageSubSection>
 						</subSections>
 					</ObjectPageSection>
 
-					<ObjectPageSection id="idObjectSectionRodasMotrizes" titleUppercase="false" title="{i18n>rodasmotrizes}">
+					<ObjectPageSection id="idObjectSectionTensionamento" titleUppercase="false" title="{i18n>tensionamento}">
 						<subSections>
-							<ObjectPageSubSection id="idObjectSubSectionRodasMotrizes" title="{i18n>rodasmotrizes}" titleUppercase="false">
+							<ObjectPageSubSection id="idObjectSubSectionTensionamento" title="{i18n>tensionamento}" titleUppercase="false">
 								<actions>
-									<m:Button id="idButtonImgRodasMotrizes" icon="sap-icon://image-viewer" press="_handleExibirImagem">
+									<m:Button id="idButtonImgTensionamento" icon="sap-icon://image-viewer" press="_handleExibirImagem">
 										<m:customData>
-											<core:CustomData key="imagem" value="rodasmotrizes" />
-											<core:CustomData key="titulo" value="{i18n>rodasmotrizes}" />
+											<core:CustomData key="imagem" value="tensionamento" />
+											<core:CustomData key="titulo" value="{i18n>tensionamento}" />
 										</m:customData>
 									</m:Button>
 								</actions>
 								<blocks>
-									<blockcolor:RodasMotrizes id="roda_motrizes"/>
+									<blockcolor:Tensionamento id="tensionamento"/>
 								</blocks>
 							</ObjectPageSubSection>
 						</subSections>
 					</ObjectPageSection>
 
-					<ObjectPageSection id="idObjectSectionRodasGuias" titleUppercase="false" title="{i18n>rodasguias}">
+					<ObjectPageSection id="idObjectSectionSegmento" titleUppercase="false" title="{i18n>segmento}">
 						<subSections>
-							<ObjectPageSubSection id="idObjectSubSectionRodasGuias" title="{i18n>rodasguias}" titleUppercase="false">
+							<ObjectPageSubSection id="idObjectSubSectionSegmento" title="{i18n>segmento}" titleUppercase="false">
 								<actions>
-									<m:Button id="idButtonImgRodasGuias" icon="sap-icon://image-viewer" press="_handleExibirImagem">
+									<m:Button id="idButtonImgSegmento" icon="sap-icon://image-viewer" press="_handleExibirImagem">
 										<m:customData>
-											<core:CustomData key="imagem" value="rodasguias" />
-											<core:CustomData key="titulo" value="{i18n>rodasguias}" />
+											<core:CustomData key="imagem" value="segmentoA" />
+											<core:CustomData key="titulo" value="{i18n>segmento}" />
 										</m:customData>
 									</m:Button>
 								</actions>
 								<blocks>
-									<blockcolor:RodasGuias id="rodas_guias"/>
-								</blocks>
-							</ObjectPageSubSection>
-						</subSections>
-					</ObjectPageSection>
-
-					<ObjectPageSection id="idObjectSectionPinosSapatas" titleUppercase="false" title="{i18n>pinossapatas}">
-						<subSections>
-							<ObjectPageSubSection id="idObjectSubSectionPinosSapatas" title="{i18n>pinossapatas}" titleUppercase="false">
-								<actions>
-									<m:Button id="idButtonImgPinosSapatas" icon="sap-icon://image-viewer" press="_handleExibirImagem">
-										<m:customData>
-											<core:CustomData key="imagem" value="pinossapatas430" />
-											<core:CustomData key="titulo" value="{i18n>pinossapatas}" />
-										</m:customData>
-									</m:Button>
-								</actions>
-								<blocks>
-									<blockcolor:PinosSapatas id="pinossapatas"/>
+									<blockcolor:Segmento id="segmento"/>
 								</blocks>
 							</ObjectPageSubSection>
 						</subSections>
@@ -220,6 +236,7 @@
 							</ObjectPageSubSection>
 						</subSections>
 					</ObjectPageSection>
+
 
 					<ObjectPageSection titleUppercase="false" title="Observações">
 						<subSections>

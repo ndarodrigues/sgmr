@@ -71,7 +71,7 @@
 								<actions>
 									<m:Button id="idButtonImgRoleteInf" icon="sap-icon://image-viewer" press="_handleExibirImagem">
 										<m:customData>
-											<core:CustomData key="imagem" value="roleteinferiorD8" />
+											<core:CustomData key="imagem" value="roleteinferiorD6" />
 											<core:CustomData key="titulo" value="{i18n>roleteinferior}" />
 										</m:customData>
 									</m:Button>
@@ -89,7 +89,7 @@
 								<actions>
 									<m:Button id="idButtonImgSapata_D8" icon="sap-icon://image-viewer" press="_handleExibirImagem">
 										<m:customData>
-											<core:CustomData key="imagem" value="sapatasAE" />
+											<core:CustomData key="imagem" value="sapata" />
 											<core:CustomData key="titulo" value="{i18n>sapatas}" />
 										</m:customData>
 									</m:Button>

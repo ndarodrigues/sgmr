@@ -187,6 +187,126 @@ sap.ui.define([
 
                     ]},
                     {
+                    Codigo: "EH-1026",
+                    DescrMaterialRodante: "ESCAVADEIRA HIDRÁULICA CATERPILLAR 315D", 
+                    Sincronizado: "N",
+                    HabilitarTelaCriarmaterialRodante: true,
+                    CodigoFormulario: "315",
+                    AutorizacaoSet: [
+                        {
+                            CodigoAutorizacao: "01",
+                            DescrAutorizacao: "INSPEÇÃO MATERIAL RODANTE",
+                            Selecionado: true
+                        },
+                        {
+                            CodigoAutorizacao: "02",
+                            DescrAutorizacao: "MOVIMENTAÇÃO MATERIAL RODANTE",
+                            Selecionado: true
+                        }
+
+
+                    ]},
+                    {
+                    Codigo: "EH-1021",
+                    DescrMaterialRodante: "HYDRAULIC EXCAVATOR CATERPILLAR 320D", 
+                    Sincronizado: "N",
+                    HabilitarTelaCriarmaterialRodante: true,
+                    CodigoFormulario: "320",
+                    AutorizacaoSet: [
+                        {
+                            CodigoAutorizacao: "01",
+                            DescrAutorizacao: "INSPEÇÃO MATERIAL RODANTE",
+                            Selecionado: true
+                        },
+                        {
+                            CodigoAutorizacao: "02",
+                            DescrAutorizacao: "MOVIMENTAÇÃO MATERIAL RODANTE",
+                            Selecionado: true
+                        }
+
+
+                    ]},
+                    {
+                    Codigo: "EH-9999",
+                    DescrMaterialRodante: "323 323 323D", 
+                    Sincronizado: "N",
+                    HabilitarTelaCriarmaterialRodante: true,
+                    CodigoFormulario: "323",
+                    AutorizacaoSet: [
+                        {
+                            CodigoAutorizacao: "01",
+                            DescrAutorizacao: "INSPEÇÃO MATERIAL RODANTE",
+                            Selecionado: true
+                        },
+                        {
+                            CodigoAutorizacao: "02",
+                            DescrAutorizacao: "MOVIMENTAÇÃO MATERIAL RODANTE",
+                            Selecionado: true
+                        }
+
+
+                    ]},
+                    {
+                    Codigo: "EH-9997",
+                    DescrMaterialRodante: "336 336 336", 
+                    Sincronizado: "N",
+                    HabilitarTelaCriarmaterialRodante: true,
+                    CodigoFormulario: "336",
+                    AutorizacaoSet: [
+                        {
+                            CodigoAutorizacao: "01",
+                            DescrAutorizacao: "INSPEÇÃO MATERIAL RODANTE",
+                            Selecionado: true
+                        },
+                        {
+                            CodigoAutorizacao: "02",
+                            DescrAutorizacao: "MOVIMENTAÇÃO MATERIAL RODANTE",
+                            Selecionado: true
+                        }
+
+
+                    ]},
+                    {
+                    Codigo: "EH-9998",
+                    DescrMaterialRodante: "349 349 349", 
+                    Sincronizado: "N",
+                    HabilitarTelaCriarmaterialRodante: true,
+                    CodigoFormulario: "349",
+                    AutorizacaoSet: [
+                        {
+                            CodigoAutorizacao: "01",
+                            DescrAutorizacao: "INSPEÇÃO MATERIAL RODANTE",
+                            Selecionado: true
+                        },
+                        {
+                            CodigoAutorizacao: "02",
+                            DescrAutorizacao: "MOVIMENTAÇÃO MATERIAL RODANTE",
+                            Selecionado: true
+                        }
+
+
+                    ]},
+                    {
+                    Codigo: "EH-3007",
+                    DescrMaterialRodante: "ESCAVADEIRA HIDRÁULICA CATERPILLAR 365C", 
+                    Sincronizado: "N",
+                    HabilitarTelaCriarmaterialRodante: true,
+                    CodigoFormulario: "365_374",
+                    AutorizacaoSet: [
+                        {
+                            CodigoAutorizacao: "01",
+                            DescrAutorizacao: "INSPEÇÃO MATERIAL RODANTE",
+                            Selecionado: true
+                        },
+                        {
+                            CodigoAutorizacao: "02",
+                            DescrAutorizacao: "MOVIMENTAÇÃO MATERIAL RODANTE",
+                            Selecionado: true
+                        }
+
+
+                    ]},
+                    {
                         Codigo: "EH-1053",
                         DescrMaterialRodante: "ESCAVADEIRA HIDRÁULICA HYUNDAI - R220LC-9",
                         Sincronizado: "N",

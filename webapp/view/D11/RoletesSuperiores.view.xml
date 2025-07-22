@@ -41,38 +41,12 @@
 										enabled="{layoutTelaModel>HabilitarTelaCriarUsuario}"
 										/>						
 								</f:fields>
-							</f:FormElement>
-							<f:FormElement label="2º Pos. (Central)\Desgaste">
-								<f:fields>							
-									<Input 
-										value="{criarUsuarioModel>CodUsuario}"
-                                        maxLength="12"
-										required="true"
-										showClearIcon="true"
-										description="50%"
-										width="100%"
-										enabled="{layoutTelaModel>HabilitarTelaCriarUsuario}"
-										/>						
-								</f:fields>
-							</f:FormElement>
-							<f:FormElement label="3º Pos. (Traseiro)\Desgaste">
-								<f:fields>							
-									<Input 
-										value="{criarUsuarioModel>CodUsuario}"
-                                        maxLength="12"
-										required="true"
-										showClearIcon="true"
-										description="50%"
-										width="100%"
-										enabled="{layoutTelaModel>HabilitarTelaCriarUsuario}"
-										/>						
-								</f:fields>
-							</f:FormElement>                                                                                      
+							</f:FormElement>							                                                                                  
 						</f:formElements>
 					</f:FormContainer>		
 					<f:FormContainer title="{i18n>ladodireito}">
 						<f:formElements>
-							<f:FormElement label="1º Pos.(Dianteiro) \ % Desgaste">
+							<f:FormElement label="Dianteiro \ % Desgaste">
 								<f:fields>							
 									<Input 
 										value="{criarUsuarioModel>CodUsuario}"
@@ -84,33 +58,7 @@
 										enabled="{layoutTelaModel>HabilitarTelaCriarUsuario}"
 										/>						
 								</f:fields>
-							</f:FormElement>
-							<f:FormElement label="2º Pos. (Central) \ % Desgaste">
-								<f:fields>							
-									<Input 
-										value="{criarUsuarioModel>CodUsuario}"
-                                        maxLength="12"
-										required="true"
-										showClearIcon="true"
-										description="50%"
-										width="100%"
-										enabled="{layoutTelaModel>HabilitarTelaCriarUsuario}"
-										/>						
-								</f:fields>
-							</f:FormElement>
-							<f:FormElement label="3º Pos. (Traseiro) \ % Desgaste">
-								<f:fields>							
-									<Input 
-										value="{criarUsuarioModel>CodUsuario}"
-                                        maxLength="12"
-										required="true"
-										showClearIcon="true"
-										description="50%"
-										width="100%"
-										enabled="{layoutTelaModel>HabilitarTelaCriarUsuario}"
-										/>						
-								</f:fields>
-							</f:FormElement>                                                                                      
+							</f:FormElement>							                                                                                     
 						</f:formElements>
 					</f:FormContainer>	
 				</f:formContainers>				

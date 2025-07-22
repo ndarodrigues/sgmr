@@ -298,6 +298,48 @@
           ]
         },
         {
+          "name": "315",
+          "pattern": "315",
+          "target": [
+            "315"
+          ]
+        },
+        {
+          "name": "320",
+          "pattern": "320",
+          "target": [
+            "320"
+          ]
+        },
+        {
+          "name": "323",
+          "pattern": "323",
+          "target": [
+            "323"
+          ]
+        },
+        {
+          "name": "336",
+          "pattern": "336",
+          "target": [
+            "336"
+          ]
+        },
+        {
+          "name": "349",
+          "pattern": "349",
+          "target": [
+            "349"
+          ]
+        },
+        {
+          "name": "365_374",
+          "pattern": "365_374",
+          "target": [
+            "365_374"
+          ]
+        },
+        {
           "name": "R220LC-9",
           "pattern": "R220LC-9",
           "target": [
@@ -467,6 +509,48 @@
           "clearControlAggregation": false,
           "viewId": "EX5500",
           "viewName": "EX5500"
+        },
+        "315": {
+          "viewType": "XML",
+          "transition": "slide",
+          "clearControlAggregation": false,
+          "viewId": "315",
+          "viewName": "315"
+        },
+        "320": {
+          "viewType": "XML",
+          "transition": "slide",
+          "clearControlAggregation": false,
+          "viewId": "320",
+          "viewName": "320"
+        },
+        "323": {
+          "viewType": "XML",
+          "transition": "slide",
+          "clearControlAggregation": false,
+          "viewId": "323",
+          "viewName": "323"
+        },
+        "336": {
+          "viewType": "XML",
+          "transition": "slide",
+          "clearControlAggregation": false,
+          "viewId": "336",
+          "viewName": "336"
+        },
+        "349": {
+          "viewType": "XML",
+          "transition": "slide",
+          "clearControlAggregation": false,
+          "viewId": "349",
+          "viewName": "349"
+        },
+        "365_374": {
+          "viewType": "XML",
+          "transition": "slide",
+          "clearControlAggregation": false,
+          "viewId": "365_374",
+          "viewName": "365_374"
         },
         "R220LC-9": {
           "viewType": "XML",
