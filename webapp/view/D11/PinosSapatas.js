@@ -6,11 +6,11 @@ sap.ui.define(['sap/uxap/BlockBase'], function (BlockBase) {
 			views: {
 				Collapsed: {
 					viewName: "com.pontual.sgmr.view.D11.PinosSapatas",
-					type: "XML"D11
+					type: "XML"
 				},
 				Expanded: {
 					viewName: "com.pontual.sgmr.view.D11.PinosSapatas",
-					type: "XML"D11
+					type: "XML"
 				}
 			}
 		}
