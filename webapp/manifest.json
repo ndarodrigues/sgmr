@@ -126,6 +126,9 @@
       "listaMaterialRodanteModel": {
         "type": "sap.ui.model.json.JSONModel"
       },
+      "listaCentrosModel": {
+        "type": "sap.ui.model.json.JSONModel"
+      },
       "listaPerfilModel": {
         "type": "sap.ui.model.json.JSONModel"
       },

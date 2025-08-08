@@ -60,9 +60,29 @@
 										/>
 								</f:fields>
 							</f:FormElement>
+                            <f:FormElement label="{i18n>centros}">
+								<f:fields>
+									<MultiInput
+						            	id="multiInputCentro"
+                                        required="true"
+						            	showValueHelp="true"
+						            	showClearIcon="true"
+						            	valueHelpOnly="true"
+						            	valueHelpRequest="handleValueHelpRequestedCentro" 
+						            	tokenUpdate="handleTokenUpdate"	
+                                        enabled="{perfilCriarModel>HabilitarTelaCriarPerfil}"				
+						            	tokens="{
+						            		path: 'perfilCriarModel>/Centros',
+						            		sorter: { path: 'key' }
+						            	}">
+						            	<tokens>
+						            		<Token key="{perfilCriarModel>key}" text="{perfilCriarModel>key}" />
+						            	</tokens>					
+						            </MultiInput>
+								</f:fields>
+							</f:FormElement>
 						</f:formElements>
 					</f:FormContainer>		
-
 				</f:formContainers>				
 			</f:Form>           
         <Table id="idListaAutorizacoesTable" 

@@ -1,12 +1,15 @@
 sap.ui.define([
     "com/pontual/sgmr/controller/BaseController",
     "com/pontual/sgmr/model/formatter",
+    'sap/ui/model/Filter',
+    'sap/ui/model/FilterOperator',
+    'sap/ui/core/Fragment',
     'sap/m/MessageToast',
     'sap/m/MessagePopover',
     'sap/m/MessageItem',
     'sap/ui/model/json/JSONModel'
 ],
-    function (Controller, formatter, MessageToast, MessagePopover, MessageItem, JSONModel) {
+    function (Controller, formatter, Filter, FilterOperator, Fragment, MessageToast, MessagePopover, MessageItem, JSONModel) {
         "use strict";
         var oController
         var oView
@@ -83,6 +86,106 @@ sap.ui.define([
                 this.getRouter().navTo("ListaPerfil", {}, true /*no history*/);
             },
 
+            handleTokenUpdate: function (oEvent) {
+            // Atualiza o listaCentrosModel
+            var aLista = oController.getOwnerComponent().getModel("listaCentrosModel").getData();
+            var chave = oEvent.getParameter("removedTokens")[0].getProperty("key");
+            var vIndex = aLista.findIndex(element => element.Werks === chave);
+
+            if (vIndex > -1) {
+                aLista[vIndex].Selected = false;
+                oController.getOwnerComponent().getModel("listaCentrosModel").setData(aLista);
+                oController.getOwnerComponent().getModel("listaCentrosModel").refresh();
+            }
+
+            // Atualiza o perfilCriarModel
+            var aCentrosSelecionados = oController.getOwnerComponent().getModel("perfilCriarModel").getProperty("/Centros") || [];
+            var novoscentrosSelecionados = aCentrosSelecionados.filter(item => item.key !== chave);
+            oController.getOwnerComponent().getModel("perfilCriarModel").setProperty("/Centros", novoscentrosSelecionados);
+            },
+
+            handleValueHelpRequestedCentro: function (oEvent) {
+                var sInputValue = oEvent.getSource().getValue(),
+                    oButton = oEvent.getSource(),
+                    oView = this.getView();
+
+                if (!this._pCentroValueHelpDialog) {
+                    this._pCentroValueHelpDialog = Fragment.load({
+                        id: oView.getId(),
+                        name: "com.pontual.sgmr.fragment.CentroDialog",
+                        controller: this
+                    }).then(function (oValueHelpCentroDialog) {
+                        oView.addDependent(oValueHelpCentroDialog);
+                        return oValueHelpCentroDialog;
+                    });
+                }
+        
+                this._pCentroValueHelpDialog.then(function (oValueHelpCentroDialog) {
+                    // Pega os centros já selecionados do modelo de perfil
+                    var aCentrosSelecionados = oController.getOwnerComponent().getModel("perfilCriarModel").getProperty("/Centros") || [];
+                    var aListaCentros = oController.getOwnerComponent().getModel("listaCentrosModel").getData();
+                
+                    // Marca os centros que já estavam selecionados
+                    if (aListaCentros && aCentrosSelecionados.length > 0) {
+                        aListaCentros.forEach(function(centro) {
+                            // Verifica se o centro está na lista de selecionados
+                            var centroSelecionado = aCentrosSelecionados.find(function(item) {
+                                return item.key === centro.Werks;
+                            });
+                            centro.Selected = !!centroSelecionado;
+                        });
+                        oController.getOwnerComponent().getModel("listaCentrosModel").refresh();
+                    }
+                
+                    oValueHelpCentroDialog.getBinding("items").filter([new Filter("Werks", sap.ui.model.FilterOperator.Contains, sInputValue)]);
+                    oValueHelpCentroDialog.open();
+                });
+            },
+
+            _handleValueHelpSearchCentro: function (oEvent) {
+                var sValue = oEvent.getParameter("value");
+                var oFilters = [new Filter({
+				filters: [
+					new Filter("Werks", sap.ui.model.FilterOperator.Contains, sValue),
+					new Filter("Name1", sap.ui.model.FilterOperator.Contains, sValue)
+				],
+				and: false,
+			})
+			];
+			oFilters.push(oFilters);
+			oEvent.getSource().getBinding("items").filter(oFilters);
+
+            },
+
+            _handleValueHelpCloseCentro: function (oEvent) {
+                var aSelectedItems = oEvent.getParameter("selectedItems"),
+				aElementos = [];
+
+			if (aSelectedItems) {
+				aSelectedItems.forEach(element => {
+					var vKey = element.getProperty("title");
+					var vValue = element.getProperty("description");
+					var oToken = {
+						key: vKey,
+						value: vValue
+					}
+					aElementos.push(oToken);
+
+                    var aLista = oController.getOwnerComponent().getModel("listaCentrosModel").getData();
+                    var vIndex = aLista.findIndex(element => element.Werks === vKey);
+                    if (vIndex > -1) { 
+                        aLista[vIndex].Selected = true;    
+                        oController.getOwnerComponent().getModel("listaCentrosModel").setData(aLista);
+                        oController.getOwnerComponent().getModel("listaCentrosModel").refresh();                    
+                    }
+				});
+                
+			}
+
+			oController.getOwnerComponent().getModel("perfilCriarModel").setProperty("/Centros", aElementos);
+
+            },
+
             onConfirmarPerfil: function () {
 
                 var aMockMessages = [];
@@ -131,6 +234,18 @@ sap.ui.define([
                         title: oController.getView().getModel("i18n").getResourceBundle().getText("campoobrigatorio"),
                         description: oController.getView().getModel("i18n").getResourceBundle().getText("campoautorizacao"),
                         subtitle: oController.getView().getModel("i18n").getResourceBundle().getText("autorizacao"),
+                        counter: 1
+                    };
+                    aMockMessages.push(oMockMessage)
+                    vPodeGravar = false;
+                }
+
+                if (oController.getOwnerComponent().getModel("perfilCriarModel").getData().Centros == undefined || oController.getOwnerComponent().getModel("perfilCriarModel").getData().Centros.length == 0) {
+                    var oMockMessage = {
+                        type: 'Error',
+                        title: oController.getView().getModel("i18n").getResourceBundle().getText("campoobrigatorio"),
+                        description: oController.getView().getModel("i18n").getResourceBundle().getText("campoautorizacao"),
+                        subtitle: oController.getView().getModel("i18n").getResourceBundle().getText("centro"),
                         counter: 1
                     };
                     aMockMessages.push(oMockMessage)

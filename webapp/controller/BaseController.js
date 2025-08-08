@@ -338,6 +338,11 @@ sap.ui.define([
                         aFilters = [];
                         break;
 
+                    case "ListaCentroSet":
+                        oExpand = ""
+                        aFilters = [];
+                        break;
+
                     case "ListaAutorizacaoSet":
                         oExpand = ""
                         aFilters = [];
@@ -459,6 +464,39 @@ sap.ui.define([
 			})
 		},
 
+        carregarCentro: function () {
+            return new Promise((resolve, reject) => {
+                oController.atualizarBusyDialog(oController.getView().getModel("i18n").getResourceBundle().getText("sincronizandocentros"));
+                oController.carregarDados("ListaCentroSet", []).then(function (result) {
+                    for (let x = 0; x < result.results.length; x++) {
+                        
+                        result.results.forEach(element => {
+                            delete element.__metadata
+
+                        });
+                    }
+
+                    oController.getOwnerComponent().getModel("listaCentrosModel").setData(result.results);
+
+
+                    var vDescricao = "Centros sincronizados " + result.results.length
+                    var oMensagem = {
+                        "title": vDescricao,
+                        "description": "Centros encaminhados para o dispositivo",
+                        "type": "Success",
+                        "subtitle": "Centros download"
+                    }
+                    oController.getOwnerComponent().getModel("mensagensModel").getData().push(oMensagem)
+
+                    resolve()
+                }).catch(
+                    function (result) {
+                        // Não fechar o busy dialog aqui - será fechado no método sincronizar principal
+                        reject(result)
+                    })
+            })
+        },
+
         carregarAutorizacoes: function () {
             return new Promise((resolve, reject) => {
                 oController.atualizarBusyDialog(oController.getView().getModel("i18n").getResourceBundle().getText("sincronizandoautorizacoes"));
@@ -550,6 +588,7 @@ sap.ui.define([
                     var aLeituras = [
                         oController.carregarAutorizacoes().catch(() => oController.carregarDadosIndexDB("tb_autorizacao", "listaAutorizacao")),
                         oController.carregarPerfil().catch(() => oController.carregarDadosIndexDB("tb_perfil", "listaPerfilModel")),
+                        oController.carregarCentro().catch(() => oController.carregarDadosIndexDB("tb_centros", "listaCentrosModel")),
                         oController.carregarUsuario().catch(() => oController.carregarDadosIndexDB("tb_usuario", "listaUsuariosModel"))
                     ]
 
@@ -562,15 +601,18 @@ sap.ui.define([
                             var aLimpezas = [
                                 oController.limparTabelaIndexDB("tb_autorizacao"),
                                 oController.limparTabelaIndexDB("tb_perfil"),
+                                oController.limparTabelaIndexDB("tb_centros"),
                                 oController.limparTabelaIndexDB("tb_usuario")]
                             Promise.all(aLimpezas).then(
                                 function (result) {
                                     var aAutorizacoes = oController.getOwnerComponent().getModel("listaAutorizacao").getData();
                                     var aPerfis = oController.getOwnerComponent().getModel("listaPerfilModel").getData();
                                     var aUsuarios = oController.getOwnerComponent().getModel("listaUsuariosModel").getData();
+                                    var aCentros = oController.getOwnerComponent().getModel("listaCentrosModel").getData();
                                     var aGravacoes = [
                                         oController.gravarTabelaIndexDB("tb_autorizacao", aAutorizacoes),
                                         oController.gravarTabelaIndexDB("tb_perfil", aPerfis),
+                                        oController.gravarTabelaIndexDB("tb_centros", aCentros),
                                         oController.gravarTabelaIndexDB("tb_usuario", aUsuarios)]
                                     Promise.all(aGravacoes).then(
                                         function (result) {
@@ -653,6 +695,7 @@ sap.ui.define([
                     var aLeituras = [
                         oController.carregarDadosIndexDB("tb_autorizacao", "listaAutorizacao"),
                         oController.carregarDadosIndexDB("tb_perfil", "listaPerfilModel"),
+                        oController.carregarDadosIndexDB("tb_centros", "listaCentrosModel"),
                         oController.carregarDadosIndexDB("tb_usuario", "listaUsuariosModel")
                     ]
                     
@@ -1125,6 +1168,7 @@ sap.ui.define([
                 var aLeituras = [
                     oController.carregarDadosIndexDB("tb_autorizacao", "autorizacoesModel"),
                     oController.carregarDadosIndexDB("tb_perfil", "listaPerfilModel"),
+                    oController.carregarDadosIndexDB("tb_centros", "listaCentrosModel"),
                     oController.carregarDadosIndexDB("tb_usuario", "listaUsuariosModel")
                 ]
                 Promise.all(aLeituras).then(

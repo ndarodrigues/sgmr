@@ -315,6 +315,10 @@ sap.ui.define([
                             db.createObjectStore("tb_associarFormulario", { autoIncrement: true });
                         }
 
+                        if (!db.objectStoreNames.contains('tb_centros')) {
+                            db.createObjectStore("tb_centros", { autoIncrement: true });
+                        }
+
                     };
 
                     openRequest.onsuccess = function (e) {

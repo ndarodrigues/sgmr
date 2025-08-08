@@ -188,7 +188,7 @@ sap.ui.define([
                     Nome: "",
                     Senha: "",
                     ConfirmarSenha: "",
-                    Centro: "UMYA",
+                    Centro: "",
                     Deposito: "DPLU",
                     Perfil: "",
                     CodigoPerfil: "",

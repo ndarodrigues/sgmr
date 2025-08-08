@@ -106,14 +106,16 @@
 									<Input 
 										id="centroInput"
 										value="{criarUsuarioModel>Centro}"
-                                        maxLength="4"
-										required="true"
+                                        showValueHelp="true"
 										showClearIcon="true"
-										enabled="{layoutTelaModel>HabilitarTelaCriarUsuario}"										
+										valueHelpOnly="true"
+										required="true"
+										valueHelpRequest="_handleCentroValueHelpRequest"
+										enabled="{layoutTelaModel>HabilitarTelaCriarUsuario}"								
 										/>
 								</f:fields>
-							</f:FormElement>
-							<f:FormElement label="{i18n>deposito}">
+							</f:FormElement> -->
+							<!-- <f:FormElement label="{i18n>deposito}">
 								<f:fields>
 									<Input 
 										id="depositoInput"
