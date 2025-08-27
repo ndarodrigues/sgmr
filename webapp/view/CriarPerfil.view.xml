@@ -73,7 +73,7 @@
                                         enabled="{perfilCriarModel>HabilitarTelaCriarPerfil}"				
 						            	tokens="{perfilCriarModel>/PerfilCentroSet}">
 						            	<tokens>
-						            		<Token key="{Centro}"/>
+						            		<Token text="{perfilCriarModel>Centro}" key="{perfilCriarModel>Centro}" />
 						            	</tokens>					
 						            </MultiInput>
 								</f:fields>
