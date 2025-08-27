@@ -30,14 +30,10 @@ sap.ui.define([
 
                 oView.bindElement("listaMaterialRodanteModel>/");
                 oView.bindElement("layoutTelaModel>/");
-                oView.bindElement("busyDialogModel>/")
-                oView.bindElement("objectPageModel>/")
-                oView.bindElement("condicaoOperacaoModel>/")
-                oView.bindElement("inspecaoModel>/")
-                oView.bindElement("condicaoModel>/")
-                oView.bindElement("formularioModel>/")
-                oView.bindElement("modeloEquipamentoModel>/")
-                oView.bindElement("listaAssociarFormularioModel>/")
+                oView.bindElement("busyDialogModel>/");
+                oView.bindElement("objectPageModel>/");
+                oView.bindElement("listaFormularioModel>/");
+                oView.bindElement("listaAssociarFormularioModel>/");
                 
                 /* var aCondicoes = [{ key: "Formulário 321" }, { key: "Formulário 322" }, { key: "Formulário 323" }]
                 oController.getOwnerComponent().getModel("formularioModel").setData(aCondicoes);
@@ -99,7 +95,7 @@ sap.ui.define([
                 this.getView().setModel(oModel);
                 this.byId("idMessagePopoverBtn").addDependent(oMessagePopover);
                 
-                var aCondicoes = [{ key: "EX1200 - 6" }, 
+                /* var aCondicoes = [{ key: "EX1200 - 6" }, 
                                   { key: "EX2500 - 5" },   
                                   { key: "320" }, 
                                   { key: "930" }]
@@ -111,13 +107,12 @@ sap.ui.define([
                                             { CodigoModeloEquipamento: "320", DescricaoModeloEquipamento: "CAT", Selecionado: false }, 
                                             { CodigoModeloEquipamento: "930", DescricaoModeloEquipamento: "KOMATSU", Selecionado: false }]
                 oController.getOwnerComponent().getModel("modeloEquipamentoModel").setData(aModelosEquipamentos);
-                oController.getOwnerComponent().getModel("modeloEquipamentoModel").refresh();
+                oController.getOwnerComponent().getModel("modeloEquipamentoModel").refresh(); */
 
                 var oFormularioSet = { Codigo: "" };
 
                 oController.getOwnerComponent().getModel("listaAssociarFormularioModel").setData(oFormularioSet);
                 oController.getOwnerComponent().getModel("listaAssociarFormularioModel").refresh();
-
 
             },
 
@@ -266,7 +261,7 @@ sap.ui.define([
             _handleAssociarFormularioValueHelpSearch: function (oEvent) {
                 var sValue = oEvent.getParameter("value");
                 var oFilter = new Filter(
-                    "key",
+                    "Modelo",
                     FilterOperator.Contains, sValue
                 );
                 /* var oFilter2 = new Filter(
@@ -280,7 +275,7 @@ sap.ui.define([
                 var oSelectedItem = oEvent.getParameter("selectedItem");
 
                 if (oSelectedItem) {
-                    var formulario = oSelectedItem.getModel("formularioModel").getProperty(oSelectedItem.getBindingContext("formularioModel").getPath()).key;
+                    var formulario = oSelectedItem.getModel("listaAssociarFormularioModel").getProperty(oSelectedItem.getBindingContext("listaAssociarFormularioModel").getPath()).Modelo;
                     oController.getOwnerComponent().getModel("listaAssociarFormularioModel").setProperty("/CodigoFormulario", formulario);
                     
                     // Carregar os equipamentos já associados ao formulário selecionado

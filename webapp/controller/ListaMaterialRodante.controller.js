@@ -18,7 +18,7 @@ sap.ui.define([
                 oController = this;
                 oView = oController.getView();
 
-                var oMaterialRodante = [{
+                /* var oMaterialRodante = [{
                     Codigo: "EH-4010",
                     DescrMaterialRodante: "ESCAVADEIRA HIDRÁULICA HITACHI - EX 1200-5", 
                     Sincronizado: "N",
@@ -327,7 +327,7 @@ sap.ui.define([
 
                 oController.getOwnerComponent().getModel("listaMaterialRodanteModel").setData(oMaterialRodante);
                 oController.getOwnerComponent().getModel("listaMaterialRodanteModel").refresh()
-
+ */
 
                 oView.bindElement("listaMaterialRodanteModel>/");
                 oView.bindElement("layoutTelaModel>/");
@@ -347,11 +347,11 @@ sap.ui.define([
 
                 oController.getView().byId("idListaMaterialRodanteTable").setBusy(false);
 
-                var aFilters = []
+              /*   var aFilters = []
                 var filter = new sap.ui.model.Filter({ path: "Sincronizado", operator: sap.ui.model.FilterOperator.NE, value1: "E" });
                 aFilters.push(filter);
                 this.getView().byId("idListaMaterialRodanteTable").getBinding("items").filter(aFilters, "Application");
-
+ */
                 var oModel = new JSONModel();
                 oModel.setData([]);
                 this.getView().setModel(oModel);
@@ -395,6 +395,8 @@ sap.ui.define([
                 oModel.setData(aMockMessages);
                 this.getView().setModel(oModel);
                 this.byId("messagePopoverBtn").addDependent(oMessagePopover);
+
+                oView.bindElement("listaMaterialRodanteModel>/");
 
             },
 
@@ -460,24 +462,23 @@ sap.ui.define([
                 //oController.getOwnerComponent().getRouter().navTo(oMaterialRodante.CodigoFormulario, null, true);                
                 //oController.getOwnerComponent().getRouter().navTo("ObjectPageSection", null, true);
                 var oRouter = oController.getOwnerComponent().getRouter();
-                var oDestiny = oMaterialRodante.CodigoFormulario.replace(/\s+/g, '')
+                var oDestiny = oMaterialRodante.Modelo.replace(/\s+/g, '');
                 var oRoute = oRouter.getRoute(oDestiny);
 
                 if (oRoute !== undefined) {
                     oRouter.navTo(oDestiny, null, true);
                 } else {
-                    sap.m.MessageBox.error(
-                        "Não foi possível encontrar o formulário: " + oMaterialRodante.CodigoFormulario,
-                        {
-                            title: "Erro ao navegar",
-                            actions: [sap.m.MessageBox.Action.OK],
-                            onClose: function(oAction) {
-                                if (oAction === sap.m.MessageBox.Action.OK) {
-                                    oController.getView().byId("idListaMaterialRodanteTable").setBusy(false);
-                                }
-                            }
-                        }
-                );
+                    var oBundle = oView.getModel("i18n").getResourceBundle();
+                    var oMockMessage = {
+                        type: 'Error',
+                        title: "Erro ao navegar",
+                        description: "Não foi possível encontrar o formulário: " + oMaterialRodante.Modelo,
+                        subtitle: oBundle.getText("materialRodante"),
+                        counter: 1
+                    };
+                    oController.getView().getModel().setData([oMockMessage]);
+                    oController.getView().getModel().refresh();
+                    oController.getView().byId("idListaMaterialRodanteTable").setBusy(false);
                 }
 
             },
@@ -531,13 +532,13 @@ sap.ui.define([
                 oBinding.filter(new sap.ui.model.Filter({
                     filters: [
                         new sap.ui.model.Filter({
-                            path: "Codigo",
+                            path: "Equnr",
                             test: function(value) {
                                 return value && value.toLowerCase().indexOf(sQuery) !== -1;
                             }
                         }),
                         new sap.ui.model.Filter({
-                            path: "DescrMaterialRodante",
+                            path: "Eqktx",
                             test: function(value) {
                                 return value && value.toLowerCase().indexOf(sQuery) !== -1;
                             }

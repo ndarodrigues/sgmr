@@ -48,7 +48,7 @@
                         <items>
                             <ColumnListItem vAlign="Middle" navigated="true" type="Navigation" press="onMaterialRodantePress">
                                 <cells>
-                                    <ObjectIdentifier title="{listaMaterialRodanteModel>Codigo}" text="{listaMaterialRodanteModel>DescrMaterialRodante}"/>
+                                    <ObjectIdentifier title="{listaMaterialRodanteModel>Equnr}" text="{listaMaterialRodanteModel>Eqktx}"/>
                                 </cells>
                             </ColumnListItem>
                         </items>

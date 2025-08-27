@@ -334,7 +334,7 @@ sap.ui.define([
 
                 switch (pServico) {
                     case "PerfilSet":
-                        oExpand = "AutorizacaoSet"
+                        oExpand = "PerfilCentroSet,AutorizacaoSet";
                         aFilters = [];
                         break;
 
@@ -417,11 +417,15 @@ sap.ui.define([
                     for (let x = 0; x < result.results.length; x++) {
                         const oPerfil = result.results[x];
                         oPerfil.AutorizacaoSet = oPerfil.AutorizacaoSet.results;
+                        oPerfil.PerfilCentroSet = oPerfil.PerfilCentroSet.results;
                         oPerfil.AutorizacaoSet.forEach(element => {
                             delete element.__metadata
 
                         });
 
+                        oPerfil.PerfilCentroSet.forEach(element => {
+                            delete element.__metadata
+                        });
 
                         delete oPerfil.__metadata
                         aPerfis.push(oPerfil);
@@ -589,8 +593,10 @@ sap.ui.define([
                         oController.carregarAutorizacoes().catch(() => oController.carregarDadosIndexDB("tb_autorizacao", "listaAutorizacao")),
                         oController.carregarPerfil().catch(() => oController.carregarDadosIndexDB("tb_perfil", "listaPerfilModel")),
                         oController.carregarCentro().catch(() => oController.carregarDadosIndexDB("tb_centros", "listaCentrosModel")),
-                        oController.carregarUsuario().catch(() => oController.carregarDadosIndexDB("tb_usuario", "listaUsuariosModel"))
-                    ]
+                        oController.carregarUsuario().catch(() => oController.carregarDadosIndexDB("tb_usuario", "listaUsuariosModel")),
+                        oController.carregarMaterialRodante().catch(() => oController.carregarDadosIndexDB("tb_material_rodante", "listaMaterialRodanteModel")),
+                        oController.carregarFormulario().catch(() => oController.carregarDadosIndexDB("tb_formulario", "listaFormularioModel"))
+                    ];
 
                     
 
@@ -602,18 +608,27 @@ sap.ui.define([
                                 oController.limparTabelaIndexDB("tb_autorizacao"),
                                 oController.limparTabelaIndexDB("tb_perfil"),
                                 oController.limparTabelaIndexDB("tb_centros"),
-                                oController.limparTabelaIndexDB("tb_usuario")]
+                                oController.limparTabelaIndexDB("tb_usuario"),
+                                oController.limparTabelaIndexDB("tb_material_rodante"),
+                                oController.limparTabelaIndexDB("tb_formulario"),
+                            ];
                             Promise.all(aLimpezas).then(
                                 function (result) {
                                     var aAutorizacoes = oController.getOwnerComponent().getModel("listaAutorizacao").getData();
                                     var aPerfis = oController.getOwnerComponent().getModel("listaPerfilModel").getData();
                                     var aUsuarios = oController.getOwnerComponent().getModel("listaUsuariosModel").getData();
                                     var aCentros = oController.getOwnerComponent().getModel("listaCentrosModel").getData();
+                                    var aMaterialRodante = oController.getOwnerComponent().getModel("listaMaterialRodanteModel").getData();
+                                    var aFormularios = oController.getOwnerComponent().getModel("listaFormularioModel").getData();
+
                                     var aGravacoes = [
                                         oController.gravarTabelaIndexDB("tb_autorizacao", aAutorizacoes),
                                         oController.gravarTabelaIndexDB("tb_perfil", aPerfis),
                                         oController.gravarTabelaIndexDB("tb_centros", aCentros),
-                                        oController.gravarTabelaIndexDB("tb_usuario", aUsuarios)]
+                                        oController.gravarTabelaIndexDB("tb_usuario", aUsuarios),
+                                        oController.gravarTabelaIndexDB("tb_material_rodante", aMaterialRodante),
+                                        oController.gravarTabelaIndexDB("tb_formulario", aFormularios)
+                                    ];
                                     Promise.all(aGravacoes).then(
                                         function (result) {
                                             if (pCatalogo) {
@@ -871,7 +886,8 @@ sap.ui.define([
                                 "CodigoPerfil": 0,
                                 "DescrPerfil": oPerfil.DescrPerfil,
                                 "Sincronizado": "N",
-                                "AutorizacaoSet": []
+                                "AutorizacaoSet": [],
+                                "PerfilCentroSet": []
                             }
                             oPerfil.AutorizacaoSet.forEach(oAutorizacao => {
                                 if (oAutorizacao.Selecionado == true) {
@@ -883,7 +899,19 @@ sap.ui.define([
                                     }
                                     oPerfilSet.AutorizacaoSet.push(oAutorizacaoSet)
                                 }
-                            })
+                            });
+                            oPerfil.PerfilCentroSet.forEach(oCentro => {
+                                if (oCentro) {
+                                    var oCentroSet =
+                                    {
+                                        "CodigoPerfil": oCentro.CodigoPerfil,
+                                        "DescPerfil": oCentro.DescrPerfil,
+                                        "Centro": oCentro.CodigoCentro,
+                                        "DescCentro": oCentro.DescrCentro
+                                    }
+                                    oPerfilSet.PerfilCentroSet.push(oCentroSet)
+                                }
+                            });
                             aPerfilSet.push(oController.enviarDados("PerfilSet", oPerfilSet))
                             break;
                         case "E":
@@ -891,7 +919,8 @@ sap.ui.define([
                                 "CodigoPerfil": oPerfil.CodigoPerfil,
                                 "DescrPerfil": oPerfil.DescrPerfil,
                                 "Sincronizado": "E",
-                                "AutorizacaoSet": []
+                                "AutorizacaoSet": [],
+                                "PerfilCentroSet": []
                             }
                             aPerfilSet.push(oController.enviarDados("PerfilSet", oPerfilSet))
                             break;
@@ -1256,7 +1285,46 @@ sap.ui.define([
 
 		},
 
-		carregarEquipamentos: function () {
+        carregarFormulario: function () {
+
+			return new Promise((resolve, reject) => {
+				oController.atualizarBusyDialog(oController.getView().getModel("i18n").getResourceBundle().getText("sincronizandoequipamentos"));
+/* 				var oUsuario = oController.getOwnerComponent().getModel("usuarioModel").getData()
+				var aFiltros = [
+					{
+						key: "Centro",
+						value: oUsuario.Centro
+					}] */
+				oController.carregarDados("ListaFormularioSet").then(function (result) {
+					var aFormularios = []
+					for (let x = 0; x < result.results.length; x++) {
+						const oFormulario = result.results[x];
+						delete oFormulario.__metadata
+						aFormularios.push(oFormulario);
+					}
+					oController.getOwnerComponent().getModel("listaFormularioModel").setData(aFormularios)
+
+					var vDescricao = "Material Rodante sincronizado " + aFormularios.length
+					var oMensagem = {
+						"title": vDescricao,
+						"description": "Material Rodante encaminhado para o dispositivo",
+						"type": "Success",
+						"subtitle": "Material Rodante download"
+					}
+					oController.getOwnerComponent().getModel("mensagensModel").getData().push(oMensagem)
+
+					resolve()
+				}).catch(
+					function (result) {
+						// Não fechar o busy dialog aqui - será fechado no método sincronizar principal
+						reject(result)
+					})
+			})
+
+		},
+
+
+        carregarMaterialRodante: function () {
 
 			return new Promise((resolve, reject) => {
 				oController.atualizarBusyDialog(oController.getView().getModel("i18n").getResourceBundle().getText("sincronizandoequipamentos"));
@@ -1266,38 +1334,21 @@ sap.ui.define([
 						key: "Centro",
 						value: oUsuario.Centro
 					}]
-				oController.carregarDados("ListaEquipamentosSet", aFiltros).then(function (result) {
+				oController.carregarDados("ListaEquipamentoSet", aFiltros).then(function (result) {
 					var aEquipamentos = []
-					var aPontos = []
 					for (let x = 0; x < result.results.length; x++) {
 						const oEquipamento = result.results[x];
-						for (let y = 0; y < oEquipamento.ListaPontosMedicaoSet.results.length; y++) {
-							const oPonto = oEquipamento.ListaPontosMedicaoSet.results[y];
-							delete oPonto.__metadata
-							aPontos.push(oPonto)
-						}
-						delete oEquipamento.ListaPontosMedicaoSet
 						delete oEquipamento.__metadata
 						aEquipamentos.push(oEquipamento);
 					}
-					oController.getOwnerComponent().getModel("equipamentosModel").setData(aEquipamentos)
-					oController.getOwnerComponent().getModel("pontosMedicaoModel").setData(aPontos)
+					oController.getOwnerComponent().getModel("listaMaterialRodanteModel").setData(aEquipamentos)
 
-					var vDescricao = "Equipamentos sincronizados " + aEquipamentos.length
+					var vDescricao = "Material Rodante sincronizado " + aEquipamentos.length
 					var oMensagem = {
 						"title": vDescricao,
-						"description": "Equipamentos encaminhados para o dispositivo",
+						"description": "Material Rodante encaminhado para o dispositivo",
 						"type": "Success",
-						"subtitle": "Equipamentos download"
-					}
-					oController.getOwnerComponent().getModel("mensagensModel").getData().push(oMensagem)
-
-					var vDescricao = "Pontos de Medição sincronizados " + aPontos.length
-					var oMensagem = {
-						"title": vDescricao,
-						"description": "Pontos de Medição encaminhados para o dispositivo",
-						"type": "Success",
-						"subtitle": "Pontos de Medição download"
+						"subtitle": "Material Rodante download"
 					}
 					oController.getOwnerComponent().getModel("mensagensModel").getData().push(oMensagem)
 

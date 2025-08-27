@@ -71,12 +71,9 @@
 						            	valueHelpRequest="handleValueHelpRequestedCentro" 
 						            	tokenUpdate="handleTokenUpdate"	
                                         enabled="{perfilCriarModel>HabilitarTelaCriarPerfil}"				
-						            	tokens="{
-						            		path: 'perfilCriarModel>/Centros',
-						            		sorter: { path: 'key' }
-						            	}">
+						            	tokens="{perfilCriarModel>/PerfilCentroSet}">
 						            	<tokens>
-						            		<Token key="{perfilCriarModel>key}" text="{perfilCriarModel>key}" />
+						            		<Token key="{Centro}"/>
 						            	</tokens>					
 						            </MultiInput>
 								</f:fields>

@@ -23,6 +23,9 @@ sap.ui.define([
 
                 oView.bindElement("perfilCriarModel>/");
 
+                console.log("Dados do PerfilCentroSet:", 
+        this.getOwnerComponent().getModel("perfilCriarModel").getProperty("/PerfilCentroSet"));
+
                 var oMessageTemplate = new MessageItem({
                     type: '{type}',
                     title: '{title}',
@@ -99,9 +102,9 @@ sap.ui.define([
             }
 
             // Atualiza o perfilCriarModel
-            var aCentrosSelecionados = oController.getOwnerComponent().getModel("perfilCriarModel").getProperty("/Centros") || [];
+            var aCentrosSelecionados = oController.getOwnerComponent().getModel("perfilCriarModel").getProperty("/PerfilCentroSet") || [];
             var novoscentrosSelecionados = aCentrosSelecionados.filter(item => item.key !== chave);
-            oController.getOwnerComponent().getModel("perfilCriarModel").setProperty("/Centros", novoscentrosSelecionados);
+            oController.getOwnerComponent().getModel("perfilCriarModel").setProperty("/PerfilCentroSet", novoscentrosSelecionados);
             },
 
             handleValueHelpRequestedCentro: function (oEvent) {
@@ -244,7 +247,7 @@ sap.ui.define([
                     var oMockMessage = {
                         type: 'Error',
                         title: oController.getView().getModel("i18n").getResourceBundle().getText("campoobrigatorio"),
-                        description: oController.getView().getModel("i18n").getResourceBundle().getText("campoautorizacao"),
+                        description: oController.getView().getModel("i18n").getResourceBundle().getText("campocentro"),
                         subtitle: oController.getView().getModel("i18n").getResourceBundle().getText("centro"),
                         counter: 1
                     };
@@ -279,7 +282,8 @@ sap.ui.define([
                                 DescrPerfil: perfil.DescrPerfil,
                                 Sincronizado: perfil.Sincronizado,
                                 HabilitarTelaCriarPerfil: perfil.HabilitarTelaCriarPerfil,
-                                AutorizacaoSet: []
+                                AutorizacaoSet: [],
+                                PerfilCentroSet: []
                             };
                             
                             if (perfil.AutorizacaoSet && perfil.AutorizacaoSet.length) {
@@ -289,6 +293,17 @@ sap.ui.define([
                                         CodigoAutorizacao: auth.CodigoAutorizacao,
                                         DescrAutorizacao: auth.DescrAutorizacao,
                                         Selecionado: auth.Selecionado
+                                    });
+                                });
+                            }
+
+                            if (perfil.Centros && perfil.Centros.length) {
+                                perfil.Centros.forEach(function(centro) {
+                                    oPerfilClone.PerfilCentroSet.push({
+                                        CodigoPerfil: perfil.CodigoPerfil,
+                                        DescrPerfil: perfil.DescrPerfil,
+                                        CodigoCentro: centro.key,
+                                        DescrCentro: centro.value
                                     });
                                 });
                             }

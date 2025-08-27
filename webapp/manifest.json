@@ -120,6 +120,9 @@
       "listaAssociarFormularioModel": {
         "type": "sap.ui.model.json.JSONModel"
       },
+      "listaFormularioModel": {
+        "type": "sap.ui.model.json.JSONModel"
+      },
       "listaMaterialRodante": {
         "type": "sap.ui.model.json.JSONModel"
       },

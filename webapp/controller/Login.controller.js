@@ -319,6 +319,14 @@ sap.ui.define([
                             db.createObjectStore("tb_centros", { autoIncrement: true });
                         }
 
+                        if (!db.objectStoreNames.contains('tb_material_rodante')) {
+                            db.createObjectStore("tb_material_rodante", { autoIncrement: true });
+                        }
+
+                        if (!db.objectStoreNames.contains('tb_formulario')) {
+                            db.createObjectStore("tb_formulario", { autoIncrement: true });
+                        }
+
                     };
 
                     openRequest.onsuccess = function (e) {
