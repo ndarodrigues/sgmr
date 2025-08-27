@@ -102,9 +102,9 @@ sap.ui.define([
             }
 
             // Atualiza o perfilCriarModel
-            var aCentrosSelecionados = oController.getOwnerComponent().getModel("perfilCriarModel").getProperty("/PerfilCentroSet") || [];
+            var aCentrosSelecionados = oController.getOwnerComponent().getModel("perfilCriarModel").getProperty("/Centros") || [];
             var novoscentrosSelecionados = aCentrosSelecionados.filter(item => item.key !== chave);
-            oController.getOwnerComponent().getModel("perfilCriarModel").setProperty("/PerfilCentroSet", novoscentrosSelecionados);
+            oController.getOwnerComponent().getModel("perfilCriarModel").setProperty("/Centros", novoscentrosSelecionados);
             },
 
             handleValueHelpRequestedCentro: function (oEvent) {
