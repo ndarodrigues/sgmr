@@ -34,11 +34,11 @@ sap.ui.define([
 
 
             _handleRouteMatched: function (oEvent) {
-
+                //var urlLogo = oController.obterArquivo("logo.png")
                 var oLogin = {
                     CodUsuario: "",
                     Senha: "",
-                    imgLogo: urlLogo
+                    imgLogo: ""//urlLogo
                 }
 
                 oController.getOwnerComponent().getModel("loginModel").setData(oLogin);
@@ -180,56 +180,55 @@ sap.ui.define([
             onLogin: function (oEvent) {
                 // oController.iniciarAplicativo()
                 // oController.getOwnerComponent().getRouter().navTo("Inicio", null, true);
-                // var aListaUsuarios = oController.getOwnerComponent().getModel("usuariosLoginModel").getData()
-                // if (aListaUsuarios.length == undefined) {
-                //     oController.carregarUsuariosOffLine();
-                //     aListaUsuarios = oController.getOwnerComponent().getModel("usuariosLoginModel").getData()
-                // }
-                // var vUsuario = oView.byId("usuarioInput").getValue()
-                // var vSenha = oController.criptografar(oView.byId("senhaInput").getValue())
-                // if (vUsuario != "" && vSenha != "") {
-                //     var oUsuario = aListaUsuarios.find((oElement) => oElement.CodUsuario.toUpperCase() == vUsuario.toUpperCase() && oElement.Senha == vSenha);
-                //     if (oUsuario) {
-                //         oController.getOwnerComponent().getModel("usuarioModel").setData(oUsuario);
-                //         if (oUsuario.Bloqueado == false) {
-                oController.iniciarAplicativo()
-                //         } else {
-                //             MessageToast.show("Usuário bloqueado");
-                //             var oMockMessage = {
-                //                 type: 'Error',
-                //                 title: 'Bloqueado',
-                //                 description: 'Usuário bloqueado',
-                //                 subtitle: 'Usuário e Senha',
-                //                 counter: 1
-                //             };
-                //             oController.getView().getModel().setData([oMockMessage]);
-                //             oController.getView().getModel().refresh()
-                //         }
-                //     } else {
-                //         MessageToast.show("Usuário ou senha inválidos");
-                //         var oMockMessage = {
-                //             type: 'Error',
-                //             title: 'Inválido',
-                //             description: 'Usuário ou Senha inválido',
-                //             subtitle: 'Usuário e Senha',
-                //             counter: 1
-                //         };
-                //         oController.getView().getModel().setData([oMockMessage]);
-                //         oController.getView().getModel().refresh()
-                //     }
-                // } else {
-                //     // MessageToast.show("Por favor, informe usuário e senha");
-                //     // var oMockMessage = {
-                //     //     type: 'Error',
-                //     //     title: 'Campos obrigatórios',
-                //     //     description: 'Por favor, informe usuário e senha',
-                //     //     subtitle: 'Usuário e Senha',
-                //     //     counter: 1
-                //     // };
-                //     // oController.getView().getModel().setData([oMockMessage]);
-                //     // oController.getView().getModel().refresh()
-                //     oController.iniciarAplicativo()
-                // }
+                var aListaUsuarios = oController.getOwnerComponent().getModel("usuariosLoginModel").getData()
+                if (aListaUsuarios.length == undefined) {
+                    oController.carregarUsuariosOffLine();
+                    aListaUsuarios = oController.getOwnerComponent().getModel("usuariosLoginModel").getData()
+                }
+                var vUsuario = oView.byId("usuarioInput").getValue()
+                var vSenha = oController.criptografar(oView.byId("senhaInput").getValue())
+                if (vUsuario != "" && vSenha != "") {
+                    var oUsuario = aListaUsuarios.find((oElement) => oElement.CodUsuario.toUpperCase() == vUsuario.toUpperCase() && oElement.Senha == vSenha);
+                    if (oUsuario) {
+                        oController.getOwnerComponent().getModel("usuarioModel").setData(oUsuario);
+                        if (oUsuario.Bloqueado == false) {
+                            oController.iniciarAplicativo()
+                        } else {
+                            MessageToast.show("Usuário bloqueado");
+                            var oMockMessage = {
+                                type: 'Error',
+                                title: 'Bloqueado',
+                                description: 'Usuário bloqueado',
+                                subtitle: 'Usuário e Senha',
+                                counter: 1
+                            };
+                            oController.getView().getModel().setData([oMockMessage]);
+                            oController.getView().getModel().refresh()
+                        }
+                    } else {
+                        MessageToast.show("Usuário ou senha inválidos");
+                        var oMockMessage = {
+                            type: 'Error',
+                            title: 'Inválido',
+                            description: 'Usuário ou Senha inválido',
+                            subtitle: 'Usuário e Senha',
+                            counter: 1
+                        };
+                        oController.getView().getModel().setData([oMockMessage]);
+                        oController.getView().getModel().refresh()
+                    }
+                } else {
+                    MessageToast.show("Por favor, informe usuário e senha");
+                    var oMockMessage = {
+                        type: 'Error',
+                        title: 'Campos obrigatórios',
+                        description: 'Por favor, informe usuário e senha',
+                        subtitle: 'Usuário e Senha',
+                        counter: 1
+                    };
+                    oController.getView().getModel().setData([oMockMessage]);
+                    oController.getView().getModel().refresh()
+                }
             },
 
             iniciarAplicativo: function (oEvent) {
@@ -310,6 +309,22 @@ sap.ui.define([
 
                         if (!db.objectStoreNames.contains('tb_autorizacao')) {
                             db.createObjectStore("tb_autorizacao", { autoIncrement: true });
+                        }
+
+                        if (!db.objectStoreNames.contains('tb_associarFormulario')) {
+                            db.createObjectStore("tb_associarFormulario", { autoIncrement: true });
+                        }
+
+                        if (!db.objectStoreNames.contains('tb_centros')) {
+                            db.createObjectStore("tb_centros", { autoIncrement: true });
+                        }
+
+                        if (!db.objectStoreNames.contains('tb_material_rodante')) {
+                            db.createObjectStore("tb_material_rodante", { autoIncrement: true });
+                        }
+
+                        if (!db.objectStoreNames.contains('tb_formulario')) {
+                            db.createObjectStore("tb_formulario", { autoIncrement: true });
                         }
 
                     };

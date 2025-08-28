@@ -49,8 +49,8 @@ sap.ui.define([
                 oNomeInput.setValueState("None");
                 oSenhaInput.setValueState("None");
                 oConfirmarInput.setValueState("None");
-                oCentroInput.setValueState("None");
-                oDepositoInput.setValueState("None");
+                //oCentroInput.setValueState("None");
+                //oDepositoInput.setValueState("None");
                 oPerfilInput.setValueState("None");
 
                 var oConfirmarButton = oView.byId("confirmarUsuarioButton")
@@ -157,14 +157,15 @@ sap.ui.define([
                     oController.getOwnerComponent().getModel("criarUsuarioModel").setProperty("/CodigoPerfil", oPerfil.CodigoPerfil);
                     oController.getOwnerComponent().getModel("criarUsuarioModel").setProperty("/Autorizacoes", oPerfil.AutorizacaoSet);
                     oController.getOwnerComponent().getModel("criarUsuarioModel").refresh()
-                    // var aFilters = []
-                    // var filter = new sap.ui.model.Filter({ path: "Selecionado", operator: sap.ui.model.FilterOperator.EQ, value1: true });
-                    // aFilters.push(filter);
-                    // this.getView().byId("idListaAutorizacoesTable").getBinding("items").filter(aFilters, "Application");
+                    var aFilters = []
+                    var filter = new sap.ui.model.Filter({ path: "Selecionado", operator: sap.ui.model.FilterOperator.EQ, value1: true });
+                    aFilters.push(filter);
+                    this.getView().byId("idListaAutorizacoesTable").getBinding("items").filter(aFilters, "Application");
 
                 }
 
             },
+
 
             handleMessagePopoverPress: function (oEvent) {
                 oMessagePopover.toggle(oEvent.getSource());
@@ -391,6 +392,8 @@ sap.ui.define([
                                                         oController.getRouter().navTo("ListaUsuario", {}, true /*no history*/);
                                                     }).catch(
                                                         function (result) {
+                                                        oConfirmarButton.setBusy(false);
+                                                      oController.getRouter().navTo("ListaUsuario", {}, true /*no history*/);
                                                         })
 
                                             } else {

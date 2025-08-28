@@ -160,10 +160,9 @@
 						<f:formElements>
 							<f:FormElement>
 								<f:fields>
-									<Image src="\img\roletesuperior.png" alt="RoleteSuperior" width="50%" heigth="50%"/>	
+									<Image id="idImageRoleteSuperior" src="/img/roletesuperior.png" alt="RoleteSuperior" width="50%" height="50%"/>	
 								</f:fields>
-							</f:FormElement>					
-											
+							</f:FormElement>																
 						</f:formElements>
 				</f:FormContainer>	
 			</f:formContainers>	
@@ -186,7 +185,7 @@
 			<f:formContainers>
 			</f:formContainers>
 			<f:formContainers>
-				<f:FormContainer title="Lado Esquerdo">
+				<f:FormContainer title="{i18n>ladoesquerdo}">
 					<f:formElements>
 						<f:FormElement label="1º Posição">
 							<f:fields>
@@ -236,7 +235,7 @@
 						<f:FormElement label="2º Posição">
 							<f:fields>
 								<Input 
-								id="horimetroInput11"
+							 id="horimetroInput11"
 								value="{CriarMaterialRodanteModel>Horimetro}"
 								description=""
 								type="Number"
@@ -321,7 +320,7 @@
 						</f:FormElement>																
 					</f:formElements>
 				</f:FormContainer>
-				<f:FormContainer title="Lado Direito">
+				<f:FormContainer title="{i18n>ladodireito}">
 				<f:formElements>
 						<f:FormElement label="1º Posição">
 							<f:fields>
@@ -468,10 +467,9 @@
 					<f:formElements>
 						<f:FormElement>
 							<f:fields>
-								<Image src="\img\roleteinferior.png" alt="RoleteSuperior" width="50%" heigth="50%"/>	
+								<Image id="idRoleteInferior" src="/img/roleteinferior.png" alt="RoleteSuperior" width="50%" height="50%"/>	
 							</f:fields>
-						</f:FormElement>					
-										
+						</f:FormElement>														
 					</f:formElements>
 			</f:FormContainer>		
 			<f:layout>
@@ -491,7 +489,7 @@
 					singleContainerFullSize="false" />
 			</f:layout>
 			<f:formContainers>
-				<f:FormContainer title="Lado Esquerdo">							
+				<f:FormContainer title="{i18n>ladoesquerdo}">							
 					<f:formElements>
 						<f:FormElement label="1º">
 							<f:fields>
@@ -607,7 +605,7 @@
 						</f:FormElement>
 					</f:formElements>	
 				</f:FormContainer>
-				<f:FormContainer title="Lado Direito">							
+				<f:FormContainer title="{i18n>ladodireito}">							
 					<f:formElements>
 						<f:FormElement label="1º">
 							<f:fields>
@@ -735,10 +733,9 @@
 					<f:formElements>
 						<f:FormElement>
 							<f:fields>
-								<Image src="\img\sapata.png" alt="RoleteSuperior" width="50%" heigth="50%"/>	
+								<Image id="idImageSapata" src="/img/sapata.png" alt="Sapatas" width="50%" height="50%"/>	
 							</f:fields>
-						</f:FormElement>		
-										
+						</f:FormElement>												
 					</f:formElements>
 			</f:FormContainer>		
 			<f:layout>
@@ -758,7 +755,7 @@
 					singleContainerFullSize="false" />
 			</f:layout>
 			<f:formContainers>
-				<f:FormContainer title="Lado Esquerdo">
+				<f:FormContainer title="{i18n>ladoesquerdo}">
 					<f:formElements>
 						<f:FormElement label="C">
 							<f:fields>
@@ -776,7 +773,7 @@
 						</f:FormElement>					
 					</f:formElements>
 				</f:FormContainer>
-				<f:FormContainer title="Lado Direito">
+				<f:FormContainer title="{i18n>ladodireito}">
 					<f:formElements>						
 						<f:FormElement label="C" visible="{CriarMaterialRodanteModel>ExibirMaterial}">
 							<f:fields>
@@ -806,7 +803,7 @@
 					<f:formElements>
 						<f:FormElement>
 							<f:fields>
-								<Image src="\img\bucha.png" alt="RoleteSuperior" width="50%" heigth="50%"/>	
+								<Image src="/img/bucha.png" alt="RoleteSuperior" width="50%" height="50%"/>	
 							</f:fields>
 						</f:FormElement>					
 										
@@ -829,7 +826,7 @@
 					singleContainerFullSize="false" />
 			</f:layout>
 			<f:formContainers>
-				<f:FormContainer title="Lado Esquerdo">
+				<f:FormContainer title="{i18n>ladoesquerdo}">
 					<f:formElements>
 						<f:FormElement label="Dn">
 							<f:fields>
@@ -847,7 +844,7 @@
 						</f:FormElement>					
 					</f:formElements>
 				</f:FormContainer>
-				<f:FormContainer title="Lado Direito">
+				<f:FormContainer title="{i18n>ladodireito}">
 					<f:formElements>						
 						<f:FormElement label="Dn" visible="{CriarMaterialRodanteModel>ExibirMaterial}">
 							<f:fields>
@@ -868,16 +865,14 @@
 			</f:formContainers>
 		</f:Form>
 
+		<!--Elos-->
 		<f:Form id="Elos"
 		editable="true">
-			<f:title>
-				<core:Title text="Elos" />
-			</f:title>
 			<f:FormContainer>
 					<f:formElements>
 						<f:FormElement>
 							<f:fields>
-								<Image src="\img\elo.png" alt="RoleteSuperior" width="50%" heigth="50%"/>	
+								<Image src="/img/elos.png" alt="RoleteSuperior" width="50%" height="50%"/>	
 							</f:fields>
 						</f:FormElement>					
 										
@@ -899,78 +894,7 @@
 					columnsM="2"
 					singleContainerFullSize="false" />
 			</f:layout>
-			<f:formContainers>
-				<f:FormContainer title="Lado Esquerdo">
-					<f:formElements>
-						<f:FormElement label="Hn">
-							<f:fields>
-								<Input 
-								id="hn_e"
-								value="{CriarMaterialRodanteModel>Horimetro}"
-								description=""
-								type="Number"
-								enabled="true"
-								required="false"
-								showClearIcon="true"
-								change="onValidarHorimetro"									
-								/>
-							</f:fields>
-						</f:FormElement>					
-					</f:formElements>
-				</f:FormContainer>
-				<f:FormContainer title="Lado Direito">
-					<f:formElements>						
-						<f:FormElement label="Hn" visible="{CriarMaterialRodanteModel>ExibirMaterial}">
-							<f:fields>
-								<Input 
-								id="hn_d"
-								value="{CriarMaterialRodanteModel>Horimetro}"
-								description=""
-								type="Number"
-								enabled="true"
-								required="false"
-								showClearIcon="true"
-								change="onValidarHorimetro"									
-								/>
-							</f:fields>
-						</f:FormElement>					
-					</f:formElements>
-				</f:FormContainer>		
-			</f:formContainers>
-		</f:Form>
-
-		<f:Form id="RodaGuia"
-		editable="true">
-			<f:title>
-				<core:Title text="Roda Guia" />
-			</f:title>
-			<f:FormContainer>
-					<f:formElements>
-						<f:FormElement>
-							<f:fields>
-								<Image src="\img\rodaguia.png" alt="RoleteSuperior" width="50%" heigth="50%"/>	
-							</f:fields>
-						</f:FormElement>					
-										
-					</f:formElements>
-			</f:FormContainer>		
-			<f:layout>
-				<f:ResponsiveGridLayout
-					labelSpanXL="4"
-					labelSpanL="4"
-					labelSpanM="12"
-					labelSpanS="12"
-					adjustLabelSpan="false"
-					emptySpanXL="0"
-					emptySpanL="0"
-					emptySpanM="0"
-					emptySpanS="0"
-					columnsXL="2"
-					columnsL="2"
-					columnsM="2"
-					singleContainerFullSize="false" />
-			</f:layout>
-				<f:FormContainer title="Lado Esquerdo">
+				<f:FormContainer title="{i18n>ladoesquerdo}">
 					<f:formElements>
 						<f:FormElement label="Hn">
 							<f:fields>
@@ -988,7 +912,77 @@
 						</f:FormElement>					
 					</f:formElements>
 				</f:FormContainer>
-				<f:FormContainer title="Lado Direito">
+				<f:FormContainer title="{i18n>ladodireito}">
+					<f:formElements>						
+						<f:FormElement label="Hn" visible="{CriarMaterialRodanteModel>ExibirMaterial}">
+							<f:fields>
+								<Input 
+								id="hn_d_rg"
+								value="{CriarMaterialRodanteModel>Horimetro}"
+								description=""
+								type="Number"
+								enabled="true"
+								required="false"
+								showClearIcon="true"
+								change="onValidarHorimetro"									
+								/>
+							</f:fields>
+						</f:FormElement>					
+					</f:formElements>
+				</f:FormContainer>	
+		</f:Form>
+		<!--Elos-->
+
+		<f:Form id="RodaGuia"
+		editable="true">
+			<f:title>
+				<core:Title text="Roda Guia" />
+			</f:title>
+			<f:FormContainer>
+					<f:formElements>
+						<f:FormElement>
+							<f:fields>
+								<Image src="/img/rodaguia.png" alt="RoleteSuperior" width="50%" height="50%"/>	
+							</f:fields>
+						</f:FormElement>					
+										
+					</f:formElements>
+			</f:FormContainer>		
+			<f:layout>
+				<f:ResponsiveGridLayout
+					labelSpanXL="4"
+					labelSpanL="4"
+					labelSpanM="12"
+					labelSpanS="12"
+					adjustLabelSpan="false"
+					emptySpanXL="0"
+					emptySpanL="0"
+					emptySpanM="0"
+					emptySpanS="0"
+					columnsXL="2"
+					columnsL="2"
+					columnsM="2"
+					singleContainerFullSize="false" />
+			</f:layout>
+				<f:FormContainer title="{i18n>ladoesquerdo}">
+					<f:formElements>
+						<f:FormElement label="Hn">
+							<f:fields>
+								<Input 
+								id="hn_e_rg"
+								value="{CriarMaterialRodanteModel>Horimetro}"
+								description=""
+								type="Number"
+								enabled="true"
+								required="false"
+								showClearIcon="true"
+								change="onValidarHorimetro"									
+								/>
+							</f:fields>
+						</f:FormElement>					
+					</f:formElements>
+				</f:FormContainer>
+				<f:FormContainer title="{i18n>ladodireito}">
 					<f:formElements>						
 						<f:FormElement label="Hn" visible="{CriarMaterialRodanteModel>ExibirMaterial}">
 							<f:fields>
@@ -1008,16 +1002,16 @@
 				</f:FormContainer>	
 		</f:Form>
 
-		<f:Form id="PassoEsteira"
+		<f:Form id="PassoEsteiras"
 		editable="true">
 			<f:title>
-				<core:Title text="Passo Esteira" />
+				<core:Title text="{i18n>passoesteiras}" />
 			</f:title>
 			<f:FormContainer>
 					<f:formElements>
 						<f:FormElement>
 							<f:fields>
-								<Image src="\img\passoesteira.png" alt="RoleteSuperior" width="50%" heigth="50%"/>	
+								<Image src="/img/passoesteiras.png" alt="RoleteSuperior" width="50%" height="50%"/>	
 							</f:fields>
 						</f:FormElement>					
 										
@@ -1040,7 +1034,7 @@
 					singleContainerFullSize="false" />
 			</f:layout>
 			<f:formContainers>
-				<f:FormContainer title="Lado Esquerdo">
+				<f:FormContainer title="{i18n>ladoesquerdo}">
 					<f:formElements>
 						<f:FormElement label="Passo Esteira (A) (5 Pinos)">
 							<f:fields>
@@ -1058,7 +1052,7 @@
 						</f:FormElement>					
 					</f:formElements>
 				</f:FormContainer>
-				<f:FormContainer title="Lado Direito">
+				<f:FormContainer title="{i18n>ladodireito}">
 					<f:formElements>						
 						<f:FormElement label="Passo (A)" visible="{CriarMaterialRodanteModel>ExibirMaterial}">
 							<f:fields>
@@ -1088,7 +1082,7 @@
 					<f:formElements>
 						<f:FormElement>
 							<f:fields>
-								<Image src="\img\tensionamento.png" alt="RoleteSuperior" width="50%" heigth="50%"/>	
+								<Image src="/img/tensionamento.png" alt="RoleteSuperior" width="50%" height="50%"/>	
 							</f:fields>
 						</f:FormElement>					
 										
@@ -1111,7 +1105,7 @@
 					singleContainerFullSize="false" />
 			</f:layout>
 			<f:formContainers>
-				<f:FormContainer title="Lado Esquerdo">
+				<f:FormContainer title="{i18n>ladoesquerdo}">
 					<f:formElements>
 						<f:FormElement label="Tensionamento (Flecha - A)">
 							<f:fields>
@@ -1129,7 +1123,7 @@
 						</f:FormElement>					
 					</f:formElements>
 				</f:FormContainer>
-				<f:FormContainer title="Lado Direito">
+				<f:FormContainer title="{i18n>ladodireito}">
 					<f:formElements>						
 						<f:FormElement label="Flecha (A)" visible="{CriarMaterialRodanteModel>ExibirMaterial}">
 							<f:fields>								

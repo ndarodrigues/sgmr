@@ -35,10 +35,18 @@ sap.ui.define([
                 oView.bindElement("inspecaoModel>/")
                 oView.bindElement("condicaoModel>/")
                 oView.bindElement("formularioModel>/")
+                oView.bindElement("modeloEquipamentoModel>/")
                 
-                var aCondicoes = [{ key: "Formulário 321" }, { key: "Formulário 322" }, { key: "Formulário 323" }]
+                var aCondicoes = [{ key: "EX1200 - 6" }, { key: "EX2500 - 5" }, { key: "320" }, { key: "930" }]
                 oController.getOwnerComponent().getModel("formularioModel").setData(aCondicoes);
                 oController.getOwnerComponent().getModel("formularioModel").refresh();
+
+                var aModelosEquipamentos = [{ cod: "EX1200 - 5", desc: "HITACHI"}, 
+                                            { cod: "EX2500", desc: "HITACHI" }, 
+                                            { cod: "320", desc: "CAT" }, 
+                                            { cod: "930", desc: "KOMATSU" }]
+                oController.getOwnerComponent().getModel("modeloEquipamentoModel").setData(aModelosEquipamentos);
+                oController.getOwnerComponent().getModel("modeloEquipamentoModel").refresh();
 
                 var oModel = new JSONModel();
                 oModel.setData([]);
@@ -100,7 +108,6 @@ sap.ui.define([
                 oModel.setData(aMockMessages);
                 this.getView().setModel(oModel);
                 this.byId("messagePopoverBtn").addDependent(oMessagePopover);
-
             },
 
 

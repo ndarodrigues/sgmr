@@ -15,7 +15,7 @@ sap.ui.define([
     var aFilters = ""
     var oExpand = ""
 
-    return Controller.extend("com.pontual.sgmr.controller.App", {
+    return Controller.extend("com.pontual.sgmr.controller.BaseController", {
 
         getRouter: function () {
             return UIComponent.getRouterFor(this);
@@ -45,26 +45,40 @@ sap.ui.define([
             var aAutorizacoes = oController.getOwnerComponent().getModel("usuarioModel").getProperty("/Autorizacoes")
 
             var oAcesso = {
-                administrativo: true
+                administrativo: false,
+                materialrodante: false,
+                perfil: false,
+                usuario: false,
+                associar: false,
+                sincronizar: false
             }
 
             if (aAutorizacoes) {
                 aAutorizacoes.forEach(oAutorizacao => {
-                    if (oAutorizacao.CodigoAutorizacao == "016" || oAutorizacao.CodigoAutorizacao == "017" || oAutorizacao.CodigoAutorizacao == "018" ||
-                        oAutorizacao.CodigoAutorizacao == "019" || oAutorizacao.CodigoAutorizacao == "020") {
-                        oAcesso.ordem = true;
-                    }
-                    if (oAutorizacao.CodigoAutorizacao == "000") {
-                        oAcesso.comboio = true;
-                    }
                     if (oAutorizacao.CodigoAutorizacao == "001") {
+                        oAcesso.materialrodante = true;
+                    }
+                    if (oAutorizacao.CodigoAutorizacao == "002" || oAutorizacao.CodigoAutorizacao == "003" || oAutorizacao.CodigoAutorizacao == "004" || oAutorizacao.CodigoAutorizacao == "005"){
                         oAcesso.administrativo = true;
+                        if(oAutorizacao.CodigoAutorizacao == "002"){
+                            oAcesso.perfil = true;
+                        }
+                        if(oAutorizacao.CodigoAutorizacao == "003"){
+                            oAcesso.usuario = true;
+                        }
+                        if(oAutorizacao.CodigoAutorizacao == "004"){
+                            oAcesso.associar = true;
+                        }
+/*                         if(oAutorizacao.CodigoAutorizacao == "005"){
+                            oAcesso.sincronizar = true;
+                        } */
                     }
                 });
-            }
+            
 
             oController.getOwnerComponent().getModel("acessosModel").setData(oAcesso)
             oController.getOwnerComponent().getModel("acessosModel").refresh();
+            }
         },
 
         /** Funções de Banco de Dados */
@@ -254,7 +268,6 @@ sap.ui.define([
             } catch (error) {
                 return content;
             }
-            v
         },
 
         enviarDados: function (pServico, pDados) {
@@ -321,7 +334,12 @@ sap.ui.define([
 
                 switch (pServico) {
                     case "PerfilSet":
-                        oExpand = "AutorizacaoSet"
+                        oExpand = "PerfilCentroSet,AutorizacaoSet";
+                        aFilters = [];
+                        break;
+
+                    case "ListaCentroSet":
+                        oExpand = ""
                         aFilters = [];
                         break;
 
@@ -399,11 +417,15 @@ sap.ui.define([
                     for (let x = 0; x < result.results.length; x++) {
                         const oPerfil = result.results[x];
                         oPerfil.AutorizacaoSet = oPerfil.AutorizacaoSet.results;
+                        oPerfil.PerfilCentroSet = oPerfil.PerfilCentroSet.results;
                         oPerfil.AutorizacaoSet.forEach(element => {
                             delete element.__metadata
 
                         });
 
+                        oPerfil.PerfilCentroSet.forEach(element => {
+                            delete element.__metadata
+                        });
 
                         delete oPerfil.__metadata
                         aPerfis.push(oPerfil);
@@ -423,7 +445,57 @@ sap.ui.define([
                     resolve()
                 }).catch(
                     function (result) {
-                        oController.closeBusyDialog();
+                        // Não fechar o busy dialog aqui - será fechado no método sincronizar principal
+                        reject(result)
+                    })
+            })
+        },
+
+        carregarPerfilIndexDB: function () {
+			oController = this;
+
+			return new Promise((resolve, reject) => {
+
+				oController.lerTabelaIndexDB("tb_perfil").then(
+					function (result) {
+						oController.getOwnerComponent().getModel("listaPerfilModel").setData(result.tb_perfil)
+						resolve()
+					}).catch(
+						function (result) {
+							reject()
+						})
+
+			})
+		},
+
+        carregarCentro: function () {
+            return new Promise((resolve, reject) => {
+                oController.atualizarBusyDialog(oController.getView().getModel("i18n").getResourceBundle().getText("sincronizandocentros"));
+                oController.carregarDados("ListaCentroSet", []).then(function (result) {
+                    for (let x = 0; x < result.results.length; x++) {
+                        
+                        result.results.forEach(element => {
+                            delete element.__metadata
+
+                        });
+                    }
+
+                    oController.getOwnerComponent().getModel("listaCentrosModel").setData(result.results);
+
+
+                    var vDescricao = "Centros sincronizados " + result.results.length
+                    var oMensagem = {
+                        "title": vDescricao,
+                        "description": "Centros encaminhados para o dispositivo",
+                        "type": "Success",
+                        "subtitle": "Centros download"
+                    }
+                    oController.getOwnerComponent().getModel("mensagensModel").getData().push(oMensagem)
+
+                    resolve()
+                }).catch(
+                    function (result) {
+                        // Não fechar o busy dialog aqui - será fechado no método sincronizar principal
                         reject(result)
                     })
             })
@@ -436,7 +508,7 @@ sap.ui.define([
                     var aAutorizacoes = []
                     for (let x = 0; x < result.results.length; x++) {
                         const oAutorizacao = result.results[x];
-                        oAutorizacao.AutorizacaoSet = oAutorizacao;
+                        //oAutorizacao.AutorizacaoSet = oAutorizacao;
                         // oAutorizacao.forEach(element => {
                         //     delete element.__metadata
 
@@ -508,7 +580,7 @@ sap.ui.define([
             resolve()
 
         },
-
+        //Revisar
         sincronizarReceber: function (pCatalogo) {
 
             oController = this;
@@ -516,15 +588,17 @@ sap.ui.define([
 
                 if (oController.checkConnection() == true) {
 
-                    //Preencher aqui com todos os serviços que precisam ser chamados e carregados
+                    //Carregar dados do servidor quando há conexão
                     var aLeituras = [
-                        oController.carregarAutorizacoes(),
-                        oController.carregarPerfil(),
-                        oController.carregarUsuario(),
-                        oController.carregarDadosIndexDB("tb_autorizacao", "listaAutorizacao"),
-                        oController.carregarDadosIndexDB("tb_perfil", "listaPerfilModel"),
-                        oController.carregarDadosIndexDB("tb_usuario", "listaUsuariosModel")
-                    ]
+                        oController.carregarAutorizacoes().catch(() => oController.carregarDadosIndexDB("tb_autorizacao", "listaAutorizacao")),
+                        oController.carregarPerfil().catch(() => oController.carregarDadosIndexDB("tb_perfil", "listaPerfilModel")),
+                        oController.carregarCentro().catch(() => oController.carregarDadosIndexDB("tb_centros", "listaCentrosModel")),
+                        oController.carregarUsuario().catch(() => oController.carregarDadosIndexDB("tb_usuario", "listaUsuariosModel")),
+                        oController.carregarMaterialRodante().catch(() => oController.carregarDadosIndexDB("tb_material_rodante", "listaMaterialRodanteModel")),
+                        oController.carregarFormulario().catch(() => oController.carregarDadosIndexDB("tb_formulario", "listaFormularioModel"))
+                    ];
+
+                    
 
                     Promise.all(aLeituras).then(
                         function (result) {
@@ -533,26 +607,38 @@ sap.ui.define([
                             var aLimpezas = [
                                 oController.limparTabelaIndexDB("tb_autorizacao"),
                                 oController.limparTabelaIndexDB("tb_perfil"),
-                                oController.limparTabelaIndexDB("tb_usuario")]
+                                oController.limparTabelaIndexDB("tb_centros"),
+                                oController.limparTabelaIndexDB("tb_usuario"),
+                                oController.limparTabelaIndexDB("tb_material_rodante"),
+                                oController.limparTabelaIndexDB("tb_formulario"),
+                            ];
                             Promise.all(aLimpezas).then(
                                 function (result) {
                                     var aAutorizacoes = oController.getOwnerComponent().getModel("listaAutorizacao").getData();
                                     var aPerfis = oController.getOwnerComponent().getModel("listaPerfilModel").getData();
                                     var aUsuarios = oController.getOwnerComponent().getModel("listaUsuariosModel").getData();
+                                    var aCentros = oController.getOwnerComponent().getModel("listaCentrosModel").getData();
+                                    var aMaterialRodante = oController.getOwnerComponent().getModel("listaMaterialRodanteModel").getData();
+                                    var aFormularios = oController.getOwnerComponent().getModel("listaFormularioModel").getData();
+
                                     var aGravacoes = [
                                         oController.gravarTabelaIndexDB("tb_autorizacao", aAutorizacoes),
                                         oController.gravarTabelaIndexDB("tb_perfil", aPerfis),
-                                        oController.gravarTabelaIndexDB("tb_usuario", aUsuarios)]
+                                        oController.gravarTabelaIndexDB("tb_centros", aCentros),
+                                        oController.gravarTabelaIndexDB("tb_usuario", aUsuarios),
+                                        oController.gravarTabelaIndexDB("tb_material_rodante", aMaterialRodante),
+                                        oController.gravarTabelaIndexDB("tb_formulario", aFormularios)
+                                    ];
                                     Promise.all(aGravacoes).then(
                                         function (result) {
                                             if (pCatalogo) {
-                                                oController.carregarCatalogos().then(
+                                                /* oController.carregarCatalogos().then(
                                                     function (result) {
                                                         oController.limparTabelaIndexDB("tb_catalogo").then(
                                                             function (result) {
                                                                 var aCatalogos = oController.getOwnerComponent().getModel("catalogosModel").getData();
                                                                 oController.gravarTabelaIndexDB("tb_catalogo", aCatalogos).then(
-                                                                    function (result) {
+                                                                    function (result) { */
                                                                         oController.carregarCodes().then(
                                                                             function (result) {
                                                                                 oController.limparTabelaIndexDB("tb_code").then(
@@ -580,7 +666,7 @@ sap.ui.define([
                                                                                     oController.closeBusyDialog();
                                                                                     reject(result)
                                                                                 });
-                                                                    }).catch(
+                                                                    /* }).catch(
                                                                         function (result) {
                                                                             oController.closeBusyDialog();
                                                                             reject(result)
@@ -596,7 +682,7 @@ sap.ui.define([
                                                         function (result) {
                                                             oController.closeBusyDialog();
                                                             reject(result)
-                                                        })
+                                                        })*/
                                             } else {
                                                 resolve()
                                             }
@@ -619,17 +705,32 @@ sap.ui.define([
                                 reject(result)
                             })
                 } else {
-                    oController.closeBusyDialog();
-                    reject()
+                    // Sem conexão - carregar dados do IndexedDB
+                    oController.atualizarBusyDialog(oController.getView().getModel("i18n").getResourceBundle().getText("carregarIDB"));
+                    var aLeituras = [
+                        oController.carregarDadosIndexDB("tb_autorizacao", "listaAutorizacao"),
+                        oController.carregarDadosIndexDB("tb_perfil", "listaPerfilModel"),
+                        oController.carregarDadosIndexDB("tb_centros", "listaCentrosModel"),
+                        oController.carregarDadosIndexDB("tb_usuario", "listaUsuariosModel")
+                    ]
+                    
+                    Promise.all(aLeituras).then(
+                        function (result) {
+                            oController.closeBusyDialog();
+                            resolve()
+                        }).catch(
+                            function (result) {
+                                oController.closeBusyDialog();
+                                reject(result)
+                            })
                 }
             })
 
         },
 
         sincronizar: function (pCatalogo) {
-            // oController = this;
-            // oController.carregarPerfil()
-            // oController.carregarAutorizacao()
+            //oController.carregarPerfil();
+            //oController.carregarAutorizacao()
             oController = this;
 
             return new Promise((resolve, reject) => {
@@ -654,17 +755,17 @@ sap.ui.define([
                                             resolve(result)
                                         }).catch(
                                             function (result) {
-                                                oController.forceCloseBusyDialog();
+                                                //oController.forceCloseBusyDialog();
                                                 reject(result)
                                             })
                                 }).catch(
                                     function (result) {
-                                        oController.forceCloseBusyDialog();
+                                        //oController.forceCloseBusyDialog();
                                         reject(result)
                                     })
                         }).catch(
                             function (result) {
-                                oController.closeBusyDialog();
+                                //oController.closeBusyDialog();
                                 reject(result)
                             })
                 } else {
@@ -683,7 +784,7 @@ sap.ui.define([
             var oComponent = this.getOwnerComponent();
             if (!oComponent._busyDialog && !this._pBusyDialog) {
                 this._pBusyDialog = Fragment.load({
-                    name: "com.pontual.sgrm.fragment.BusyDialog",
+                    name: "com.pontual.sgmr.fragment.BusyDialog",
                     controller: this
                 }).then(function (oBusyDialog) {
                     this.getView().addDependent(oBusyDialog);
@@ -785,7 +886,8 @@ sap.ui.define([
                                 "CodigoPerfil": 0,
                                 "DescrPerfil": oPerfil.DescrPerfil,
                                 "Sincronizado": "N",
-                                "AutorizacaoSet": []
+                                "AutorizacaoSet": [],
+                                "PerfilCentroSet": []
                             }
                             oPerfil.AutorizacaoSet.forEach(oAutorizacao => {
                                 if (oAutorizacao.Selecionado == true) {
@@ -797,7 +899,19 @@ sap.ui.define([
                                     }
                                     oPerfilSet.AutorizacaoSet.push(oAutorizacaoSet)
                                 }
-                            })
+                            });
+                            oPerfil.PerfilCentroSet.forEach(oCentro => {
+                                if (oCentro) {
+                                    var oCentroSet =
+                                    {
+                                        "CodigoPerfil": oCentro.CodigoPerfil,
+                                        "DescPerfil": oCentro.DescrPerfil,
+                                        "Centro": oCentro.CodigoCentro,
+                                        "DescCentro": oCentro.DescrCentro
+                                    }
+                                    oPerfilSet.PerfilCentroSet.push(oCentroSet)
+                                }
+                            });
                             aPerfilSet.push(oController.enviarDados("PerfilSet", oPerfilSet))
                             break;
                         case "E":
@@ -805,7 +919,8 @@ sap.ui.define([
                                 "CodigoPerfil": oPerfil.CodigoPerfil,
                                 "DescrPerfil": oPerfil.DescrPerfil,
                                 "Sincronizado": "E",
-                                "AutorizacaoSet": []
+                                "AutorizacaoSet": [],
+                                "PerfilCentroSet": []
                             }
                             aPerfilSet.push(oController.enviarDados("PerfilSet", oPerfilSet))
                             break;
@@ -845,7 +960,7 @@ sap.ui.define([
                             resolve()
                         }).catch(
                             function (result) {
-                                oController.closeBusyDialog();
+                                // Não fechar o busy dialog aqui - será fechado no método sincronizar principal
                                 reject()
                             })
                 } else {
@@ -908,20 +1023,145 @@ sap.ui.define([
             oController = this;
             return new Promise((resolve, reject) => {
                 if (oController.checkConnection() == true) {
-                    // Promise.all([
-                    // oController.atualizarPerfil(),
-                    // oController.atualizarUsuario()
-                    // ]).then(
-                    // function (result) {
-                    resolve()
-                    // }).catch(
-                    // function (result) {
-                    //     reject()
-                    // }
-                    // );
+                    Promise.all([
+                        oController.atualizarPerfil(),
+                        oController.atualizarUsuario(),
+                        oController.atualizarMaterialRodante()
+                    ]).then(
+                        function (result) {
+                            resolve()
+                        }).catch(
+                            function (result) {
+                                reject()
+                            });
                 } else {
                     reject()
                 }
+            })
+        },
+
+        atualizarUsuario: function () {
+            return new Promise((resolve, reject) => {
+                oController.lerTabelaIndexDB("tb_usuario").then(
+                    function (result) {
+                        if (result.tb_usuario) {
+                            oController.getOwnerComponent().getModel("listaUsuariosModel").setData(result.tb_usuario);
+                            oController.prepararUsuario().then(
+                                function (result) {
+                                    resolve()
+                                }).catch(
+                                    function (result) {
+                                        reject()
+                                    })
+                        } else {
+                            resolve()
+                        }
+                    }).catch(
+                        function (result) {
+                            reject(result)
+                        })
+            })
+        },
+
+        prepararUsuario: function () {
+            return new Promise((resolve, reject) => {
+                oController.atualizarBusyDialog(oController.getView().getModel("i18n").getResourceBundle().getText("atualizandousuarios"));
+                var aUsuarios = oController.getOwnerComponent().getModel("listaUsuariosModel").getData();
+                var aUsuarioSet = []
+
+                if (aUsuarios && aUsuarios.length) {
+                    aUsuarios.forEach(oUsuario => {
+                        if (oUsuario.Bloqueado == true) {
+                            oUsuario.Bloqueado = "X"
+                        } else {
+                            oUsuario.Bloqueado = ""
+                        }
+                        switch (oUsuario.Sincronizado) {
+                            case "N":
+                                var oUsuarioSet = {
+                                    "CodUsuario": oUsuario.CodUsuario,
+                                    "Nome": oUsuario.Nome,
+                                    "Senha": oUsuario.Senha,
+                                    "Centro": oUsuario.Centro,
+                                    "Deposito": oUsuario.Deposito,
+                                    "Bloqueado": oUsuario.Bloqueado,
+                                    "Perfil": oUsuario.CodigoPerfil.toString(),
+                                    "Sincronizado": "N"
+                                }
+                                aUsuarioSet.push(oController.enviarDados("UsuarioSet", oUsuarioSet))
+                                break;
+                            case "U":
+                                var oUsuarioSet = {
+                                    "CodUsuario": oUsuario.CodUsuario,
+                                    "Nome": oUsuario.Nome,
+                                    "Senha": oUsuario.Senha,
+                                    "Centro": oUsuario.Centro,
+                                    "Deposito": oUsuario.Deposito,
+                                    "Bloqueado": oUsuario.Bloqueado,
+                                    "Perfil": oUsuario.CodigoPerfil.toString(),
+                                    "Sincronizado": "U"
+                                }
+                                aUsuarioSet.push(oController.enviarDados("UsuarioSet", oUsuarioSet))
+                                break;
+                            case "E":
+                                var oUsuarioSet = {
+                                    "CodUsuario": oUsuario.CodUsuario,
+                                    "Nome": oUsuario.Nome,
+                                    "Senha": oUsuario.Senha,
+                                    "Centro": oUsuario.Centro,
+                                    "Deposito": oUsuario.Deposito,
+                                    "Bloqueado": oUsuario.Bloqueado,
+                                    "Perfil": oUsuario.CodigoPerfil.toString(),
+                                    "Sincronizado": "E"
+                                }
+                                aUsuarioSet.push(oController.enviarDados("UsuarioSet", oUsuarioSet))
+                                break;
+                            default:
+                                break;
+                        }
+                    });
+                }
+
+                if (aUsuarioSet.length > 0) {
+                    Promise.all(aUsuarioSet).then(
+                        function (result) {
+                            result.forEach(oUsuario => {
+                                var vTipo
+                                switch (oUsuario.Tipomensagem) {
+                                    case "S":
+                                        vTipo = "Success"
+                                        break;
+                                    case "E":
+                                        vTipo = "Error"
+                                        break;
+                                    default:
+                                        break;
+                                }
+                                var oMensagem = {
+                                    "title": "Gestão de usuário",
+                                    "description": oUsuario.Mensagem,
+                                    "type": vTipo,
+                                    "subtitle": oUsuario.Mensagem
+                                }
+                                oController.getOwnerComponent().getModel("mensagensModel").getData().push(oMensagem)
+                            });
+                            resolve()
+                        }).catch(
+                            function (result) {
+                                // Não fechar o busy dialog aqui - será fechado no método sincronizar principal
+                                reject()
+                            })
+                } else {
+                    resolve()
+                }
+            })
+        },
+
+        atualizarMaterialRodante: function () {
+            return new Promise((resolve, reject) => {
+                // Material Rodante pode não existir em todas as implementações
+                // Por isso, sempre resolve com sucesso
+                resolve()
             })
         },
 
@@ -957,6 +1197,7 @@ sap.ui.define([
                 var aLeituras = [
                     oController.carregarDadosIndexDB("tb_autorizacao", "autorizacoesModel"),
                     oController.carregarDadosIndexDB("tb_perfil", "listaPerfilModel"),
+                    oController.carregarDadosIndexDB("tb_centros", "listaCentrosModel"),
                     oController.carregarDadosIndexDB("tb_usuario", "listaUsuariosModel")
                 ]
                 Promise.all(aLeituras).then(
@@ -973,6 +1214,323 @@ sap.ui.define([
 
         },
 
+        carregarOrdens: function () {
+
+			return new Promise((resolve, reject) => {
+				oController.atualizarBusyDialog(oController.getView().getModel("i18n").getResourceBundle().getText("sincronizandoordens"));
+				var oUsuario = oController.getOwnerComponent().getModel("usuarioModel").getData()
+
+				var aFiltros = [
+					{
+						key: "Centro",
+						value: oUsuario.Centro
+					},
+					{
+						key: "Deposito",
+						value: oUsuario.Deposito
+					}]
+				oUsuario.Autorizacoes.forEach(element => {
+					if (element.CodigoAutorizacao != "000") {
+						aFiltros.push({
+							key: "Tipoatividade",
+							value: element.CodigoAutorizacao
+
+						})
+					}
+				});
+				oController.carregarDados("ListaOrdensSet", aFiltros).then(function (result) {
+					var aOrdens = []
+					var aOperacoes = []
+					for (let x = 0; x < result.results.length; x++) {
+						const oOrdem = result.results[x];
+						for (let y = 0; y < oOrdem.ListaOperacoesSet.results.length; y++) {
+							const oOperacao = oOrdem.ListaOperacoesSet.results[y];
+							delete oOperacao.ListaComponentesOperacaoSet
+							delete oOperacao.ListaOrdens
+							delete oOperacao.__metadata
+							aOperacoes.push(oOperacao)
+						}
+						delete oOrdem.ListaOperacoesSet
+						delete oOrdem.__metadata
+						aOrdens.push(oOrdem)
+					}
+					oController.getOwnerComponent().getModel("ordensModel").setData(aOrdens)
+					oController.getOwnerComponent().getModel("operacoesModel").setData(aOperacoes)
+
+					var vDescricao = "Ordem recebidas " + aOrdens.length
+					var oMensagem = {
+						"title": vDescricao,
+						"description": "Ordens encaminhadas para o dispositivo",
+						"type": "Success",
+						"subtitle": "Ordens download"
+					}
+					oController.getOwnerComponent().getModel("mensagensModel").getData().push(oMensagem)
+
+					var vDescricao = "Operações recebidas " + aOperacoes.length
+					var oMensagem = {
+						"title": vDescricao,
+						"description": "Operações encaminhadas para o dispositivo",
+						"type": "Success",
+						"subtitle": "Operações download"
+					}
+					oController.getOwnerComponent().getModel("mensagensModel").getData().push(oMensagem)
+
+					resolve()
+				}).catch(
+					function (result) {
+						// Não fechar o busy dialog aqui - será fechado no método sincronizar principal
+						reject(result)
+					})
+			})
+
+		},
+
+        carregarFormulario: function () {
+
+			return new Promise((resolve, reject) => {
+				oController.atualizarBusyDialog(oController.getView().getModel("i18n").getResourceBundle().getText("sincronizandoequipamentos"));
+/* 				var oUsuario = oController.getOwnerComponent().getModel("usuarioModel").getData()
+				var aFiltros = [
+					{
+						key: "Centro",
+						value: oUsuario.Centro
+					}] */
+				oController.carregarDados("ListaFormularioSet").then(function (result) {
+					var aFormularios = []
+					for (let x = 0; x < result.results.length; x++) {
+						const oFormulario = result.results[x];
+						delete oFormulario.__metadata
+						aFormularios.push(oFormulario);
+					}
+					oController.getOwnerComponent().getModel("listaFormularioModel").setData(aFormularios)
+
+					var vDescricao = "Material Rodante sincronizado " + aFormularios.length
+					var oMensagem = {
+						"title": vDescricao,
+						"description": "Material Rodante encaminhado para o dispositivo",
+						"type": "Success",
+						"subtitle": "Material Rodante download"
+					}
+					oController.getOwnerComponent().getModel("mensagensModel").getData().push(oMensagem)
+
+					resolve()
+				}).catch(
+					function (result) {
+						// Não fechar o busy dialog aqui - será fechado no método sincronizar principal
+						reject(result)
+					})
+			})
+
+		},
+
+
+        carregarMaterialRodante: function () {
+
+			return new Promise((resolve, reject) => {
+				oController.atualizarBusyDialog(oController.getView().getModel("i18n").getResourceBundle().getText("sincronizandoequipamentos"));
+				var oUsuario = oController.getOwnerComponent().getModel("usuarioModel").getData()
+				var aFiltros = [
+					{
+						key: "Centro",
+						value: oUsuario.Centro
+					}]
+				oController.carregarDados("ListaEquipamentoSet", aFiltros).then(function (result) {
+					var aEquipamentos = []
+					for (let x = 0; x < result.results.length; x++) {
+						const oEquipamento = result.results[x];
+						delete oEquipamento.__metadata
+						aEquipamentos.push(oEquipamento);
+					}
+					oController.getOwnerComponent().getModel("listaMaterialRodanteModel").setData(aEquipamentos)
+
+					var vDescricao = "Material Rodante sincronizado " + aEquipamentos.length
+					var oMensagem = {
+						"title": vDescricao,
+						"description": "Material Rodante encaminhado para o dispositivo",
+						"type": "Success",
+						"subtitle": "Material Rodante download"
+					}
+					oController.getOwnerComponent().getModel("mensagensModel").getData().push(oMensagem)
+
+					resolve()
+				}).catch(
+					function (result) {
+						// Não fechar o busy dialog aqui - será fechado no método sincronizar principal
+						reject(result)
+					})
+			})
+
+		},
+
+
+		carregarMateriais: function () {
+
+			return new Promise((resolve, reject) => {
+				oController.atualizarBusyDialog(oController.getView().getModel("i18n").getResourceBundle().getText("sincronizandomateriais"));
+				var oUsuario = oController.getOwnerComponent().getModel("usuarioModel").getData()
+				var aFiltros = [
+					{
+						key: "Centro",
+						value: oUsuario.Centro
+					},
+					{
+						key: "Deposito",
+						value: oUsuario.Deposito
+					}
+				]
+
+				oController.carregarDados("ListaMateriaisSet", aFiltros).then(function (result) {
+					var aMateriais = []
+					var aTipos = []
+					for (let x = 0; x < result.results.length; x++) {
+						const oMaterial = result.results[x];
+						if (oMaterial.ListaTiposAvaliacaoSet.results.length > 0) {
+							for (let y = 0; y < oMaterial.ListaTiposAvaliacaoSet.results.length; y++) {
+								const oTipo = oMaterial.ListaTiposAvaliacaoSet.results[y];
+								delete oTipo.__metadata
+								aTipos.push(oTipo)
+							}
+						} else {
+							oMaterial.ListaTiposAvaliacaoSet.results.push(
+								{
+									Material: "",
+									TipoAvaliacao: "NOVO"
+								}
+							)
+						}
+
+						// delete oMaterial.ListaTiposAvaliacaoSet
+						delete oMaterial.__metadata
+						aMateriais.push(oMaterial);
+					}
+					oController.getOwnerComponent().getModel("materiaisModel").setData(aMateriais)
+					oController.getOwnerComponent().getModel("tiposAvaliacaoModel").setData(aTipos)
+
+					var vDescricao = "Materiais sincronizados " + aMateriais.length
+					var oMensagem = {
+						"title": vDescricao,
+						"description": "Materiais encaminhados para o dispositivo",
+						"type": "Success",
+						"subtitle": "Materiais download"
+					}
+					oController.getOwnerComponent().getModel("mensagensModel").getData().push(oMensagem)
+
+					var vDescricao = "Tipo de Avaliação sincronizados " + aTipos.length
+					var oMensagem = {
+						"title": vDescricao,
+						"description": "Tipo de Avaliação encaminhados para o dispositivo",
+						"type": "Success",
+						"subtitle": "Tipo de Avaliação download"
+					}
+					oController.getOwnerComponent().getModel("mensagensModel").getData().push(oMensagem)
+
+					resolve()
+				}).catch(
+					function (result) {
+						// Não fechar o busy dialog aqui - será fechado no método sincronizar principal
+						reject(result)
+					})
+			})
+
+		},
+
+		carregarCatalogos: function () {
+
+			return new Promise((resolve, reject) => {
+				oController.atualizarBusyDialog(oController.getView().getModel("i18n").getResourceBundle().getText("sincronizandocatalogos"));
+				var aListaCatalogos = [];
+				qtdeCatalogo = 0;
+				var aEquipamentos = oController.getOwnerComponent().getModel("equipamentosModel").getData()
+
+				for (let index = 0; index < aEquipamentos.length; index++) {
+					const element = aEquipamentos[index];
+					var aFiltros = [{ key: "Equipamento", value: element.Equipamento }]
+					aListaCatalogos.push(oController.carregarDados("ListaCatalogosSet", aFiltros))
+				}
+				Promise.all(aListaCatalogos).then(
+					function (result) {
+						var aCatalogos = []
+
+						for (let x = 0; x < result.length; x++) {
+							const element = result[x];
+							var array3 = aCatalogos.concat(result[x].results)
+							aCatalogos = array3;
+						}
+
+						oController.getOwnerComponent().getModel("catalogosModel").setData(aCatalogos)
+
+						var vDescricao = "Catálogos sincronizados " + aCatalogos.length
+						var oMensagem = {
+							"title": vDescricao,
+							"description": "Catálogos encaminhados para o dispositivo",
+							"type": "Success",
+							"subtitle": "Catálogos download"
+						}
+						oController.getOwnerComponent().getModel("mensagensModel").getData().push(oMensagem)
+
+						resolve()
+					}).catch(
+						function (result) {
+							// Não fechar o busy dialog aqui - será fechado no método sincronizar principal
+							reject();
+							console.table(result)
+						})
+			})
+		},
+
+		carregarCodes: function () {
+			return new Promise((resolve, reject) => {
+				oController.atualizarBusyDialog(oController.getView().getModel("i18n").getResourceBundle().getText("sincronizandocodes"));
+				var aListaCodes = []
+				var aCatalogos = oController.agruparCatalogos(oController.getOwnerComponent().getModel("catalogosModel").getData())
+
+				for (let index = 0; index < aCatalogos.length; index++) {
+					const element = aCatalogos[index];
+					var aFiltros = [{ key: "Catalogo", value: element.key }]
+					aListaCodes.push(oController.carregarDados("ListaCodesSet", aFiltros))
+				}
+				Promise.all(aListaCodes).then(
+					function (result) {
+						var aCodes = []
+
+						for (let x = 0; x < result.length; x++) {
+							var array3 = aCodes.concat(result[x].results)
+							aCodes = array3;
+						}
+
+						var aCatalogos = oController.getOwnerComponent().getModel("catalogosModel").getData();
+
+						aCodes.forEach(function (item) {
+							var oCatalogo = aCatalogos.find(function (catalogo) {
+								return catalogo.CodeGroup === item.Codegruppe;
+							});
+							if (oCatalogo) {
+								item.Shorttxtgr = oCatalogo.Shorttxtgr;
+							}
+						});
+
+						oController.getOwnerComponent().getModel("codesModel").setData(aCodes)
+
+						oController.getOwnerComponent().getModel("codesModel").setData(aCodes)
+
+						var vDescricao = "Codes sincronizados " + aCodes.length
+						var oMensagem = {
+							"title": vDescricao,
+							"description": "Codes encaminhados para o dispositivo",
+							"type": "Success",
+							"subtitle": "Codes download"
+						}
+						oController.getOwnerComponent().getModel("mensagensModel").getData().push(oMensagem)
+
+						resolve()
+					}).catch(
+						function (result) {
+							// Não fechar o busy dialog aqui - será fechado no método sincronizar principal
+							reject(result)
+						})
+			})
+		},
+
         carregarDadosIndexDB: function (pTabela, pModel) {
             oController = this;
 
@@ -980,7 +1538,20 @@ sap.ui.define([
 
                 oController.lerTabelaIndexDB(pTabela).then(
                     function (result) {
-                        oController.getOwnerComponent().getModel(pModel).setData(result[pTabela])
+                        var data = result[pTabela];
+                        
+                        // Converter campo Bloqueado para boolean se for dados de usuário
+                        if (pTabela === "tb_usuario" && data && Array.isArray(data)) {
+                            data.forEach(function(oUsuario) {
+                                if (oUsuario.Bloqueado === "X" || oUsuario.Bloqueado === true) {
+                                    oUsuario.Bloqueado = true;
+                                } else {
+                                    oUsuario.Bloqueado = false;
+                                }
+                            });
+                        }
+                        
+                        oController.getOwnerComponent().getModel(pModel).setData(data)
                         resolve()
                     }).catch(
                         function (result) {
@@ -1091,11 +1662,35 @@ sap.ui.define([
 
                 if (oConexao.verificarDisponibilidade) {
                     if (oController.checkConnection() == true) {
-                        if (oConexao.url) {
-                            oController.openBusyDialog();
-                            oController.atualizarBusyDialog("Tentando conexão com o endereço " + oConexao.url);
+                        if (oConexao.url && oConexao.urlsemclient) {
+                            // Validar se a URL tem formato válido
+                            try {
+                                new URL(oConexao.urlsemclient);
+                            } catch (urlError) {
+                                console.error("URL inválida:", oConexao.urlsemclient, urlError);
+                                var oMockMessage = {
+                                    type: 'Error',
+                                    title: 'URL Inválida',
+                                    description: "O endereço configurado não é válido: " + oConexao.urlsemclient,
+                                    subtitle: oController.getView().getModel("i18n").getResourceBundle().getText("conexaoerro"),
+                                    counter: 1
+                                };
+                                oController.getOwnerComponent().getModel("mensagensModel").getData().push(oMockMessage)
+                                reject()
+                                return;
+                            }
 
-                            fetch(oConexao.urlsemclient, { mode: 'no-cors' }).then(r => {
+                            oController.openBusyDialog();
+                            oController.atualizarBusyDialog("Tentando conexão com o endereço " + oConexao.urlsemclient);
+
+                            console.log("Testando conexão com:", oConexao.urlsemclient);
+
+                            fetch(oConexao.urlsemclient, { 
+                                mode: 'no-cors',
+                                method: 'GET',
+                                cache: 'no-cache'
+                            }).then(r => {
+                                console.log("Fetch success:", r);
                                 oController.atualizarBusyDialog("Conexão com o endereço " + oConexao.urlsemclient + " estabelecida com sucesso");
 
                                 var oMockMessage = {
@@ -1107,25 +1702,23 @@ sap.ui.define([
                                 };
 
                                 oController.getOwnerComponent().getModel("mensagensModel").getData().push(oMockMessage)
-
                                 resolve()
-
                             })
-                                .catch(e => {
-                                    oController.atualizarBusyDialog("Não foi possível alcançar o endereço " + oConexao.urlsemclient + "informado");
+                            .catch(e => {
+                                console.error("Fetch error:", e);
+                                oController.atualizarBusyDialog("Não foi possível alcançar o endereço " + oConexao.urlsemclient + " informado");
 
-                                    var oMockMessage = {
-                                        type: 'Error',
-                                        title: oController.getView().getModel("i18n").getResourceBundle().getText("erroservidor"),
-                                        description: "Não foi possível alcançar o endereço " + oConexao.urlsemclient + " informado.",
-                                        subtitle: oController.getView().getModel("i18n").getResourceBundle().getText("conexaoerro"),
-                                        counter: 1
-                                    };
+                                var oMockMessage = {
+                                    type: 'Error',
+                                    title: oController.getView().getModel("i18n").getResourceBundle().getText("erroservidor"),
+                                    description: "Erro de conexão: " + e.message + " - Endereço: " + oConexao.urlsemclient,
+                                    subtitle: oController.getView().getModel("i18n").getResourceBundle().getText("conexaoerro"),
+                                    counter: 1
+                                };
 
-                                    oController.getOwnerComponent().getModel("mensagensModel").getData().push(oMockMessage)
-                                    // reject()
-                                    resolve()
-                                });
+                                oController.getOwnerComponent().getModel("mensagensModel").getData().push(oMockMessage)
+                                resolve() // Resolve para não quebrar o fluxo
+                            });
                         } else {
                             var oMockMessage = {
                                 type: 'Error',
@@ -1160,143 +1753,28 @@ sap.ui.define([
 
         },
 
-        atualizarUsuario: function () {
-            return new Promise((resolve, reject) => {
-                oController.lerTabelaIndexDB("tb_usuario").then(
-                    function (result) {
-                        if (result.tb_usuario) {
-                            oController.getOwnerComponent().getModel("listaUsuariosModel").setData(result.tb_usuario);
-                            oController.prepararUsuario().then(
-                                function (result) {
-                                    resolve()
-                                }).catch(
-                                    function (result) {
-                                        reject()
-                                    })
-                        }
 
-                    }).catch(
-                        function (result) {
-                            reject(result)
-                        })
-
-            })
-        },
-
-        prepararUsuario: function () {
-            return new Promise((resolve, reject) => {
-                oController.atualizarBusyDialog(oController.getView().getModel("i18n").getResourceBundle().getText("atualizandousuarios"));
-                var aUsuarios = oController.getOwnerComponent().getModel("listaUsuariosModel").getData();
-                var aUsuarioSet = []
-
-                aUsuarios.forEach(oUsuario => {
-                    if (oUsuario.Bloqueado == true) {
-                        oUsuario.Bloqueado = "X"
-                    } else {
-                        oUsuario.Bloqueado = ""
-                    }
-                    switch (oUsuario.Sincronizado) {
-                        case "N":
-                            var oUsuarioSet = {
-                                "CodUsuario": oUsuario.CodUsuario,
-                                "Nome": oUsuario.Nome,
-                                "Senha": oUsuario.Senha,
-                                "Centro": oUsuario.Centro,
-                                "Deposito": oUsuario.Deposito,
-                                "Bloqueado": oUsuario.Bloqueado,
-                                "Perfil": oUsuario.CodigoPerfil.toString(),
-                                "Sincronizado": "N"
-
-                            }
-                            aUsuarioSet.push(oController.enviarDados("UsuarioSet", oUsuarioSet))
-                            break;
-                        case "U":
-                            var oUsuarioSet = {
-                                "CodUsuario": oUsuario.CodUsuario,
-                                "Nome": oUsuario.Nome,
-                                "Senha": oUsuario.Senha,
-                                "Centro": oUsuario.Centro,
-                                "Deposito": oUsuario.Deposito,
-                                "Bloqueado": oUsuario.Bloqueado,
-                                "Perfil": oUsuario.CodigoPerfil.toString(),
-                                "Sincronizado": "U"
-                            }
-                            aUsuarioSet.push(oController.enviarDados("UsuarioSet", oUsuarioSet))
-                            break;
-
-                        case "E":
-                            var oUsuarioSet = {
-                                "CodUsuario": oUsuario.CodUsuario,
-                                "Nome": oUsuario.Nome,
-                                "Senha": oUsuario.Senha,
-                                "Centro": oUsuario.Centro,
-                                "Deposito": oUsuario.Deposito,
-                                "Bloqueado": oUsuario.Bloqueado,
-                                "Perfil": oUsuario.CodigoPerfil,
-                                "Sincronizado": "E"
-                            }
-                            aUsuarioSet.push(oController.enviarDados("UsuarioSet", oUsuarioSet))
-                            break;
-                        default:
-                            break;
-                    }
-
-                });
-
-                if (aUsuarioSet.length > 0) {
-                    Promise.all(aUsuarioSet).then(
-                        function (result) {
-                            result.forEach(oUsuario => {
-                                var vTipo
-                                switch (oUsuario.Tipomensagem) {
-                                    case "S":
-                                        vTipo = "Success"
-                                        break;
-                                    case "E":
-                                        vTipo = "Error"
-                                        break;
-                                    default:
-                                        break;
-                                }
-                                var oMensagem = {
-                                    "title": "Gestão de usuário",
-                                    "description": oUsuario.Mensagem,
-                                    "type": vTipo,
-                                    "subtitle": oUsuario.Mensagem
-                                }
-                                oController.getOwnerComponent().getModel("mensagensModel").getData().push(oMensagem)
-
-                            });
-
-                            resolve()
-                        }).catch(
-                            function (result) {
-                                oController.closeBusyDialog();
-                                reject()
-                            })
-                } else {
-                    resolve()
-                }
-
-            })
-        },
 
         carregarUsuario: function () {
             oController = this
             return new Promise((resolve, reject) => {
-                var aPerfis = oController.getOwnerComponent().getModel("listaPerfilModel").getData()
                 oController.atualizarBusyDialog(oController.getView().getModel("i18n").getResourceBundle().getText("sincronizandousuarios"));
                 oController.carregarDados("UsuarioSet", []).then(function (result) {
                     var aUsuarios = []
+                    // Obtém os perfis carregados (pode estar vazio se carregamento paralelo ainda não terminou)
+                    var aPerfis = oController.getOwnerComponent().getModel("listaPerfilModel").getData() || []
                     for (let x = 0; x < result.results.length; x++) {
                         const oUsuario = result.results[x];
-                        if (aPerfis.length != undefined) {
+                        if (aPerfis.length != undefined && aPerfis.length > 0) {
                             var oPerfil = aPerfis.find((oElement) => oUsuario.Perfil == oElement.CodigoPerfil);
                             if (oPerfil != undefined) {
                                 oUsuario.Perfil = oPerfil.DescrPerfil;
                                 oUsuario.CodigoPerfil = oPerfil.CodigoPerfil
                                 oUsuario.Autorizacoes = oPerfil.AutorizacaoSet
                             }
+                        } else {
+                            // Perfis ainda não carregados - mantém dados originais do usuário
+                            console.log("Perfis ainda não disponíveis durante carregamento de usuários");
                         }
 
                         if (oUsuario.Bloqueado == 'X') {
@@ -1342,7 +1820,7 @@ sap.ui.define([
 
                 openRequest.onerror = function (event) {
                     console.log(openRequest.errorCode);
-                    oController.closeBusyDialog();
+                    // Não fechar o busy dialog aqui - será fechado no onSincronizarGeral
                     reject();
                 };
 
@@ -1350,19 +1828,19 @@ sap.ui.define([
                     db = event.target.result;
                     db.onerror = function () {
                         console.log(db.errorCode);
-                        oController.closeBusyDialog();
+                        // Não fechar o busy dialog aqui - será fechado no onSincronizarGeral
                         reject();
                     };
                     var oTransaction = db.transaction([pTabela], "readwrite");
                     oTransaction.oncomplete = function (event) {
                         db.close();
-                        oController.closeBusyDialog();
+                        // Não fechar o busy dialog aqui - será fechado no onSincronizarGeral
                         resolve();
                     };
 
                     oTransaction.onerror = function (event) {
                         db.close();
-                        oController.closeBusyDialog();
+                        // Não fechar o busy dialog aqui - será fechado no onSincronizarGeral
                         reject();
                     };
                     var oObjectStore = oTransaction.objectStore(pTabela);
@@ -1388,7 +1866,7 @@ sap.ui.define([
 
                 openRequest.onerror = function (event) {
                     console.log(openRequest.errorCode);
-                    oController.closeBusyDialog();
+                    // Não fechar o busy dialog aqui - será fechado no onSincronizarGeral
                     reject()
                 };
 
@@ -1396,7 +1874,7 @@ sap.ui.define([
                     db = event.target.result;
                     db.onerror = function () {
                         console.log(db.errorCode);
-                        oController.closeBusyDialog();
+                        // Não fechar o busy dialog aqui - será fechado no onSincronizarGeral
                         reject()
                     };
                     var objectStore = db.transaction([pTabela], "readwrite").objectStore(pTabela);
@@ -1410,7 +1888,7 @@ sap.ui.define([
 
                         transaction.onerror = function (event) {
                             db.close();
-                            oController.closeBusyDialog();
+                            // Não fechar o busy dialog aqui - será fechado no onSincronizarGeral
                             reject();
                         };
                         var values = pData
@@ -1463,6 +1941,7 @@ sap.ui.define([
                                         var aGravacoes = [oController.gravarTabelaIndexDB("tb_usuario", aPerfis)]
                                         Promise.all(aGravacoes).then(
                                             function (result) {
+                                            oController.closeBusyDialog();
                                                 resolve()
                                             })
                                     }).catch(
@@ -1508,19 +1987,19 @@ sap.ui.define([
                                             })
                                     }).catch(
                                         function (result) {
-                                            oController.closeBusyDialog();
+                                            // Não fechar o busy dialog aqui - será fechado no método sincronizar principal
                                             reject()
                                         })
 
                             }).catch(
                                 function (result) {
-                                    oController.closeBusyDialog();
+                                    // Não fechar o busy dialog aqui - será fechado no método sincronizar principal
                                     reject()
                                 })
 
                     }).catch(
                         function (result) {
-                            oController.closeBusyDialog();
+                            // Não fechar o busy dialog aqui - será fechado no método sincronizar principal
                             reject()
                         })
 
