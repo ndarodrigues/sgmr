@@ -12,7 +12,8 @@
   "devDependencies": {
     "@sap-ux/ui5-middleware-fe-mockserver": "2",
     "@sap/ux-ui5-tooling": "^1.18.0",
-    "@ui5/cli": "^4.0.18"
+    "@ui5/cli": "^4.0.23",
+    "ui5-middleware-livereload": "^3.1.2"
   },
   "scripts": {
     "start": "fiori run --open \"test/flpSandbox.html?sap-client=111&sap-ui-xx-viewCache=false#compontualsgmr-display\"",
